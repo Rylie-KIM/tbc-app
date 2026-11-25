@@ -130,13 +130,13 @@ export default function StartApp({ initialRole, welcome }: { initialRole?: strin
                   <h3>{e.name}</h3>
                   <p className="muted">{e.blurb}</p>
                   <p className="small">{e.size} people · {e.place} · Goal: {e.goal} · {e.price}</p>
-                  <div className="row"><button className="btn btn-ghost" aria-expanded={open === e.id} onClick={() => { setOpen(open === e.id ? null : e.id); tick('s-open'); }}>{open === e.id ? 'Hide packages' : 'See packages'}</button></div>
                   {open === e.id && (
                     <div className="tiers">
                       {e.tiers.map((t) => (<div className="tier" key={t.name}><span><b>{t.name}</b> · {t.gets}</span><b>{t.price}</b></div>))}
                       <button className="btn btn-primary" disabled>Send a proposal (coming next)</button>
                     </div>
                   )}
+                  <div className="row bottom"><button className="btn btn-ghost" aria-expanded={open === e.id} onClick={() => { setOpen(open === e.id ? null : e.id); tick('s-open'); }}>{open === e.id ? 'Hide packages' : 'See packages'}</button></div>
                 </article>
               ))}
             </div>

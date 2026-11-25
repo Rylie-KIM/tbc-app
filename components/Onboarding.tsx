@@ -127,8 +127,8 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
       <div className="onb wrap"><div className="onb-card glass">
         <h2>Which side do you want to try first?</h2>
         <div className="row">
-          <Link className="btn btn-neon" href="/start?role=sponsor">Try as a sponsor</Link>
-          <Link className="btn btn-lime" href="/start?role=organiser">Try as an organiser</Link>
+          <Link className="btn btn-lime" href="/start?role=sponsor">Try as a sponsor</Link>
+          <Link className="btn btn-neon" href="/start?role=organiser">Try as an organiser</Link>
         </div>
       </div></div>
     );

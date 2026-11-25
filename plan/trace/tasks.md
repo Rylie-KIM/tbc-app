@@ -129,7 +129,7 @@ Owner decision 2026-11-25: an organiser can test the product with a sample prosp
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F06.1 | done | Events list page | Build | M | F02.5 | Published events appear as cards with the key facts |
+| F06.1 | done | Events list page | Build | M | F02.5 | Published events appear as cards with the key facts **Built 2026-11-25:** the "See packages" button sits at the bottom edge of every card, in the same place across a row |
 | F06.2 | in progress | Filters: goal, date, location, audience and organiser type | Build | M | F06.1, F04 (see F04.1) | Each filter works alone and together; filter state kept in the page address |
 | F06.3 | todo | Cold start: what the page shows when there are few or no events | Design, build | S | F06.1 | Clear empty state with a next step (list an event, or ask us to introduce you) |
 | F06.4 | done | Organiser-type filter with plain labels (student society; university or careers service; company-hosted; community or non-profit; commercial organiser), a count for each, and a one-line explanation of each | Build | M | F06.1, F02.2 | Each label filters the list; the counts add up; every label has at least two example events (F24.10) |
@@ -211,7 +211,7 @@ Two kinds of user: organiser (wants sponsors) and sponsor (decides what to back)
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
 | F23.1 | done | Write the preview rules: the switch changes the view, not permissions; the other side shows example data only; actions there are never sent to real people | Decision | S | none | One short note; the team has agreed |
-| F23.2 | in progress | Pick two neon colours, one per role, and check them on the light page: always with a text label (and icon), never colour alone; check contrast and a visible edge | Design | S | F00.1 | Two role colours chosen; contrast and colour-blind check recorded **Built 2026-11-25:** Lime for organiser, mint for sponsor, always with a text label. The contrast and colour-blind check is not recorded yet |
+| F23.2 | in progress | Pick two neon colours, one per role, and check them on the light page: always with a text label (and icon), never colour alone; check contrast and a visible edge | Design | S | F00.1 | Two role colours chosen; contrast and colour-blind check recorded **Built 2026-11-25:** Lime for organiser, mint for sponsor, always with a text label. The contrast and colour-blind check is not recorded yet Colours swapped on 2026-11-25 at the owner's request: sponsor is lime, organiser is neon green |
 | F23.3 | done | Switch component fixed in the top-right corner on every screen, reading "Trying as: Organiser | Sponsor"; keyboard and screen-reader friendly, large enough to tap on a phone, announces the current role | Build | M | F00.3, F23.2 | Works with keyboard only; the role change is announced Sponsor and Organiser buttons have the same size (112 px); the switch also shows on the first onboarding screen |
 | F23.4 | in progress | Home screen and navigation for each role (what each side sees after switching) | Build | L | F23.3, F02.5, F08.3 | Each role has its own start screen and menu |
 | F23.5 | in progress | Example data for the side the person does not own | Build | M | F18.2 | The other side is never empty; every record has the Example label |
