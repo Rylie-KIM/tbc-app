@@ -38,6 +38,13 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
   const [ready, setReady] = useState(false);
   const [text, setText] = useState('');
   const [panel, setPanel] = useState(false);
+  // a click anywhere outside the Filters button and its panel closes the panel
+  useEffect(() => {
+    if (!panel) return;
+    const close = (e: MouseEvent) => { if (!(e.target as Element).closest('#filterpanel, .btn-filters')) setPanel(false); };
+    document.addEventListener('mousedown', close);
+    return () => document.removeEventListener('mousedown', close);
+  }, [panel]);
   const [types, setTypes] = useState<string[]>([]);
   const [goals, setGoals] = useState<string[]>([]);
   const [sizes, setSizes] = useState<string[]>([]);
@@ -119,7 +126,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
           </section>
         )}
 
-        <div className="pilllabel"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden><path d="M8 1.5 13 3.4v4.2c0 3-2 5.3-5 6.9-3-1.6-5-3.9-5-6.9V3.4z" fill="currentColor" opacity=".85" /></svg> Early preview · everything here is example data</div>
+        <div className="pilllabel"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden><path d="M8 1.5 13 3.4v4.2c0 3-2 5.3-5 6.9-3-1.6-5-3.9-5-6.9V3.4z" fill="currentColor" opacity=".85" /></svg> Early preview: everything here is example data</div>
         <section className="bento" aria-label="Overview">
           <div className="tile tile-grad" aria-hidden><img src="/brand/logo-white.png" alt="" /></div>
           <a className="tile tile-glass" href={role === 'sponsor' ? '#events' : '#proposals'}>
@@ -136,26 +143,32 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
               </ul>
             </div>
           ) : null}
-          <div className="tile tile-black">
-            <span className="num">+{role === 'sponsor' ? ORGANISER_TYPES.length : GOALS.length}</span>
-            <span className="tilelabel"><span>{role === 'sponsor' ? 'Kinds of organiser to choose from' : 'Sponsor goals: hire, product feedback, brand'}</span><span className="glowdot" aria-hidden /></span>
-          </div>
+          {role === 'sponsor' ? (
+            <div className="tile tile-black">
+              <span className="num">+{ORGANISER_TYPES.length}</span>
+              <span className="tilelabel"><span>Kinds of organiser to choose from</span><span className="glowdot" aria-hidden /></span>
+            </div>
+          ) : null}
         </section>
 
         {role === 'sponsor' ? (
           <>
             <div>
-              <span className="kicker">Sponsor view</span>
-              <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)', marginTop: 6 }}>Choose events to sponsor</h1>
+              <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)' }}>Choose events to sponsor</h1>
               <p className="muted" style={{ marginTop: 8 }}>These cards are summaries of example events. Open an event for its full details, packages and prospectus.</p>
             </div>
 
             <div id="events" className="searchbox" data-tour="filters">
               <div className="searchrow">
-                <input className="input" type="search" aria-label="Search events by keyword" placeholder="Search by keyword, for example AI, London, hire" value={text} onChange={(e) => { setText(e.target.value); tick('s-filter'); }} />
-                <button className="btn btn-ghost" aria-expanded={panel} aria-controls="filterpanel" onClick={() => setPanel(!panel)}>
-                  Filters{nFilters ? <span className="badge">{nFilters}</span> : null}
-                </button>
+                <div className="searchfield">
+                  <input className="input search" type="search" aria-label="Search events by keyword" placeholder="Search by keyword, for example AI, London, hire" value={text} onChange={(e) => { setText(e.target.value); tick('s-filter'); }} />
+                  {(nFilters > 0 || text) && <button className="clearin" onClick={clearAll}>Clear all</button>}
+                </div>
+                <span className="filterwrap">
+                  <button className="btn btn-ghost btn-filters" aria-expanded={panel} aria-controls="filterpanel" onClick={() => setPanel(!panel)}>
+                    Filters{nFilters ? <span className="badge">{nFilters}</span> : null}
+                  </button>
+                </span>
               </div>
               {panel && (
                 <div id="filterpanel" className="fpanel">
@@ -164,10 +177,9 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
                   <fieldset><legend>Size</legend><div className="filters">{SIZE_BANDS.map((b) => (<button key={b.id} className="fchip" aria-pressed={sizes.includes(b.id)} onClick={() => toggle(setSizes, b.id)}>{b.label}</button>))}</div></fieldset>
                 </div>
               )}
-              {(nFilters > 0 || text) && (
+              {nFilters > 0 && (
                 <div className="active">
                   {[...types, ...goals, ...sizes.map((s) => SIZE_BANDS.find((b) => b.id === s)?.label ?? s)].map((v) => <span className="tag" key={v}>{v}</span>)}
-                  <button className="btn btn-ghost btn-small" onClick={clearAll}>Clear all</button>
                 </div>
               )}
               <p className="small" role="status">{events.length} of {EVENTS.length} example events</p>
@@ -201,8 +213,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
         ) : (
           <>
             <div>
-              <span className="kicker">Organiser view</span>
-              <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)', marginTop: 6 }}>Find sponsors for your event</h1>
+              <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)' }}>Find sponsors for your event</h1>
               <p className="muted" style={{ marginTop: 8 }}>List your event, set your packages and talk to sponsors in one place. This preview shows how it will look.</p>
             </div>
             <section className="glass" data-tour="add">
