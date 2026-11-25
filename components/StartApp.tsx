@@ -36,6 +36,7 @@ export default function StartApp({ initialRole, welcome }: { initialRole?: strin
   const [tour, setTour] = useState<number | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
   const [hideList, setHideList] = useState(false);
+  const [toast, setToast] = useState('');
 
   useEffect(() => {
     const r = (initialRole === 'organiser' || initialRole === 'sponsor' ? initialRole : ls.get('tbc_role')) as Role | null;
@@ -47,7 +48,7 @@ export default function StartApp({ initialRole, welcome }: { initialRole?: strin
   }, [initialRole, welcome]);
 
   const tick = useCallback((id: string) => setDone((d) => { if (d.includes(id)) return d; const n = [...d, id]; ls.set('tbc_tasks', JSON.stringify(n)); return n; }), []);
-  const pick = (r: Role) => { if (r === role) return; ls.set('tbc_role', r); setRole(r); tick(r === 'organiser' ? 's-switch' : 'o-switch'); setOpen(null); if (tour !== null) setTour(0); };
+  const pick = (r: Role) => { if (r === role) return; ls.set('tbc_role', r); setRole(r); tick(r === 'organiser' ? 's-switch' : 'o-switch'); setOpen(null); if (tour !== null) setTour(0); setToast(`Switched to ${r}.`); setTimeout(() => setToast(''), 4000); };
 
   // tour highlight
   useEffect(() => {
@@ -169,6 +170,8 @@ export default function StartApp({ initialRole, welcome }: { initialRole?: strin
         )}
         <footer className="foot">TBC is an early preview. Everything on this page is example data. <Link href="/privacy">What we store</Link></footer>
       </main>
+
+      {toast && <div className="toast" role="status" aria-live="polite"><i aria-hidden /> {toast}</div>}
 
       {tour !== null && (
         <div className="tour" role="dialog" aria-label="Guided tour" aria-live="polite">

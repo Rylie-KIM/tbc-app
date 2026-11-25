@@ -16,7 +16,11 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   const router = useRouter();
   const [role, setRole] = useState<Role | null>(roleParam === 'organiser' || roleParam === 'sponsor' ? roleParam : null);
   const started = useRef(false);
-  const [step, setStep] = useState(0); // 0..2 intro screens, then questions, then the email step
+  const [step, setStep] = useState(0); // 0..2 intro screens, 3 "questionnaire starts" screen, then questions, then the email step
+  const [anchor, setAnchor] = useState<{ step: number; pct: number } | null>(null); // keeps the progress bar where it was after a side switch
+  const [toast, setToast] = useState('');
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pctNow = useRef(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -29,7 +33,6 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const questions = useMemo(() => (role ? questionsFor(role, answers) : []), [role, answers]);
-  const total = questions.length + 1;
 
   useEffect(() => {
     let a = readLS('tbc_anon');
@@ -84,10 +87,20 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   // the questions differ between the two sides.
   const switchRole = (r: Role) => {
     if (r === role) return;
+    const newQs = questionsFor(r, answers);
+    let ns = step;
+    if (step >= 4) { const i = step - 4; ns = i >= questions.length ? 4 + newQs.length : 4 + Math.min(i, newQs.length - 1); }
+    setAnchor({ step: ns, pct: pctNow.current }); // the bar stays exactly where it is
+    setStep(ns);
     setRole(r);
     writeLS('tbc_role', r);
     if (started.current) enqueue('/api/survey/start', { role: r });
-    if (step >= 3) setStep(2);
+    const msg = step >= 4
+      ? `Switched to ${r}. The questions on this side are different; your earlier answers are kept.`
+      : `Switched to ${r}.`;
+    setToast(msg);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(''), 5000);
   };
 
   const choose = (q: Question, opt: string) => {
@@ -134,11 +147,16 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     );
   }
 
-  const isIntro = step < 3;
-  const qi = step - 3;
+  const isIntro = step < 4;
+  const qi = step - 4;
   const q = qi >= 0 && qi < questions.length ? questions[qi] : null;
   const onEmail = !isIntro && !q;
-  const pct = isIntro ? ((step + 1) / (total + 3)) * 100 : ((step + 1) / (total + 3)) * 100;
+  const last = 4 + questions.length; // index of the email step
+  const baseline = ((step + 1) / (last + 1)) * 100;
+  const pct = !anchor ? baseline
+    : step >= anchor.step ? (last <= anchor.step ? 100 : anchor.pct + ((100 - anchor.pct) * (step - anchor.step)) / (last - anchor.step))
+    : (anchor.pct * (step + 1)) / (anchor.step + 1);
+  pctNow.current = pct;
   const sel = (k: string) => answers[k];
   const canNext = !q || (q.kind === 'single' ? !!sel(q.key) : ((sel(q.key) as string[] | undefined)?.length ?? 0) > 0);
 
@@ -196,6 +214,21 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             </div>
           </>)}
 
+          {step === 3 && (<>
+            <span className="kicker">Questionnaire</span>
+            <h2>Your questionnaire starts now</h2>
+            <p className="muted">{role === 'sponsor' ? 'Questions about how you choose events to back.' : 'Questions about how you find sponsors today.'}</p>
+            <div className="two">
+              <div className="usercard"><b>{questions.length} questions</b><span className="small">one at a time</span></div>
+              <div className="usercard"><b>About 1 minute</b><span className="small">no right answers</span></div>
+            </div>
+            <p className="small">Each answer is saved as you give it. You can go back, switch sides, or delete your answers at any time.</p>
+            <div className="row">
+              <button className="btn btn-ghost" onClick={() => setStep(2)}>Back</button>
+              <button className="btn btn-primary btn-same" onClick={() => setStep(4)} autoFocus>Begin the questionnaire</button>
+            </div>
+          </>)}
+
           {q && (<>
             <span className="kicker">Question {qi + 1} of {questions.length}</span>
             <h2>{q.title}</h2>
@@ -211,7 +244,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
               })}
             </div>
             <div className="row">
-              <button className="btn btn-ghost" onClick={() => setStep(step - 1)} disabled={qi === 0}>Back</button>
+              <button className="btn btn-ghost" onClick={() => setStep(step - 1)}>Back</button>
               <button className="btn btn-primary" onClick={() => setStep(step + 1)} disabled={!canNext}>Next</button>
             </div>
           </>)}
@@ -242,6 +275,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           )}
         </section>
       </div>
+      {toast && <div className="toast" role="status" aria-live="polite"><i aria-hidden /> {toast}</div>}
     </div>
   );
 }
