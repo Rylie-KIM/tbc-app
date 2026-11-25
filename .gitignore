@@ -20,3 +20,7 @@ plan/ImpactHack_Sponsorship_Prospectus.pdf
 plan/TBC-Hackathon Sponsorship Platform Planning.txt
 plan/design/[0-9].jpg
 .env*
+
+# Build artefacts
+*.tsbuildinfo
+next-env.d.ts
