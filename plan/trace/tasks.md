@@ -6,22 +6,22 @@ Draft 2026-11-24, updated 2026-11-25 (owner's standing instruction: keep this fi
 
 **Sizes are my rough guesses, not agreed with the tech lead:** S = under half a day, M = 1-2 days, L = 3-5 days. Hosting and database are decided (Vercel and Supabase); the code stack is assumed to be Next.js (`decisions.md`).
 
-**Status column (added 2026-11-25):** every task row has one of `todo`, `in progress`, `done`, `blocked` (waiting for something outside the task) or `later` (its gate is not passed yet, so it is not planned in detail). Claude changes the cell whenever work happens and refreshes the counts below; the owner can also edit it by hand.
+**Status column (added 2026-11-25):** every task row has one of `todo`, `in progress`, `done`, `blocked` (waiting for something outside the task), `skipped` (owner decided not to do it) or `later` (its gate is not passed yet, so it is not planned in detail). Claude changes the cell whenever work happens and refreshes the counts below; the owner can also edit it by hand.
 
-**Progress (2026-11-25):** done 6, in progress 8, todo 129, blocked 0, later 13; 156 tasks in all.
+**Progress (2026-11-25):** done 6, in progress 8, todo 126, blocked 0, skipped 3, later 13; 156 tasks in all.
 
 **Notes on the first status values:**
 
 Done so far (2026-11-24 and 25):
 - User needs, features and tasks written (this folder); decisions recorded in `decisions.md`.
-- Questionnaire file updated: fixes 1-4, new Q21 to Q24 (the Google Form itself is not rebuilt yet, R9).
+- Questionnaire file updated: fixes 1-4, new Q21 to Q24. Owner decision 2026-11-25: the survey is collected on the website only (no Google Form, no timing test).
 - Design direction chosen and saved (`../design/`: Flora v2, glass v1, `design-direction.md`, `logo_final.png`).
 - Supabase project created on the owner's account in Europe (`eu-west-1`), Free plan decided; `.env` and `.env.example` set up and git-ignored; the `.env` password line fixed by the owner (H1, H3, H5).
 - The repo `README.md` now lists the TBC project (owner allowed it, 2026-11-25).
 
 Open problems right now:
 - No connection test has been run yet (H6): the `.env` lines look consistent, but nothing has connected to the database.
-- The Google Form is not rebuilt or sent yet (R2, R9, R10).
+- The survey cannot go out until the site is built: the survey part (F26, F00 basics, F22, F21) is now the first build, and its save-check (F21.16) must pass before any link is shared (R10).
 
 **Timing constraint from meeting 1:** no development until the winter holidays (exams, then the final-year project due in February). So the research tasks (section 1) come first; build tasks start after.
 
@@ -33,9 +33,9 @@ These unblock the gates in `features.md`. Owners are left empty on purpose: nobo
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| R1 | done | Decide whether to apply the five questionnaire fixes (`user-needs.md` 2.2) and update the form | Decision | S | none | The form owner has said yes or no to each of the five fixes; the form and script match. **Decided 2026-11-24: fixes 1-4 applied to `../research/sponsor-questionnaire.md` (text and script); fix 5 waits for the timing test (R2). The Google Form itself still has to be rebuilt or edited by hand. Q24 (own events organised, by edition) was added the same day** |
-| R2 | todo | Time the form with two people; cut questions if over 6 minutes | Research | S | R1 | Two completion times recorded; the form is shortened if needed |
-| R3 | todo | Send the questionnaire; reach at least 10 responses, with 3 or more each from recruiting, developer relations and marketing | Research | M (spread over days) | R2, R9 | Counts per role recorded; quota met or a note on why not |
+| R1 | done | Decide whether to apply the five questionnaire fixes (`user-needs.md` 2.2) and update the form | Decision | S | none | The form owner has said yes or no to each of the five fixes; the form and script match. **Decided 2026-11-24: fixes 1-4 applied to `../research/sponsor-questionnaire.md` (text and script); fix 5 waits for the timing test (R2). The Google Form route was dropped on 2026-11-25 (R9). Q24 (own events organised, by edition) was added the same day** |
+| R2 | skipped | Time the form with two people; cut questions if over 6 minutes | Research | S | R1 | **Skipped (owner, 2026-11-25).** There is no Google Form to time; the in-app onboarding is short by design (F21.4 aims at about a minute) |
+| R3 | todo | Share the survey link from the website and reach at least 10 responses, with 3 or more each from recruiting, developer relations and marketing | Research | M (spread over days) | F21.16, F22.2 | Counts per role recorded; quota met or a note on why not |
 | R4 | todo | Run 5 short interviews with other organisers (15 minutes each) | Research | M | none | 5 notes saved in `../research/`; organiser needs O1-O6 re-rated |
 | R5 | todo | Run a 5-question participant poll on willingness to share data | Research | S | none | Results saved; P1 re-rated |
 | R6 | todo | Analyse the survey with the plan in `../research/sponsor-questionnaire.md` and read the decision gate | Research | M | R3 | One-page report; gate result Go, Iterate or Pivot written down |
@@ -51,8 +51,8 @@ These unblock the gates in `features.md`. Owners are left empty on purpose: nobo
 | H8 | todo | A second Supabase project for development and previews (the free plan allows two active projects); previews never use production data | Build | S | H1 | Two projects exist; preview deployments use the second one |
 | H9 | todo | Row Level Security on every table, with tests: a person cannot read another person's proposal; the publishable key reads only public example data | Build, test | M | H4, F01.2 | Tests pass; a table without a policy is not readable |
 | H10 | todo | Storage buckets: `examples` (public read) and `uploads` (private, signed links), size and type limits, policies | Build | M | H1 | Public examples open without login; an upload is readable only by its owner |
-| R9 | todo | Rebuild the Google Form from the updated script (new Q21 to Q24) and test both branches (Q4 = 0 and any other answer) with two people | Research | S | R1 | Both paths reach the right sections; answers land in the Sheet in the expected column order |
-| R10 | todo | First wave goes out by Google Form (assumed, `decisions.md` D2); the web survey (F21) follows with the app | Decision | S | R2, R9 | The first-wave link is shared; nothing sent before R2 and R9 |
+| R9 | skipped | Rebuild the Google Form from the updated script (new Q21 to Q24) and test both branches (Q4 = 0 and any other answer) with two people | Research | S | R1 | **Skipped (owner, 2026-11-25): the survey is collected on the website only.** The Apps Script in the questionnaire file is kept for reference |
+| R10 | todo | Send the survey link to sponsors only after the save-check (F21.16) has passed; the first wave comes from the website, not from a Google Form (`decisions.md` D2) | Decision | S | F21.16, F22.2 | The link is shared; nothing was sent before the save-check passed |
 | R11 | todo | Test the organiser-type filter: add a survey question on which kinds of organiser sponsors prefer (proposed Q25, not yet in the questionnaire file) | Research | S | R1 | Question text agreed and added to the questionnaire, or a note on why not |
 
 **Build tasks in section 2 start only after R6 says Go and R8 is done.** Design tasks (F00) can start earlier because the design direction is already chosen.
@@ -158,7 +158,7 @@ F04 (sponsor profile by goal) is gated by survey Q5. For the first slice, F06.2 
 
 ### F21 Onboarding survey (needs: S1, O1, research)
 
-Decided 2026-11-24: built **with the full app**, not as an earlier standalone page. Until it ships, the Google Form is the only collection path (R3). The flow starts from the landing page's call-to-action: landing hero, then one question per screen, then a personalised start.
+Decided 2026-11-24: built **with the full app**. Updated 2026-11-25: this is now the **only** way the survey is collected (the Google Form is dropped), so F21, F22 and F26 are built first, before the rest of the app. The flow starts from the landing page's call-to-action: landing hero, then one question per screen, then a personalised start.
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
@@ -169,15 +169,15 @@ Decided 2026-11-24: built **with the full app**, not as an earlier standalone pa
 | F21.5 | todo | Answer without an account (for QR use at events); offer an account at the end | Build | M | F21.4 | An anonymous answer is saved; account creation links it |
 | F21.6 | todo | Optional "help shape TBC" cards with deeper questions | Build | M | F21.4 | Each card can be skipped; answers saved with the same source tag |
 | F21.7 | todo | Turn the chosen goals into the sponsor profile | Build | M | F21.4, F04.1 (gate) | Profile pre-filled from onboarding answers |
-| F21.8 | todo | CSV export in the survey's column order plus a `source` column | Build | S | F21.3 | The export opens in the existing analysis plan without changes |
+| F21.8 | todo | CSV export in the survey's column order plus a `source` column | Build | S | F21.3 | The export opens in the analysis plan in `../research/sponsor-questionnaire.md` without changes |
 | F21.9 | todo | Spam protection (request limit, hidden field) | Build | S | F21.3 | A script posting many answers is limited; test written |
 | F21.10 | todo | "Early preview" notice and Example labels on the landing and onboarding | Build | S | F18.1 | No example content looks real |
-| F21.11 | todo | Compare in-app answers with Google Form answers by source | Research | S | R3, F21.8 | A short note: where do the two groups differ, and do the differences look like bias from seeing the product first |
+| F21.11 | skipped | Compare in-app answers with Google Form answers by source | Research | S | R3, F21.8 | **Skipped (owner, 2026-11-25): there is no Google Form wave to compare with.** There is no unprimed baseline, so keep the intro general (F21.21) |
 | F21.17 | todo | An "I do both" choice (from survey Q24: the person also organises events) that sets up the both-sides home (F23.9) | Build | S | F21.4 | Choosing it is saved and read by F23.9 |
-| F21.18 | todo | One table that maps every in-app question to its Google Form question number (Q1 to Q24), so both sources export in the same columns | Decision | S | F21.1 | The table is in the repo; the export in F21.8 follows it |
+| F21.18 | todo | One table that maps every in-app question to its number in the questionnaire (Q1 to Q24), so the export follows the analysis plan's columns | Decision | S | F21.1 | The table is in the repo; the export in F21.8 follows it |
 | F21.19 | todo | Three short intro screens before the questions: what TBC is for; the two kinds of user (organiser, sponsor) with one line each and "you can try both"; why we ask: this survey is to understand sponsors' needs. Draft texts in `../design/onboarding-copy.md` | Build | M | F21.4, F22.1 | The three screens show in order, can be read in about 20 seconds, and end with "Start" or "Skip and explore"; the consent line sits on the third |
 | F21.20 | todo | Organiser path: if the person chose organiser, say this round is about sponsors' needs and offer two or three short questions on how they find sponsors today (written after the organiser interviews, R4), or "Skip and explore" | Decision, build | M | F21.19, R4 | An organiser can answer the short set or skip; answers saved with source `app` and the role |
-| F21.21 | todo | Keep screen 1 to one general sentence about TBC (no feature list) so the intro does not steer the answers; compare with the Google Form answers by source (F21.11) | Decision | S | F21.19 | The intro wording is checked against this rule |
+| F21.21 | todo | Keep screen 1 to one general sentence about TBC (no feature list) so the intro does not steer the answers; with no Google Form baseline, note the intro wording next to the results | Decision | S | F21.19 | The intro wording is checked against this rule |
 | F21.22 | in progress | Review the intro wording together with all other English texts | Decision | S | F21.19, F22.6 | Final texts listed; the owner has read them |
 
 Keeping every answer safe (added 2026-11-24: losing survey answers is not acceptable):
@@ -347,12 +347,14 @@ Feature tasks for the preview app: 113. Cross-cutting: 9. Research and decisions
 
 ## 5. Suggested order
 
-1. **Now, no code needed:** R2 (time the form), R9 (rebuild the Google Form and test both branches), R4 and R5 (organiser interviews, participant poll), R11 (organiser-type question), F24.1 (confirm the twelve examples), F22.1 and F22.6 (texts).
-2. **Then, first send:** R10 (first wave by Google Form), then R3 (collect answers) while building starts.
-3. **Platform:** X1, X8, X6, X7, H7, H8, H6, then H4, H9, H10.
-4. **Design:** F00.1 to F00.11 (tokens, buttons, forms, glass, backgrounds, knot status symbol, logo set).
+The survey is now collected on the website only, so the survey part is built first (owner decision 2026-11-25). This conflicts with the meeting-1 plan of no development before the winter holidays: the survey slice is the first thing built when development starts.
+
+1. **Now, no code needed:** R4 and R5 (organiser interviews, participant poll), R11 (organiser-type question), F24.1 (confirm the twelve examples), F22.1, F22.6 and F21.19 to F21.22 (texts), F21.1 and F21.18 (which questions, and their numbers).
+2. **Platform:** X1, X8, X6, X7, H7, H8, H6, then H4, H9, H10.
+3. **Survey slice (first build):** F00.1 to F00.7 (tokens, buttons, forms, glass, backgrounds), F21 (intro screens, onboarding, and F21.12 to F21.16 so no answer is lost), F22 (landing, with the dark hero), F00.9 and F00.11 (logo set).
+4. **Save-check, then send:** F21.16 must pass; then R10 (share the link) and R3 (collect at least 10 answers) while the rest is built.
 5. **Product core:** F01, then F02 and F05, then F06 (with F06.4) and F08.
-6. **Samples and AI:** F24 (the twelve examples) and F18.4, F18.5; F25.1 to F25.8 and F03 (the organiser trial) once examples exist; F25.8 decides the model.
-7. **Preview wrapper:** F21 (intro screens and onboarding, with F21.12 to F21.16 so no answer is lost), F22 (landing), F23 (role switch), then F27 (guided start, last, because it points at the finished screens).
-8. **Check:** F00.10, X3, F03.7, F24.8 to F24.10, F21.16.
+6. **Samples and AI:** F24 (the twelve examples), F18.4 and F18.5; F25.1 to F25.8 and F03 (the organiser trial); F25.8 decides the model.
+7. **Preview wrapper:** F23 (role switch), then F27 (guided start, last, because it points at the finished screens).
+8. **Check:** F00.10, X3, F03.7, F24.8 to F24.10.
 9. **X4** (concierge test on Impact Hack), then X5 and R7, then decide the next phase.

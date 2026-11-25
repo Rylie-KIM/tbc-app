@@ -51,7 +51,7 @@ Student and community organisers need sponsors to run tech events, and companies
 - Hypothesis, expected value and decision written **before** the data, with a go / iterate / pivot gate.
 - Honest about small samples (counts, intervals, no p-values).
 
-### 2.2 Gaps to fix in the form (fixes 1-4 applied to `research/sponsor-questionnaire.md` on 2026-11-24; fix 5 waits for the timing test)
+### 2.2 Gaps to fix in the form (fixes 1-4 applied to `research/sponsor-questionnaire.md` on 2026-11-24; fix 5 skipped by the owner on 2026-11-25: no timing test)
 
 | # | Gap | Why it matters | Proposed fix |
 |---|---|---|---|
@@ -165,7 +165,7 @@ Done: this file, `features.md`, `tasks.md` and `decisions.md`; questionnaire fix
 
 Next, in this order (details and sizes in `tasks.md`):
 1. Fix the `.env` password line and change the database password (H5).
-2. Time the form with two people (R2), rebuild the Google Form and test both branches (R9), then send the first wave by Google Form (R10, R3). Nothing has been sent yet.
+2. Build the survey slice first (hosting and data safety, design basics, landing, onboarding with the save-check), because the survey is collected on the website only; then share the link (R10, R3). Nothing has been sent yet.
 3. Run the organiser interviews and the participant poll (R4, R5); consider a survey question on organiser types (R11).
 4. Build the platform and the preview app (X, H, F-series tasks), samples and AI reader included.
 5. After the survey: update confidence and priority in sections 3 and 5 and the gates in `features.md` (R7).

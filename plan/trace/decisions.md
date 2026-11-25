@@ -50,13 +50,15 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 
 ---
 
-## D2. Survey collection: Google Form first, web survey with the app (2026-11-25)
+## D2. Survey collection: the website only, no Google Form (2026-11-25)
 
-**Status:** Assumed. The owner said the survey will be collected through the website, and that nobody has received the Google Form yet.
+**Status:** Owner decided (2026-11-25): the survey is collected on the website only; the Google Form and the timing test are dropped. This replaces an earlier assumption of mine (Google Form first). Nothing had been sent through the Google Form.
 
-**Why:** the web survey (F21) ships with the full app, which is built after the winter holidays, but the survey result decides what to build. So the first wave goes out by Google Form (it is ready, and it saves to the owner's Drive); the web survey becomes a second source. If the owner prefers web only, F22 and the core of F21 move before the other features.
-
-**What changes:** tasks R9 and R10 (rebuild the form, send the first wave); F21.11 compares both sources. Questionnaire changes already made: fixes 1-4, Q21 to Q24 (owner approved 1-4 and asked for the organised-events question).
+**Consequences:**
+- The survey cannot go out until the site exists, so the survey part (F26 hosting and data safety, the F00 basics, F22 landing, F21 onboarding) is the first build. This conflicts with the meeting-1 plan of no development before the winter holidays; the survey slice is the first thing built when development starts.
+- The Google Form's automatic copy in the owner's Drive is gone, so the safety tasks F21.12 to F21.16 (immediate save, Google Sheet copy, backups, daily count, save-check) are the only protection and must pass before any link is shared (R10).
+- There is no unprimed Google Form baseline (F21.11 skipped), so the intro stays general (F21.21).
+- Tasks R2 and R9 are skipped; the Apps Script in the questionnaire file is kept only for reference. The questions (Q1 to Q24) and the analysis plan still apply.
 
 ## D3. AI provider and models (2026-11-25)
 

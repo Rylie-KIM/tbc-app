@@ -1,5 +1,7 @@
 # Sponsor questionnaire (Google Form)
 
+> **Update 2026-11-25:** the survey is now collected on the website (onboarding, task F21), not by Google Form. The questions (Q1 to Q24), the analysis plan and the decision gate below still apply. The Google Forms steps and the Apps Script are kept only for reference.
+
 Draft 2026-11-12. Goal: learn how sponsors choose hackathons, what is hard for them, and whether TBC would help. Target 10-15 responses, at least 3 each from recruitment, product/developer-relations and brand/marketing sponsors. About 4 minutes before the 2026-11-24 revision (now likely 7-10 minutes: time it with two people before sending, see `../trace/user-needs.md` 2.2 fix 5). Revised 2026-11-24: fixes 1-4 of `../trace/user-needs.md` 2.2 applied (new Q21, Q22, Q23; Q4 asks about sponsoring only); Q24 (own events organised, by edition) added the same day. Based on meeting 1 (`discussion.md`) and the benchmarks in `examples.md`.
 
 Rules for the form: ask about past behaviour, not hypotheticals; do not mention TBC until section 4; we do not quote prices ourselves; email is optional.
