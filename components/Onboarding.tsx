@@ -247,7 +247,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             <h2>Your questionnaire starts now</h2>
             <div className="two">
               <div className="usercard"><b className="bignum">{role === 'sponsor' ? '23' : total}</b><span>{role === 'sponsor' ? 'questions at most' : 'questions'}</span></div>
-              <div className="usercard"><b className="bignum">{role === 'sponsor' ? '5' : '2'}</b><span>{role === 'sponsor' ? 'minutes' : 'minutes or less'}</span></div>
+              <div className="usercard"><b className="bignum">{role === 'sponsor' ? '5–10' : '2'}</b><span>{role === 'sponsor' ? 'minutes' : 'minutes or less'}</span></div>
             </div>
             <div className="row">
               <button className="btn btn-ghost" onClick={() => setStep(2)}>Back</button>
