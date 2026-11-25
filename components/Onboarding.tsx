@@ -246,7 +246,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           {step === 3 && (<>
             <h2>Your questionnaire starts now</h2>
             <div className="two">
-              <div className="usercard"><b className="bignum">{total}</b><span>questions</span></div>
+              <div className="usercard"><b className="bignum">{role === 'sponsor' ? '11–23' : total}</b><span>questions</span></div>
               <div className="usercard"><b className="bignum">{role === 'sponsor' ? '5' : '2'}</b><span>{role === 'sponsor' ? 'minutes' : 'minutes or less'}</span></div>
             </div>
             <div className="row">
