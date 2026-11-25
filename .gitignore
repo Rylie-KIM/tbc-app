@@ -19,3 +19,4 @@ plan/ImpactHack_Sponsorship_Prospectus.pdf
 # raw meeting transcript (names of team members) and the reference images (other people's design work)
 plan/TBC-Hackathon Sponsorship Platform Planning.txt
 plan/design/[0-9].jpg
+.env*

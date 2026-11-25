@@ -110,3 +110,14 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 
 **Status:** Owner decided: when a task is finished, Claude commits and pushes it to `origin/main` of the `tbc-app` repo without asking again. One commit per task, message starts with the task ID (for example `H6: connection test passes`); the commit ends with the co-author line the tool requires. Before each commit: `.env` is not staged, no key or password is in the diff, `git status` is clean afterwards. Three things stay out of git (`.gitignore`) until the repo is confirmed private: the real Impact Hack PDF (D5), the raw meeting transcript (names of team members) and the reference images `1.jpg` to `8.jpg` (other people's design work). The other DeskThread repo also keeps its `plan/` out of git, so this is a deliberate choice to review. The visibility of the GitHub repo (public or private) was not checked: keep it private while it holds the plan and the research.
 
+## D14. First build and deployment (2026-11-25)
+
+**Status:** Owner asked to build the app and deploy it ("start now, deploy until done"). Facts, not choices:
+- Live at https://tbc-app-mu.vercel.app, Vercel project `tbc-app`, function region Dublin (dub1) to sit near the Supabase database (`eu-west-1`). The site is public (no password) and marked "early preview"; it asks search engines not to index it. Nobody has been given the link yet: share it only after the save-check on the live site has passed (R10).
+- The app reaches the database through the pooled address (`DATABASE_URL`); the direct address does not work from the Vercel build or from this Mac (IPv6 only), so migrations also use the pooled one.
+- Production variables set on Vercel: `DATABASE_URL`, `ADMIN_EXPORT_TOKEN` (the CSV export of answers, `/api/admin/export?token=...`). Preview and development variables are not set.
+- A daily Vercel cron calls `/api/health`, which reads the database, against the Free plan's pause after a week without activity (H2).
+- Not built yet, and listed in `tasks.md`: the Google Sheet copy (F21.13), the weekly backup (F21.14), the daily count check (F21.15), the backup restore test, event pages, prospectus upload, the AI reader.
+
+**Save-check results (2026-11-25).** On the live site, 20 of 20 test answers were stored exactly as sent and read back, wrong input and a wrong export token were refused, and the delete button removed all 20 (checked in the database; the one row left belongs to a real visitor). In a real browser, answers showed "Saved" only after the server confirmed, and answers given while the network was cut were kept in the browser and stored after it returned. Not yet done: the Google Sheet copy, automatic backups, the backup restore test (F21.13 to F21.16): until they pass, treat the live survey as not yet safe to share widely (R10).
+

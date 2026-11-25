@@ -8,7 +8,7 @@ Draft 2026-11-24, updated 2026-11-25 (owner's standing instruction: keep this fi
 
 **Status column (added 2026-11-25):** every task row has one of `todo`, `in progress`, `done`, `blocked` (waiting for something outside the task), `skipped` (owner decided not to do it) or `later` (its gate is not passed yet, so it is not planned in detail). Claude changes the cell whenever work happens and refreshes the counts below; the owner can also edit it by hand.
 
-**Progress (2026-11-25):** done 6, in progress 8, todo 126, blocked 0, skipped 3, later 13; 156 tasks in all.
+**Progress (2026-11-25, after the first build):** done 35, in progress 27, todo 78, blocked 0, skipped 3, later 13; 156 tasks in all.
 
 **Notes on the first status values:**
 
@@ -18,6 +18,7 @@ Done so far (2026-11-24 and 25):
 - Design direction chosen and saved (`../design/`: Flora v2, glass v1, `design-direction.md`, `logo_final.png`).
 - Supabase project created on the owner's account in Europe (`eu-west-1`), Free plan decided; `.env` and `.env.example` set up and git-ignored; the `.env` password line fixed by the owner (H1, H3, H5).
 - The repo `README.md` now lists the TBC project (owner allowed it, 2026-11-25).
+- **The survey slice is built and live (2026-11-25):** landing, onboarding that saves every answer, start page with role switch, example events with the organiser-type filter, a short tour and checklist. https://tbc-app-mu.vercel.app. Not yet built: the Google Sheet copy, automatic backups, event pages, prospectus upload, the AI reader.
 
 Open problems right now:
 - No connection test has been run yet (H6): the `.env` lines look consistent, but nothing has connected to the database.
@@ -42,14 +43,14 @@ These unblock the gates in `features.md`. Owners are left empty on purpose: nobo
 | R7 | todo | Update confidence and priority in `user-needs.md` and the gates in `features.md` | Planning | S | R4, R5, R6 | Both files updated; first slice confirmed or changed |
 | R8 | in progress | Choose the stack and hosting; record the decision | Decision | S | none | One short decision note in `trace/`; includes web only or web plus mobile. Hosting and database decided: see `decisions.md` D1 (Vercel and Supabase) |
 | H1 | done | Create the Supabase project in a London or EU region | Build | S | R8 | **Done 2026-11-24.** Project exists (created by the owner, region Europe, `eu-west-1` Ireland); keys saved only in `.env`; Vercel settings still to do (H7) |
-| H2 | todo | Keep the project from pausing: a scheduled request plus a warning if the project is paused (approved 2026-11-24) | Build | S | H1 | The project stays active through a week with no visitors; a forced pause sends a warning |
+| H2 | in progress | Keep the project from pausing: a scheduled request plus a warning if the project is paused (approved 2026-11-24) | Build | S | H1 | The project stays active through a week with no visitors; a forced pause sends a warning **Built 2026-11-25:** A daily Vercel cron calls `/api/health`, which queries the database (in `vercel.json`). Still to do: a warning if the project is ever paused |
 | H3 | done | Free or Pro for the survey: **decided Free** (2026-11-24, done). Free pauses after a week without activity and has no automatic backups, so H2 and F21.13-F21.16 are required | Decision | S | H1 | Recorded in `decisions.md`; revisit if a pause or data loss becomes a real problem |
-| H4 | todo | Database changes live in the repo as migration files; the first table is created by one | Build | S | H1 | The first migration runs on an empty project and produces the table |
+| H4 | done | Database changes live in the repo as migration files; the first table is created by one | Build | S | H1 | **Done 2026-11-25.** `supabase/migrations/0001_survey_response.sql` applied by `npm run db:migrate`; a second run skips it |
 | H5 | done | Fix `.env`: `SUPABASE_DB_PASSWORD` holds the real password (with `!`) and only the two connection strings use `%21`; set a new long password because the old one was shown in chat, then rebuild `DATABASE_URL` and `DIRECT_URL` | Build | S | H1 | **Done 2026-11-25 (owner).** Checked: the password line holds the plain password, both connection strings decode to it, no placeholders left, `.env` is git-ignored. Whether the password was changed from the one shown in chat was not checked |
-| H6 | todo | Connection test from the repo: the pooled and the direct connection both answer a simple query | Test | S | H5, X6 | Both connections work from a script |
-| H7 | todo | Create the Vercel project, link the repo, enter the same variables under Environment Variables (production and preview) | Build | S | H5, X1 | A deployed page loads and can read from the database |
+| H6 | done | Connection test from the repo: the pooled and the direct connection both answer a simple query | Test | S | H5, X6 | **Done 2026-11-25.** The pooled address answers. The direct address fails from this network (it is IPv6 only), so migrations and the app use the pooled one |
+| H7 | done | Create the Vercel project, link the repo, enter the same variables under Environment Variables (production and preview) | Build | S | H5, X1 | **Done 2026-11-25.** Vercel project `tbc-app` (region Dublin, dub1); `DATABASE_URL` and `ADMIN_EXPORT_TOKEN` set for production only; live at https://tbc-app-mu.vercel.app. Preview and development variables are not set yet (H8) |
 | H8 | todo | A second Supabase project for development and previews (the free plan allows two active projects); previews never use production data | Build | S | H1 | Two projects exist; preview deployments use the second one |
-| H9 | todo | Row Level Security on every table, with tests: a person cannot read another person's proposal; the publishable key reads only public example data | Build, test | M | H4, F01.2 | Tests pass; a table without a policy is not readable |
+| H9 | in progress | Row Level Security on every table, with tests: a person cannot read another person's proposal; the publishable key reads only public example data | Build, test | M | H4, F01.2 | Tests pass; a table without a policy is not readable **Built 2026-11-25:** `survey_response` has Row Level Security on and no grants to the public roles (checked). Still to do: tests for every future table |
 | H10 | todo | Storage buckets: `examples` (public read) and `uploads` (private, signed links), size and type limits, policies | Build | M | H1 | Public examples open without login; an upload is readable only by its owner |
 | R9 | skipped | Rebuild the Google Form from the updated script (new Q21 to Q24) and test both branches (Q4 = 0 and any other answer) with two people | Research | S | R1 | **Skipped (owner, 2026-11-25): the survey is collected on the website only.** The Apps Script in the questionnaire file is kept for reference |
 | R10 | todo | Send the survey link to sponsors only after the save-check (F21.16) has passed; the first wave comes from the website, not from a Google Form (`decisions.md` D2) | Decision | S | F21.16, F22.2 | The link is shared; nothing was sent before the save-check passed |
@@ -67,13 +68,13 @@ Source: `../design/design-direction.md` and `../design/tbc-flora_v2.html`.
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F00.1 | todo | Put the colour, type and spacing tokens in code (the token block in `tbc-flora_v2.html`) | Build | S | R8 | One tokens file; colours, `--gap: 12px`, one font family |
-| F00.2 | in progress | Load the one typeface; decide Aeonik (licence) or Hanken Grotesk | Decision, build | S | F00.1 | **Decided 2026-11-25 (owner): Hanken Grotesk for now**; Aeonik is reconsidered at a public launch. Used everywhere, including buttons, inputs and numbers |
-| F00.3 | todo | Buttons: primary, mint, black, ghost, stop, disabled, icon, link; same height and padding in a row, 12px gap | Build | M | F00.1 | All variants in the page; focus ring visible; rows checked for equal gaps |
-| F00.4 | todo | Form controls: text input, select, segmented control, checkbox, switch, error state | Build | M | F00.1 | Each control has default, focus, error and disabled states |
-| F00.5 | todo | Tags, chips, status labels, progress bar, steps, notice | Build | M | F00.1 | Matches the design file; warning uses amber, errors use black, no red |
-| F00.6 | todo | Glass panels and cards (text sits on at least 66% white) | Build | S | F00.1 | Panel and card components; no text directly on the background |
-| F00.7 | todo | Backgrounds: light X form for app screens, dark X form for hero | Build | M | F00.6 | Two background components; soft edges; work at phone width |
+| F00.1 | done | Put the colour, type and spacing tokens in code (the token block in `tbc-flora_v2.html`) | Build | S | R8 | One tokens file; colours, `--gap: 12px`, one font family |
+| F00.2 | done | Load the one typeface; decide Aeonik (licence) or Hanken Grotesk | Decision, build | S | F00.1 | **Decided 2026-11-25 (owner): Hanken Grotesk for now**; Aeonik is reconsidered at a public launch. Used everywhere, including buttons, inputs and numbers |
+| F00.3 | in progress | Buttons: primary, mint, black, ghost, stop, disabled, icon, link; same height and padding in a row, 12px gap | Build | M | F00.1 | All variants in the page; focus ring visible; rows checked for equal gaps |
+| F00.4 | in progress | Form controls: text input, select, segmented control, checkbox, switch, error state | Build | M | F00.1 | Each control has default, focus, error and disabled states |
+| F00.5 | in progress | Tags, chips, status labels, progress bar, steps, notice | Build | M | F00.1 | Matches the design file; warning uses amber, errors use black, no red |
+| F00.6 | done | Glass panels and cards (text sits on at least 66% white) | Build | S | F00.1 | Panel and card components; no text directly on the background |
+| F00.7 | in progress | Backgrounds: light X form for app screens, dark X form for hero | Build | M | F00.6 | Two background components; soft edges; work at phone width |
 | F00.8 | todo | Status symbol as the TBC knot, bright strand blinks, stops when "reduce motion" is on | Build | M | F00.5 | Three states (success, warning, error); used in notices; reduced-motion respected |
 | F00.9 | in progress | Logo files: neon-gradient with black strand, and white-strand version for dark | Design | S | none | **Started 2026-11-24:** `logo_final.png` (3D, shadow baked in, transparent) is saved in `../design/`. Still to do: the white-strand version for dark backgrounds |
 | F00.10 | todo | Accessibility pass: contrast of every pair, focus order, keyboard use | Test | M | F00.3-F00.8 | Contrast table updated with measured values; keyboard-only run-through recorded |
@@ -87,7 +88,7 @@ Source: `../design/design-direction.md` and `../design/tbc-flora_v2.html`.
 | F01.2 | todo | Data model: user, organisation, role (organiser, sponsor, decision-maker, recommender) | Build | M | F01.1 | Model in code; roles can be added to an organisation |
 | F01.3 | todo | Sign-up and sign-in screens | Build | M | F01.2, F00.4 | A new person can sign up as organiser or sponsor and sign back in |
 | F01.4 | todo | Organisation profile page (name, short description, contact, logo) | Build | M | F01.3 | Profile can be created and edited; visible to the other side |
-| F01.5 | todo | Privacy basics: what personal data is stored, how an account is deleted | Build, test | M | F01.2 | Stored fields listed in one document; deletion removes the account and its data |
+| F01.5 | in progress | Privacy basics: what personal data is stored, how an account is deleted | Build, test | M | F01.2 | Stored fields listed in one document; deletion removes the account and its data |
 
 ### F02 Event page (needs: O2, S2, S3, S4)
 
@@ -128,10 +129,10 @@ Owner decision 2026-11-25: an organiser can test the product with a sample prosp
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F06.1 | todo | Events list page | Build | M | F02.5 | Published events appear as cards with the key facts |
-| F06.2 | todo | Filters: goal, date, location, audience and organiser type | Build | M | F06.1, F04 (see F04.1) | Each filter works alone and together; filter state kept in the page address |
+| F06.1 | done | Events list page | Build | M | F02.5 | Published events appear as cards with the key facts |
+| F06.2 | in progress | Filters: goal, date, location, audience and organiser type | Build | M | F06.1, F04 (see F04.1) | Each filter works alone and together; filter state kept in the page address |
 | F06.3 | todo | Cold start: what the page shows when there are few or no events | Design, build | S | F06.1 | Clear empty state with a next step (list an event, or ask us to introduce you) |
-| F06.4 | todo | Organiser-type filter with plain labels (student society; university or careers service; company-hosted; community or non-profit; commercial organiser), a count for each, and a one-line explanation of each | Build | M | F06.1, F02.2 | Each label filters the list; the counts add up; every label has at least two example events (F24.10) |
+| F06.4 | done | Organiser-type filter with plain labels (student society; university or careers service; company-hosted; community or non-profit; commercial organiser), a count for each, and a one-line explanation of each | Build | M | F06.1, F02.2 | Each label filters the list; the counts add up; every label has at least two example events (F24.10) |
 
 F04 (sponsor profile by goal) is gated by survey Q5. For the first slice, F06.2 uses a plain goal filter without a saved profile (F04.1).
 
@@ -150,8 +151,8 @@ F04 (sponsor profile by goal) is gated by survey Q5. For the first slice, F06.2 
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F18.1 | todo | An "Example" label component for any invented content | Build | S | F00.5 | Label shown wherever data is example data |
-| F18.2 | todo | Seed data: a few example events, packages and a sponsor, all flagged as example | Build | M | F02.2, F05.1 | Every seeded record carries the flag; removed with one command |
+| F18.1 | done | An "Example" label component for any invented content | Build | S | F00.5 | Label shown wherever data is example data |
+| F18.2 | in progress | Seed data: a few example events, packages and a sponsor, all flagged as example | Build | M | F02.2, F05.1 | Every seeded record carries the flag; removed with one command **Built 2026-11-25:** Twelve example events sit in `data/events.ts` (not in the database yet); example sponsors and threads are not built |
 | F18.3 | todo | Rule: no star ratings in the first release; show verified facts and "first edition" | Decision | S | none | Written in `../design/design-direction.md` or here |
 | F18.4 | todo | Five to eight example sponsors (invented) across the three goals (hire, product feedback, brand) and in-kind only | Build | M | F18.1 | Every example sponsor has a profile and the Example label |
 | F18.5 | todo | Example proposals in every status (requested, counter, confirmed, declined) between example sponsors and example events, so both sides have threads to open | Build | M | F18.4, F08.1 | Both sides see at least one thread in each status |
@@ -162,33 +163,33 @@ Decided 2026-11-24: built **with the full app**. Updated 2026-11-25: this is now
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F21.1 | todo | Choose the 4-5 onboarding questions and their order (past behaviour first, product explained after); candidates are Q1, Q5, Q6, Q20 and Q24 | Decision | S | R6 or provisional | Question list and order written; each maps to a survey question number |
-| F21.2 | todo | Consent text, what is stored and for how long (matches F01.5) | Decision, build | S | F01.5 | Text on screen before the first answer is saved; stored fields listed |
-| F21.3 | todo | Data model `survey_response`: source, answers, consent time, optional email, anonymous id | Build | M | R8 | Model in code; every row has a source (form or app) |
-| F21.4 | todo | Stepped onboarding screens, one question per screen, progress shown, phone first; starts from the landing hero's button | Build | L | F00.3, F00.4, F00.5, F00.7, F21.3 | A person can finish on a phone in about a minute |
-| F21.5 | todo | Answer without an account (for QR use at events); offer an account at the end | Build | M | F21.4 | An anonymous answer is saved; account creation links it |
+| F21.1 | done | Choose the 4-5 onboarding questions and their order (past behaviour first, product explained after); candidates are Q1, Q5, Q6, Q20 and Q24 | Decision | S | R6 or provisional | Question list and order written; each maps to a survey question number |
+| F21.2 | in progress | Consent text, what is stored and for how long (matches F01.5) | Decision, build | S | F01.5 | Text on screen before the first answer is saved; stored fields listed |
+| F21.3 | done | Data model `survey_response`: source, answers, consent time, optional email, anonymous id | Build | M | R8 | Model in code; every row has a source (form or app) |
+| F21.4 | done | Stepped onboarding screens, one question per screen, progress shown, phone first; starts from the landing hero's button | Build | L | F00.3, F00.4, F00.5, F00.7, F21.3 | A person can finish on a phone in about a minute The two buttons on the "why we are asking" screen are the same size and the main one moves gently (not with "reduce motion"); small buttons at the bottom right: "Answer as … instead" and "Delete my answers" |
+| F21.5 | in progress | Answer without an account (for QR use at events); offer an account at the end | Build | M | F21.4 | An anonymous answer is saved; account creation links it |
 | F21.6 | todo | Optional "help shape TBC" cards with deeper questions | Build | M | F21.4 | Each card can be skipped; answers saved with the same source tag |
 | F21.7 | todo | Turn the chosen goals into the sponsor profile | Build | M | F21.4, F04.1 (gate) | Profile pre-filled from onboarding answers |
-| F21.8 | todo | CSV export in the survey's column order plus a `source` column | Build | S | F21.3 | The export opens in the analysis plan in `../research/sponsor-questionnaire.md` without changes |
-| F21.9 | todo | Spam protection (request limit, hidden field) | Build | S | F21.3 | A script posting many answers is limited; test written |
-| F21.10 | todo | "Early preview" notice and Example labels on the landing and onboarding | Build | S | F18.1 | No example content looks real |
+| F21.8 | done | CSV export in the survey's column order plus a `source` column | Build | S | F21.3 | The export opens in the analysis plan in `../research/sponsor-questionnaire.md` without changes |
+| F21.9 | in progress | Spam protection (request limit, hidden field) | Build | S | F21.3 | A script posting many answers is limited; test written Rate limit (per address, per minute) and answer whitelist are live and tested locally; a hidden field was not added |
+| F21.10 | done | "Early preview" notice and Example labels on the landing and onboarding | Build | S | F18.1 | No example content looks real |
 | F21.11 | skipped | Compare in-app answers with Google Form answers by source | Research | S | R3, F21.8 | **Skipped (owner, 2026-11-25): there is no Google Form wave to compare with.** There is no unprimed baseline, so keep the intro general (F21.21) |
 | F21.17 | todo | An "I do both" choice (from survey Q24: the person also organises events) that sets up the both-sides home (F23.9) | Build | S | F21.4 | Choosing it is saved and read by F23.9 |
 | F21.18 | todo | One table that maps every in-app question to its number in the questionnaire (Q1 to Q24), so the export follows the analysis plan's columns | Decision | S | F21.1 | The table is in the repo; the export in F21.8 follows it |
-| F21.19 | todo | Three short intro screens before the questions: what TBC is for; the two kinds of user (organiser, sponsor) with one line each and "you can try both"; why we ask: this survey is to understand sponsors' needs. Draft texts in `../design/onboarding-copy.md` | Build | M | F21.4, F22.1 | The three screens show in order, can be read in about 20 seconds, and end with "Start" or "Skip and explore"; the consent line sits on the third |
-| F21.20 | todo | Organiser path: if the person chose organiser, say this round is about sponsors' needs and offer two or three short questions on how they find sponsors today (written after the organiser interviews, R4), or "Skip and explore" | Decision, build | M | F21.19, R4 | An organiser can answer the short set or skip; answers saved with source `app` and the role |
-| F21.21 | todo | Keep screen 1 to one general sentence about TBC (no feature list) so the intro does not steer the answers; with no Google Form baseline, note the intro wording next to the results | Decision | S | F21.19 | The intro wording is checked against this rule |
+| F21.19 | done | Three short intro screens before the questions: what TBC is for; the two kinds of user (organiser, sponsor) with one line each and "you can try both"; why we ask: this survey is to understand sponsors' needs. Draft texts in `../design/onboarding-copy.md` | Build | M | F21.4, F22.1 | The three screens show in order, can be read in about 20 seconds, and end with "Start" or "Skip and explore"; the consent line sits on the third |
+| F21.20 | done | Organiser path: if the person chose organiser, say this round is about sponsors' needs and offer two or three short questions on how they find sponsors today (written after the organiser interviews, R4), or "Skip and explore" | Decision, build | M | F21.19, R4 | An organiser can answer the short set or skip; answers saved with source `app` and the role |
+| F21.21 | done | Keep screen 1 to one general sentence about TBC (no feature list) so the intro does not steer the answers; with no Google Form baseline, note the intro wording next to the results | Decision | S | F21.19 | The intro wording is checked against this rule |
 | F21.22 | in progress | Review the intro wording together with all other English texts | Decision | S | F21.19, F22.6 | Final texts listed; the owner has read them |
 
 Keeping every answer safe (added 2026-11-24: losing survey answers is not acceptable):
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F21.12 | todo | Save each answer to the database the moment it is given; if the network fails, keep it in the browser and retry, and show "Saved" only after the server confirms | Build | M | F21.3 | A test that cuts the network mid-way loses no answer; the screen never says "Saved" before the server did |
+| F21.12 | done | Save each answer to the database the moment it is given; if the network fails, keep it in the browser and retry, and show "Saved" only after the server confirms | Build | M | F21.3 | A test that cuts the network mid-way loses no answer; the screen never says "Saved" before the server did **Built 2026-11-25:** Built: every answer is sent at once, queued in the browser and retried every 3 seconds; "Saved" shows only after the server confirms. The cut-network test in a browser is still to do **Tested on the live site 2026-11-25 in a real browser:** "Saved" showed only after the server confirmed; with the network cut on purpose the screen said "Not saved yet, trying again…", the answer waited in the browser queue, and after the network came back it was sent and stored (checked in the database) |
 | F21.13 | todo | Second copy of every answer in a Google Sheet in the team's Drive, through a retry queue (an answer waits in the queue until the Sheet confirms) | Build | M | F21.3 | Every database answer appears in the Sheet; a failed write is retried, not dropped |
-| F21.14 | todo | Automatic backups of the database plus a weekly CSV export saved outside the database provider | Build | M | R8, F21.8 | Backups run on schedule; the latest export is found in Drive |
+| F21.14 | in progress | Automatic backups of the database plus a weekly CSV export saved outside the database provider | Build | M | R8, F21.8 | Backups run on schedule; the latest export is found in Drive **Built 2026-11-25:** The export endpoint exists (`/api/admin/export`, token protected). The weekly automatic copy outside the database provider is still to do |
 | F21.15 | todo | Daily check that database and Sheet counts match; the team is told if they do not | Build | S | F21.13 | A forced mismatch in a test sends a warning |
-| F21.16 | todo | Save-check before launch: submit 20 test answers (some on a bad connection), compare database, Sheet and export, then restore a backup into an empty database | Test | M | F21.12-F21.15 | All 20 found in all three places; the restore works; result written down |
+| F21.16 | in progress | Save-check before launch: submit 20 test answers (some on a bad connection), compare database, Sheet and export, then restore a backup into an empty database | Test | M | F21.12-F21.15 | All 20 found in all three places; the restore works; result written down **Built 2026-11-25:** Database part passed locally on 2026-11-25: 20 of 20 answers stored as sent, bad input and wrong token refused, delete works, test rows removed (`scripts/save-check.mjs`). The run against the live site, the Google Sheet copy and the backup restore are still to do **Live-site run 2026-11-25:** 20 of 20 test answers stored as sent and read back; all 20 removed by delete (checked in the database); the one row left in the table is a real visitor's. The rate-limit step cannot be shown on the live site when requests are paced (it passed locally). `scripts/save-check.mjs` now checks by anonymous id in the database. Still to do: the Google Sheet copy and the backup restore |
 
 ### F22 Landing page (needs: S1, O1, promotion)
 
@@ -196,10 +197,10 @@ Dark hero from `../design/design-direction.md`; the app itself is light. Two neo
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F22.1 | in progress | Write the landing content: headline, three short lines on what TBC is, the question "Which side do you want to try first?", the two button labels ("Try as an organiser", "Try as a sponsor", each with a short line under it), the "early preview" notice | Decision | S | none | Text agreed by the team; no claim that is not true yet |
-| F22.2 | todo | Build the landing page: dark X hero, white-strand logo, two neon buttons, works on a phone | Build | L | F00.3, F00.7, F00.9, F22.1 | Both buttons start onboarding with the chosen type already set |
+| F22.1 | done | Write the landing content: headline, three short lines on what TBC is, the question "Which side do you want to try first?", the two button labels ("Try as an organiser", "Try as a sponsor", each with a short line under it), the "early preview" notice | Decision | S | none | Text agreed by the team; no claim that is not true yet |
+| F22.2 | done | Build the landing page: dark X hero, white-strand logo, two neon buttons, works on a phone | Build | L | F00.3, F00.7, F00.9, F22.1 | Both buttons start onboarding with the chosen type already set Sponsor button (neon green) on the left, organiser (lime) on the right |
 | F22.3 | todo | Dark-to-light transition when the person enters onboarding (respects "reduce motion") | Build | S | F22.2, F21.4 | The switch from dark to light looks intentional, not like a page jump |
-| F22.4 | todo | Page title, description and a share image for links (promotion) | Build | S | F22.2 | A pasted link shows a proper title and image |
+| F22.4 | in progress | Page title, description and a share image for links (promotion) | Build | S | F22.2 | A pasted link shows a proper title and image |
 | F22.5 | todo | Count visits and which button was pressed, with consent where the law needs it (UK rules to check) | Build | M | F22.2, F21.2 | Counts per button; no personal data kept without consent |
 | F22.6 | todo | Review all English button, headline, notice and pop-up texts for plain, natural wording (landing, onboarding, role switch, sample pop-up) | Decision | S | F22.1, F03.1 | One list of final texts; the owner has read it |
 
@@ -209,13 +210,13 @@ Two kinds of user: organiser (wants sponsors) and sponsor (decides what to back)
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F23.1 | in progress | Write the preview rules: the switch changes the view, not permissions; the other side shows example data only; actions there are never sent to real people | Decision | S | none | One short note; the team has agreed |
-| F23.2 | todo | Pick two neon colours, one per role, and check them on the light page: always with a text label (and icon), never colour alone; check contrast and a visible edge | Design | S | F00.1 | Two role colours chosen; contrast and colour-blind check recorded |
-| F23.3 | todo | Switch component fixed in the top-right corner on every screen, reading "Trying as: Organiser | Sponsor"; keyboard and screen-reader friendly, large enough to tap on a phone, announces the current role | Build | M | F00.3, F23.2 | Works with keyboard only; the role change is announced |
-| F23.4 | todo | Home screen and navigation for each role (what each side sees after switching) | Build | L | F23.3, F02.5, F08.3 | Each role has its own start screen and menu |
-| F23.5 | todo | Example data for the side the person does not own | Build | M | F18.2 | The other side is never empty; every record has the Example label |
-| F23.6 | todo | Remember the last role for the next visit; a one-time hint after onboarding: "Switch to see the other side" | Build | S | F23.3, F21.4 | Reopening the app shows the last role; the hint shows once |
-| F23.7 | todo | Guardrails: actions in the example side stay in the example side; test that nothing reaches a real person | Build, test | M | F23.1, F08.6 | Test passes: a proposal sent "as the other role" is never visible to a real account |
+| F23.1 | done | Write the preview rules: the switch changes the view, not permissions; the other side shows example data only; actions there are never sent to real people | Decision | S | none | One short note; the team has agreed |
+| F23.2 | in progress | Pick two neon colours, one per role, and check them on the light page: always with a text label (and icon), never colour alone; check contrast and a visible edge | Design | S | F00.1 | Two role colours chosen; contrast and colour-blind check recorded **Built 2026-11-25:** Lime for organiser, mint for sponsor, always with a text label. The contrast and colour-blind check is not recorded yet |
+| F23.3 | done | Switch component fixed in the top-right corner on every screen, reading "Trying as: Organiser | Sponsor"; keyboard and screen-reader friendly, large enough to tap on a phone, announces the current role | Build | M | F00.3, F23.2 | Works with keyboard only; the role change is announced Sponsor and Organiser buttons have the same size (112 px); the switch also shows on the first onboarding screen |
+| F23.4 | in progress | Home screen and navigation for each role (what each side sees after switching) | Build | L | F23.3, F02.5, F08.3 | Each role has its own start screen and menu |
+| F23.5 | in progress | Example data for the side the person does not own | Build | M | F18.2 | The other side is never empty; every record has the Example label |
+| F23.6 | in progress | Remember the last role for the next visit; a one-time hint after onboarding: "Switch to see the other side" | Build | S | F23.3, F21.4 | Reopening the app shows the last role; the hint shows once |
+| F23.7 | done | Guardrails: actions in the example side stay in the example side; test that nothing reaches a real person | Build, test | M | F23.1, F08.6 | Test passes: a proposal sent "as the other role" is never visible to a real account |
 | F23.8 | todo | Test: switching back and forth keeps drafts and filters | Test | S | F23.4 | A half-filled form survives a role switch |
 | F23.9 | todo | Both-sides home: when onboarding says "I do both", the home shows both sides and the switch marks both | Build | M | F23.4, F21.17 | A person who chose "I do both" sees both start screens; gate: survey Q24 shows 25% or more also organise |
 
@@ -257,13 +258,13 @@ After the questions, the start page offers a short tour and a checklist. Texts a
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F27.1 | in progress | Decide the steps for each side (sponsor: switch, filters, example event, prospectus viewer, proposal button, proposals; organiser: switch, add event, sample download, review screen, packages, proposals) and the closing checklist "Try these three things" | Decision | S | none | The two step lists are final; each step points at a real screen element |
-| F27.2 | todo | Decide: build the tour component ourselves or use a small open-source tour library (check licence, size, keyboard support, phone support) | Decision | S | none | The choice and its reasons written in `decisions.md` |
-| F27.3 | todo | Tour component: highlights a real element with a small card (title, one sentence, Back, Next, Skip); works on a phone; focus moves into the card and Esc skips; respects "reduce motion" | Build | L | F27.2, F00.6 | A keyboard-only person can go through and skip; the highlight sits on the right element at phone and desktop width |
-| F27.4 | todo | Start rule: the welcome card ("Show me around" or "I'll explore myself") shows once after onboarding; the tour is skippable at every step and replayable from the menu | Build | S | F27.3, F21.4 | Skipping never traps the person; the menu entry replays the tour |
-| F27.5 | todo | Checklist card "Try these three things" that ticks as the person does them, shows progress and can be hidden | Build | M | F27.1, F00.5 | Each task ticks when done; the card can be dismissed |
-| F27.6 | todo | Save progress (tour done, checklist ticks) per person and per anonymous id, so reopening does not restart it | Build | S | F21.3, F26 | Closing and reopening keeps the progress |
-| F27.7 | todo | Role-aware: the steps change when the person switches side, and the switch step comes first | Build | M | F23.3, F27.3 | Switching side mid-tour moves to that side's steps without breaking |
+| F27.1 | done | Decide the steps for each side (sponsor: switch, filters, example event, prospectus viewer, proposal button, proposals; organiser: switch, add event, sample download, review screen, packages, proposals) and the closing checklist "Try these three things" | Decision | S | none | The two step lists are final; each step points at a real screen element |
+| F27.2 | done | Decide: build the tour component ourselves or use a small open-source tour library (check licence, size, keyboard support, phone support) | Decision | S | none | The choice and its reasons written in `decisions.md` |
+| F27.3 | in progress | Tour component: highlights a real element with a small card (title, one sentence, Back, Next, Skip); works on a phone; focus moves into the card and Esc skips; respects "reduce motion" | Build | L | F27.2, F00.6 | A keyboard-only person can go through and skip; the highlight sits on the right element at phone and desktop width **Built 2026-11-25:** Own simple version built (highlights a real element, Back, Next, Skip, Esc). Not yet tested with a keyboard only or on a phone (F27.8) |
+| F27.4 | done | Start rule: the welcome card ("Show me around" or "I'll explore myself") shows once after onboarding; the tour is skippable at every step and replayable from the menu | Build | S | F27.3, F21.4 | Skipping never traps the person; the menu entry replays the tour |
+| F27.5 | done | Checklist card "Try these three things" that ticks as the person does them, shows progress and can be hidden | Build | M | F27.1, F00.5 | Each task ticks when done; the card can be dismissed |
+| F27.6 | in progress | Save progress (tour done, checklist ticks) per person and per anonymous id, so reopening does not restart it | Build | S | F21.3, F26 | Closing and reopening keeps the progress **Built 2026-11-25:** Progress is saved in this browser only (not in the database yet) |
+| F27.7 | done | Role-aware: the steps change when the person switches side, and the switch step comes first | Build | M | F23.3, F27.3 | Switching side mid-tour moves to that side's steps without breaking |
 | F27.8 | todo | Test with three first-time people on a phone: can they finish the tour or skip it without help; do the highlights still point at the right elements after layout changes | Test | M | F27.4, F27.5 | Notes saved; broken steps fixed |
 
 ### F25 AI assistant (needs: O2, O7, S1, S4)
@@ -286,14 +287,14 @@ Claude through the Anthropic API (`decisions.md` D3). Model prices and ids come 
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| X1 | todo | Repo setup: structure, readme, linting, a basic test run | Build | M | R8 | A new clone runs and passes its tests |
+| X1 | in progress | Repo setup: structure, readme, linting, a basic test run | Build | M | R8 | A new clone runs and passes its tests **Built 2026-11-25:** Project created (Next.js, TypeScript, build passes) and `scripts/save-check.mjs` is the one test so far; there is no wider test suite yet |
 | X2 | todo | Hosted preview for each change | Build | S | X1 | A link is made for every change |
 | X3 | todo | Test plan for the slice: one scripted walk from organiser event to confirmed package | Test | M | F08.4 | Script written and run once end to end |
 | X4 | todo | Concierge test on a real event (Impact Hack; its date is not confirmed): one organiser, three sponsors, three hand-made proposals | Research | L | F02.5, F05.2, F08.4 | Notes on who replied and what they asked for; features nobody asked for stay out of Phase A |
 | X5 | todo | Review after the concierge test; update `features.md` gates | Planning | S | X4 | Gates and first slice updated |
-| X6 | todo | Scaffold the web project (Next.js assumed) with the routes `/`, `/start`, `/app/events`, `/app/events/[id]`, `/app/events/new`, `/app/proposals/[id]`, and the light and dark page shells | Build | M | X1 | Every route loads an empty page in the right shell |
+| X6 | in progress | Scaffold the web project (Next.js assumed) with the routes `/`, `/start`, `/app/events`, `/app/events/[id]`, `/app/events/new`, `/app/proposals/[id]`, and the light and dark page shells | Build | M | X1 | Every route loads an empty page in the right shell **Built 2026-11-25:** Routes `/`, `/start`, `/app`, `/privacy` exist; the event pages and proposal routes come with their features |
 | X7 | todo | Three environments (local, preview, production) with separate keys; a script that refuses to run against production by mistake | Build | S | H8 | A preview deployment cannot reach production data |
-| X8 | todo | Write the code layout in the repo readme (folders for app, components, lib, database migrations, the example-prospectus generator); changes to the database only through migration scripts | Decision | S | X1 | The readme shows the layout and the rule |
+| X8 | done | Write the code layout in the repo readme (folders for app, components, lib, database migrations, the example-prospectus generator); changes to the database only through migration scripts | Decision | S | X1 | The readme shows the layout and the rule |
 | X9 | done | Git workflow: one commit per finished task, message starts with the task ID, pushed to `origin/main` right away (owner approval 2026-11-25); before each commit check that `.env` is not staged and no key or password is in the diff | Decision | S | none | Rule recorded in `decisions.md` D13; the first commit and push of the plan done |
 
 ---
