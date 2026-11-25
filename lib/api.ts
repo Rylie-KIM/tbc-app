@@ -30,3 +30,14 @@ export function cleanAnswer(key: unknown, value: unknown): string | string[] | n
 }
 
 export const validEmail = (v: unknown): v is string => typeof v === 'string' && v.length <= 200 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+type Q = (sql: string, params?: unknown[]) => Promise<import('pg').QueryResult>;
+export const sideOf = (v: unknown): 'organiser' | 'sponsor' | null => (v === 'organiser' || v === 'sponsor' ? v : null);
+
+/** The response of this person for one side; an older queued answer without a side goes to the most recent response. */
+export async function responseFor(q: Q, anonId: string, side: 'organiser' | 'sponsor' | null): Promise<{ id: string; role_chosen: string } | null> {
+  const r = side
+    ? await q('select id, role_chosen from public.survey_response where anon_id = $1 and role_chosen = $2', [anonId, side])
+    : await q('select id, role_chosen from public.survey_response where anon_id = $1 order by updated_at desc limit 1', [anonId]);
+  return r.rows[0] ?? null;
+}

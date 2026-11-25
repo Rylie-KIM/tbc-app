@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   await tx(async (q) => {
     const r = await q(
       `insert into public.survey_response (anon_id, role_chosen, consent_at) values ($1, $2, now())
-       on conflict (anon_id) do update set role_chosen = excluded.role_chosen, updated_at = now() returning id`,
+       on conflict (anon_id, role_chosen) do update set updated_at = now() returning id`,
       [b.anonId, b.role],
     );
     await q(`insert into public.survey_event (response_id, kind, role) values ($1, 'start', $2)`, [r.rows[0].id, b.role]);

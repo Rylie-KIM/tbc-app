@@ -129,3 +129,7 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 
 **Status:** Owner asked. All 24 questions of the questionnaire file are in the onboarding (earlier only 5 to 6 were). This overrides the earlier plan of 4 to 5 onboarding questions (F21.1). A sponsor who has sponsored sees 23 questions, one who has not (Q4 = 0) sees 11, an organiser sees 5. The intro now says "a few minutes" (it was "about a minute"); the time was not measured.
 
+## D17. One response per person and side (2026-11-25)
+
+**Status:** Owner reported a bug: after switching between Sponsor and Organiser, the earlier answers stayed attached to the newly chosen side. Cause: there was one response row per browser, and the side was overwritten. Now there is one response per browser and side (migration 0003, unique on `anon_id` + `role_chosen`); each answer names its side. Switching side during the questionnaire returns to that side's start screen. Answers already stored before this fix were not split (only one real visitor row existed). "Delete my answers" removes both sides.
+

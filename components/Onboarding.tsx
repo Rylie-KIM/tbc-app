@@ -24,7 +24,9 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   const pctNow = useRef(0);
   const lastPct = useRef(0);
   const lastLen = useRef(0);
-  const [answers, setAnswers] = useState<Answers>({});
+  const [allAnswers, setAllAnswers] = useState<Record<Role, Answers>>({ sponsor: {}, organiser: {} }); // one set of answers per side
+  const answers: Answers = role ? allAnswers[role] : {};
+  const setAnswers = (f: (a: Answers) => Answers) => { if (role) setAllAnswers((all) => ({ ...all, [role]: f(all[role]) })); };
   const [emailError, setEmailError] = useState('');
   const [save, setSave] = useState<SaveState>('idle');
   const [finishing, setFinishing] = useState(false);
@@ -73,7 +75,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   }, []);
 
   const enqueue = (path: string, body: Record<string, unknown>) => {
-    queue.current.push({ path, body: { anonId: anon.current, ...body } });
+    queue.current.push({ path, body: { anonId: anon.current, role, ...body } });
     persistQueue();
     void flush();
   };
@@ -91,18 +93,15 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     toastTimer.current = setTimeout(() => setToast(''), ms);
   };
 
-  // The switch is visible from the first screen. Changing side keeps the answers, the question position and the bar.
+  // The switch is visible from the first screen. Changing side sends the person back to the screen with the Start
+  // button for that side: its answers are kept apart from the other side's (each side is its own response).
   const switchRole = (r: Role) => {
     if (r === role) return;
-    const newQs = questionsFor(r, answers);
-    let ns = step;
-    if (step >= 4) ns = 4 + Math.min(step - 4, newQs.length - 1);
-    setAnchor({ step: ns, pct: pctNow.current });
-    setStep(ns);
+    setAnchor(null);
     setRole(r);
     writeLS('tbc_role', r);
-    if (started.current) enqueue('/api/survey/start', { role: r });
-    say(step >= 4 ? `Switched to ${r}. The questions on this side are different; your earlier answers are kept.` : `Switched to ${r}.`);
+    if (step >= 3) setStep(2);
+    say(`Switched to ${r}.`);
   };
 
   const setValue = (key: string, value: string | string[]) => {
@@ -155,7 +154,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     try { await fetch('/api/survey/delete', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ anonId: anon.current }) }); } catch { /* ignore */ }
     queue.current = []; persistQueue();
     try { localStorage.removeItem('tbc_anon'); localStorage.removeItem('tbc_done'); } catch { /* ignore */ }
-    setAnswers({}); setDeleted(true);
+    setAllAnswers({ sponsor: {}, organiser: {} }); setDeleted(true);
   };
 
   const isIntro = step < 4;

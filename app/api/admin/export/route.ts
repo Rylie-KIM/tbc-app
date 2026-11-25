@@ -17,12 +17,12 @@ export async function GET(req: Request) {
     const rowsCsv = ev.rows.map((x) => [x.id, x.response_id, x.kind, x.key, x.value === null ? '' : typeof x.value === 'string' ? x.value : JSON.stringify(x.value), x.role, x.created_at?.toISOString()].map(csv).join(','));
     return new Response([hd.join(','), ...rowsCsv].join('\n'), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="tbc-survey-log.csv"', 'cache-control': 'no-store' } });
   }
-  const r = await db().query('select * from public.survey_response order by started_at');
-  const head = ['id', 'source', 'role_chosen', 'started_at', 'updated_at', 'consent_at', 'completed_at', ...EXPORT_KEYS];
+  const r = await db().query("select *, left(md5(anon_id), 10) as person from public.survey_response order by started_at");
+  const head = ['id', 'person', 'source', 'role_chosen', 'started_at', 'updated_at', 'consent_at', 'completed_at', ...EXPORT_KEYS];
   const lines = [head.join(',')];
   for (const row of r.rows) {
     const ans = row.answers ?? {};
-    lines.push([row.id, row.source, row.role_chosen, row.started_at?.toISOString(), row.updated_at?.toISOString(), row.consent_at?.toISOString(), row.completed_at?.toISOString(),
+    lines.push([row.id, row.person, row.source, row.role_chosen, row.started_at?.toISOString(), row.updated_at?.toISOString(), row.consent_at?.toISOString(), row.completed_at?.toISOString(),
       ...EXPORT_KEYS.map((k) => (k === 'q18_email' ? row.email : Array.isArray(ans[k]) ? ans[k].join('; ') : ans[k]))].map(csv).join(','));
   }
   return new Response(lines.join('\n'), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="tbc-survey.csv"', 'cache-control': 'no-store' } });

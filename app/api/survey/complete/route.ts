@@ -1,5 +1,5 @@
 import { tx } from '@/lib/db';
-import { json, limited, validAnon, validEmail } from '@/lib/api';
+import { json, limited, responseFor, sideOf, validAnon, validEmail } from '@/lib/api';
 
 export async function POST(req: Request) {
   if (limited(req)) return json({ ok: false, error: 'rate' }, 429);
@@ -8,9 +8,10 @@ export async function POST(req: Request) {
   const email = b.email ? (validEmail(b.email) ? b.email : null) : null;
   if (b.email && !email) return json({ ok: false, error: 'bad-email' }, 400);
   const ok = await tx(async (q) => {
-    const r = await q(`update public.survey_response set email = coalesce($2, email), completed_at = now(), updated_at = now() where anon_id = $1 returning id, role_chosen`, [b.anonId, email]);
-    if (!r.rowCount) return false;
-    await q(`insert into public.survey_event (response_id, kind, role) values ($1, 'complete', $2)`, [r.rows[0].id, r.rows[0].role_chosen]);
+    const resp = await responseFor(q, b.anonId, sideOf(b.role));
+    if (!resp) return false;
+    await q(`update public.survey_response set email = coalesce($2, email), completed_at = now(), updated_at = now() where id = $1`, [resp.id, email]);
+    await q(`insert into public.survey_event (response_id, kind, role) values ($1, 'complete', $2)`, [resp.id, resp.role_chosen]);
     return true;
   });
   return ok ? json({ ok: true }) : json({ ok: false, error: 'no-session' }, 404);
