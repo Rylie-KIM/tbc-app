@@ -77,7 +77,7 @@ export default function StartApp({ initialRole, welcome }: { initialRole?: strin
         <div className="wrap">
           <Link href="/" className="logo-row" aria-label="TBC home"><img src="/brand/logo.png" alt="" style={{ height: 36 }} /><b>TBC.</b></Link>
           <div className="row">
-            <button className="btn btn-ghost" style={{ padding: '8px 16px' }} onClick={() => setTour(0)}>Show me around</button>
+            <button className="btn btn-tour" onClick={() => setTour(0)}><span className="spark" aria-hidden>✦</span> Show me around</button>
             <div className="switch" data-tour="switch" role="group" aria-label="Trying as">
               <span className="lbl">Trying as:</span>
               <button className="spo" aria-pressed={role === 'sponsor'} onClick={() => pick('sponsor')}>Sponsor</button>
@@ -93,7 +93,7 @@ export default function StartApp({ initialRole, welcome }: { initialRole?: strin
             <h2>You are ready to explore</h2>
             <p className="muted" style={{ margin: '8px 0 16px' }}>Everything here is example data, so try anything. Want a quick tour?</p>
             <div className="row">
-              <button className="btn btn-primary" onClick={startTour}>Show me around</button>
+              <button className="btn btn-tour" onClick={startTour}><span className="spark" aria-hidden>✦</span> Show me around</button>
               <button className="btn btn-ghost" onClick={() => { setShowWelcome(false); ls.set('tbc_tour', 'seen'); }}>I will explore myself</button>
             </div>
           </section>
