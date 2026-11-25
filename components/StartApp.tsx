@@ -62,6 +62,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
     if (r === 'organiser' || r === 'sponsor') setRole(r);
     try { setDone(JSON.parse(ls.get('tbc_tasks') || '[]')); } catch { /* ignore */ }
     setHideList(ls.get('tbc_hidelist') === '1');
+    if (new URLSearchParams(window.location.search).get('tour') === 'again') { ls.set('tbc_tour_done', ''); ls.set('tbc_tour', ''); } // /app?tour=again brings the guide button back
     setTourDone(ls.get('tbc_tour_done') === '1');
     setShowWelcome(!!welcome && ls.get('tbc_tour') !== 'seen' && ls.get('tbc_tour_done') !== '1');
     if (switched === 'organiser' || switched === 'sponsor') say(`Switched to ${switched}.`);
