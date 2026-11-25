@@ -1,0 +1,21 @@
+# Secrets: never commit. Only .env.example (no real values) is committed.
+.env
+.env.*
+!.env.example
+
+# Vercel and tooling
+.vercel
+node_modules
+.next
+.DS_Store
+
+# Survey exports contain emails: keep out of git
+plan/research/analysis/
+responses*.csv
+# Real Impact Hack prospectus: never published (decisions D5), kept local for private reader tests
+plan/ImpactHack_Sponsorship_Prospectus.pdf
+
+# Kept local until the GitHub repo is confirmed private (decisions D13):
+# raw meeting transcript (names of team members) and the reference images (other people's design work)
+plan/TBC-Hackathon Sponsorship Platform Planning.txt
+plan/design/[0-9].jpg
