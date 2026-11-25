@@ -259,8 +259,8 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             <span className="kicker">Question {qi + 1} of {questions.length}</span>
             {q.intro && <p className="muted" style={{ background: 'rgba(255,255,255,.7)', borderRadius: 16, padding: '12px 16px' }}>{q.intro}</p>}
             <h2>{q.title}</h2>
-            {q.hint && <p className="muted">{q.hint}{q.optional && q.kind !== 'email' ? '' : ''}</p>}
-            {q.optional && <span className="small">Optional</span>}
+            {q.hint && <p className="muted">{q.hint}</p>}
+            {q.optional && q.kind !== 'email' && <span className="small">Optional</span>} {/* the email question already says it in its hint */}
 
             {(q.kind === 'single' || q.kind === 'multi') && (
               <div className="opts" role={q.kind === 'single' ? 'radiogroup' : 'group'} aria-label={q.title}>
@@ -290,8 +290,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             )}
 
             {q.kind === 'email' && (<>
-              <label className="small" htmlFor="em">Email (optional)</label>
-              <input id="em" className="input" type="email" inputMode="email" autoComplete="email" value={(sel(q.key) as string) ?? ''} onChange={(e) => { setEmailError(''); setAnswers((a) => ({ ...a, [q.key]: e.target.value })); }} placeholder="you@example.com" aria-describedby="emerr" />
+              <input id="em" className="input" aria-label="Email address" type="email" inputMode="email" autoComplete="email" value={(sel(q.key) as string) ?? ''} onChange={(e) => { setEmailError(''); setAnswers((a) => ({ ...a, [q.key]: e.target.value })); }} placeholder="you@example.com" aria-describedby="emerr" />
               <p id="emerr" className="small" style={{ color: '#7d5200' }}>{emailError}</p>
               {/* the email is sent when leaving this question (see go) */}
             </>)}
