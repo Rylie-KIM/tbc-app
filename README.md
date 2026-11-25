@@ -6,7 +6,7 @@ Live preview: https://tbc-app-mu.vercel.app (public, marked "early preview", all
 
 ## What is built (2026-11-25)
 
-The survey slice: landing page (dark hero), onboarding survey that saves every answer, a start page with a role switch, example events filterable by organiser type, a short guided tour and checklist.
+The survey slice: landing page (dark hero), the full questionnaire (every answer saved at once, with an append-only log), a start page with a role switch, search and filters over twelve invented example events with event pages and example prospectus PDFs, a short guided tour and checklist.
 
 ## Run it
 
@@ -26,7 +26,8 @@ node scripts/save-check.mjs http://localhost:3100   # stores 20 test answers, re
 |---|---|
 | `app/` | Pages (`/` landing, `/start` onboarding, `/app` start page, `/privacy`) and API routes (`app/api/survey/*`, `health`, `admin/export`) |
 | `components/` | `Onboarding`, `StartApp` (role switch, tour, checklist, events), `XScene` (background) |
-| `data/events.ts` | Twelve invented example events (always labelled "Example") |
+| `data/events.json`, `data/events.ts` | Twelve invented example events with the same facts for each (always labelled "Example") |
+| `public/events`, `public/prospectuses` | Cover art (SVG) and two-page example prospectus PDFs, made by `scripts/make-examples.mjs` |
 | `lib/` | `db.ts` (pooled Postgres), `survey.ts` (questions), `api.ts` (checks, rate limit) |
 | `supabase/migrations/` | Database changes: only through these files, never by hand |
 | `scripts/` | `migrate.mjs`, `db-test.mjs`, `save-check.mjs` |

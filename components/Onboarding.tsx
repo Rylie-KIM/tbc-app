@@ -11,18 +11,20 @@ const QUEUE_KEY = 'tbc_queue';
 const readLS = (k: string) => { try { return localStorage.getItem(k); } catch { return null; } };
 const writeLS = (k: string, v: string) => { try { localStorage.setItem(k, v); } catch { /* private mode: the page still works */ } };
 const newId = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`);
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Onboarding({ role: roleParam }: { role?: string }) {
   const router = useRouter();
   const [role, setRole] = useState<Role | null>(roleParam === 'organiser' || roleParam === 'sponsor' ? roleParam : null);
   const started = useRef(false);
-  const [step, setStep] = useState(0); // 0..2 intro screens, 3 "questionnaire starts" screen, then questions, then the email step
-  const [anchor, setAnchor] = useState<{ step: number; pct: number } | null>(null); // keeps the progress bar where it was after a side switch
+  const [step, setStep] = useState(0); // 0..2 intro, 3 "questionnaire starts", 4.. the questions
+  const [anchor, setAnchor] = useState<{ step: number; pct: number } | null>(null); // keeps the bar where it was after a switch or a branch
   const [toast, setToast] = useState('');
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pctNow = useRef(0);
+  const lastPct = useRef(0);
+  const lastLen = useRef(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [save, setSave] = useState<SaveState>('idle');
   const [finishing, setFinishing] = useState(false);
@@ -31,6 +33,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   const queue = useRef<Job[]>([]);
   const busy = useRef(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const textTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const questions = useMemo(() => (role ? questionsFor(role, answers) : []), [role, answers]);
 
@@ -55,7 +58,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
       const job = queue.current[0];
       try {
         const res = await fetch(job.path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(job.body) });
-        if (res.ok || res.status === 400 || res.status === 404) { queue.current.shift(); persistQueue(); if (res.status === 404) { /* session gone: nothing to update */ } }
+        if (res.ok || res.status === 400 || res.status === 404) { queue.current.shift(); persistQueue(); }
         else throw new Error(String(res.status));
       } catch {
         busy.current = false;
@@ -82,46 +85,66 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     setStep(3);
   };
 
-  // The role switch is visible from the first screen (owner request 2026-11-25): changing side keeps the
-  // answers already given, updates the stored side, and returns to the "why we are asking" screen because
-  // the questions differ between the two sides.
+  const say = (msg: string, ms = 5000) => {
+    setToast(msg);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(''), ms);
+  };
+
+  // The switch is visible from the first screen. Changing side keeps the answers, the question position and the bar.
   const switchRole = (r: Role) => {
     if (r === role) return;
     const newQs = questionsFor(r, answers);
     let ns = step;
-    if (step >= 4) { const i = step - 4; ns = i >= questions.length ? 4 + newQs.length : 4 + Math.min(i, newQs.length - 1); }
-    setAnchor({ step: ns, pct: pctNow.current }); // the bar stays exactly where it is
+    if (step >= 4) ns = 4 + Math.min(step - 4, newQs.length - 1);
+    setAnchor({ step: ns, pct: pctNow.current });
     setStep(ns);
     setRole(r);
     writeLS('tbc_role', r);
     if (started.current) enqueue('/api/survey/start', { role: r });
-    const msg = step >= 4
-      ? `Switched to ${r}. The questions on this side are different; your earlier answers are kept.`
-      : `Switched to ${r}.`;
-    setToast(msg);
-    if (toastTimer.current) clearTimeout(toastTimer.current);
-    toastTimer.current = setTimeout(() => setToast(''), 5000);
+    say(step >= 4 ? `Switched to ${r}. The questions on this side are different; your earlier answers are kept.` : `Switched to ${r}.`);
+  };
+
+  const setValue = (key: string, value: string | string[]) => {
+    setAnswers((a) => ({ ...a, [key]: value }));
+    enqueue('/api/survey/answer', { key, value });
   };
 
   const choose = (q: Question, opt: string) => {
-    let value: string | string[];
-    if (q.kind === 'single') value = opt;
-    else {
-      const cur = (answers[q.key] as string[] | undefined) ?? [];
-      if (cur.includes(opt)) value = cur.filter((x) => x !== opt);
-      else if (q.max && cur.length >= q.max) return;
-      else value = [...cur, opt];
-    }
-    setAnswers((a) => ({ ...a, [q.key]: value }));
-    enqueue('/api/survey/answer', { key: q.key, value });
+    if (q.kind === 'single' || q.kind === 'scale') return setValue(q.key, opt);
+    const cur = (answers[q.key] as string[] | undefined) ?? [];
+    if (cur.includes(opt)) return setValue(q.key, cur.filter((x) => x !== opt));
+    if (q.max && cur.length >= q.max) return;
+    setValue(q.key, [...cur, opt]);
   };
 
-  const finish = async () => {
-    const e = email.trim();
-    if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { setEmailError('That email does not look right. You can leave it empty.'); return; }
-    setEmailError('');
+  // Free text: kept in state at once, sent shortly after typing stops and again when leaving the question.
+  const typeText = (key: string, value: string) => {
+    setAnswers((a) => ({ ...a, [key]: value }));
+    if (textTimer.current) clearTimeout(textTimer.current);
+    textTimer.current = setTimeout(() => enqueue('/api/survey/answer', { key, value }), 700);
+  };
+  const flushText = (q: Question | null) => {
+    if (textTimer.current) { clearTimeout(textTimer.current); textTimer.current = null; }
+    if (!q) return;
+    const keys = [q.key, `${q.key}_other`].filter((k) => typeof answers[k] === 'string');
+    for (const k of keys) enqueue('/api/survey/answer', { key: k, value: answers[k] });
+  };
+
+  const go = (delta: number, q: Question | null) => {
+    if (q?.kind === 'email') {
+      const v = ((answers[q.key] as string) ?? '').trim();
+      if (delta > 0 && v && !EMAIL.test(v)) { setEmailError('That email does not look right. You can leave it empty.'); return; }
+      setEmailError('');
+    }
+    flushText(q);
+    setStep((s) => s + delta);
+  };
+
+  const finish = async (q: Question | null) => {
+    flushText(q);
     setFinishing(true);
-    enqueue('/api/survey/complete', e ? { email: e } : {});
+    enqueue('/api/survey/complete', {});
     writeLS('tbc_done', '1');
     for (let i = 0; i < 40 && (queue.current.length || busy.current); i++) await new Promise((r) => setTimeout(r, 250));
     if (!queue.current.length) router.push('/app?welcome=1');
@@ -135,6 +158,24 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     setAnswers({}); setDeleted(true);
   };
 
+  const isIntro = step < 4;
+  const qi = step - 4;
+  const q = qi >= 0 && qi < questions.length ? questions[qi] : null;
+  const last = 3 + questions.length; // index of the final question
+  const baseline = ((step + 1) / (last + 1)) * 100;
+  const pct = !anchor ? baseline
+    : step >= anchor.step ? (last <= anchor.step ? 100 : anchor.pct + ((100 - anchor.pct) * (step - anchor.step)) / (last - anchor.step))
+    : (anchor.pct * (step + 1)) / (anchor.step + 1);
+  pctNow.current = pct;
+
+  // when the number of questions changes (a branch after Q4), keep the bar where it was
+  useEffect(() => {
+    if (lastLen.current && lastLen.current !== questions.length && step >= 4) setAnchor({ step, pct: lastPct.current });
+    lastLen.current = questions.length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questions.length]);
+  useEffect(() => { lastPct.current = pct; });
+
   if (!role) {
     return (
       <div className="onb wrap"><div className="onb-card glass">
@@ -147,18 +188,11 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     );
   }
 
-  const isIntro = step < 4;
-  const qi = step - 4;
-  const q = qi >= 0 && qi < questions.length ? questions[qi] : null;
-  const onEmail = !isIntro && !q;
-  const last = 4 + questions.length; // index of the email step
-  const baseline = ((step + 1) / (last + 1)) * 100;
-  const pct = !anchor ? baseline
-    : step >= anchor.step ? (last <= anchor.step ? 100 : anchor.pct + ((100 - anchor.pct) * (step - anchor.step)) / (last - anchor.step))
-    : (anchor.pct * (step + 1)) / (anchor.step + 1);
-  pctNow.current = pct;
   const sel = (k: string) => answers[k];
-  const canNext = !q || (q.kind === 'single' ? !!sel(q.key) : ((sel(q.key) as string[] | undefined)?.length ?? 0) > 0);
+  const canNext = !q || q.optional || (q.kind === 'multi' ? ((sel(q.key) as string[] | undefined)?.length ?? 0) > 0 : !!sel(q.key));
+  const isLast = !!q && qi === questions.length - 1;
+  const total = questionsFor(role, {}).length;
+  const otherOn = !!q?.other && ((sel(q.key) as string[] | undefined) ?? []).includes('Other');
 
   return (
     <div className="onb">
@@ -180,28 +214,28 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           <div className="progress" aria-hidden><i style={{ width: `${pct}%` }} /></div>
 
           {step === 0 && (<>
-            <span className="kicker">Welcome</span>
+            <span className="kicker">Welcome to TBC</span>
             <h2>Sponsors and hackathons, in one place</h2>
             <p className="muted">TBC helps people who run hackathons find sponsors, and helps sponsors find events worth backing.</p>
             <div className="row"><button className="btn btn-primary" onClick={() => setStep(1)}>Next</button></div>
           </>)}
 
           {step === 1 && (<>
-            <span className="kicker">Two sides, and you can try both</span>
+            <span className="kicker">You can try both sides</span>
             <h2>Who is TBC for?</h2>
             <div className="two">
-              <div className="usercard spo"><b>Sponsor</b><p className="muted">You decide whether your company backs events: to hire, to get product feedback, or to be seen.</p></div>
-              <div className="usercard org"><b>Organiser</b><p className="muted">You run a hackathon or student event and need support: money, credits, prizes, mentors or a venue.</p></div>
+              <div className="usercard spo"><span className="orb spo" aria-hidden>S</span><b>Sponsor</b><p className="muted">You decide whether your company backs events: to hire, to get product feedback, or to be seen.</p></div>
+              <div className="usercard org"><span className="orb org" aria-hidden>O</span><b>Organiser</b><p className="muted">You run a hackathon or student event and need support: money, credits, prizes, mentors or a venue.</p></div>
             </div>
             <p className="small">You are trying TBC as <b>{role === 'organiser' ? 'an organiser' : 'a sponsor'}</b>. You can switch sides at any time with the button in the top right corner, here and inside the app.</p>
             <div className="row"><button className="btn btn-ghost" onClick={() => setStep(0)}>Back</button><button className="btn btn-primary" onClick={() => setStep(2)}>Next</button></div>
           </>)}
 
           {step === 2 && (<>
-            <span className="kicker">Why we are asking</span>
+            <span className="kicker">Why we ask</span>
             {role === 'sponsor' ? (<>
               <h2>A few questions about sponsoring</h2>
-              <p className="muted">We are building TBC around what sponsors actually need, so we would like to learn how you decide which events to back. It takes about a minute. There are no right answers.</p>
+              <p className="muted">We are building TBC around what sponsors actually need, so we would like to learn how you decide which events to back. It takes a few minutes. There are no right answers.</p>
             </>) : (<>
               <h2>We are starting with sponsors</h2>
               <p className="muted">This first round is about what sponsors need. You can answer a few quick questions about how you find sponsors today, or go straight to exploring.</p>
@@ -209,56 +243,72 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             <p className="small">Your answers are saved to help us design TBC. Your email is optional. <Link href="/privacy" target="_blank">What we store</Link></p>
             <div className="row">
               <button className="btn btn-ghost" onClick={() => setStep(1)}>Back</button>
-              <button className="btn btn-primary btn-same btn-invite" onClick={begin}>{role === 'sponsor' ? 'Start' : 'Answer a few questions'}</button>
+              <button className="btn btn-tour btn-same" onClick={begin}><span className="spark" aria-hidden>✦</span> {role === 'sponsor' ? 'Start' : 'Answer a few questions'}</button>
               <Link className="btn btn-ghost btn-same" href="/app">Skip and explore</Link>
             </div>
           </>)}
 
           {step === 3 && (<>
-            <span className="kicker">Questionnaire</span>
+            <span className="kicker">The questionnaire</span>
             <h2>Your questionnaire starts now</h2>
             <p className="muted">{role === 'sponsor' ? 'Questions about how you choose events to back.' : 'Questions about how you find sponsors today.'}</p>
             <div className="two">
-              <div className="usercard"><b>{questions.length} questions</b><span className="small">one at a time</span></div>
-              <div className="usercard"><b>About 1 minute</b><span className="small">no right answers</span></div>
+              <div className="usercard"><b>{role === 'sponsor' ? `Up to ${total} questions` : `${total} questions`}</b><span className="small">one at a time{role === 'sponsor' ? '; fewer if you have not sponsored yet' : ''}</span></div>
+              <div className="usercard"><b>A few minutes</b><span className="small">no right answers; you can skip the open questions</span></div>
             </div>
             <p className="small">Each answer is saved as you give it. You can go back, switch sides, or delete your answers at any time.</p>
             <div className="row">
               <button className="btn btn-ghost" onClick={() => setStep(2)}>Back</button>
-              <button className="btn btn-primary btn-same" onClick={() => setStep(4)} autoFocus>Begin the questionnaire</button>
+              <button className="btn btn-tour btn-same" onClick={() => setStep(4)} autoFocus><span className="spark" aria-hidden>✦</span> Begin the questionnaire</button>
             </div>
           </>)}
 
           {q && (<>
-            <span className="kicker">Question {qi + 1} of {questions.length}</span>
+            <span className="kicker">{q.section} · Question {qi + 1} of {questions.length}</span>
+            {q.intro && <p className="muted" style={{ background: 'rgba(255,255,255,.7)', borderRadius: 16, padding: '12px 16px' }}>{q.intro}</p>}
             <h2>{q.title}</h2>
-            {q.hint && <p className="muted">{q.hint}</p>}
-            <div className="opts" role={q.kind === 'single' ? 'radiogroup' : 'group'} aria-label={q.title}>
-              {q.options.map((o) => {
-                const on = q.kind === 'single' ? sel(q.key) === o : ((sel(q.key) as string[] | undefined) ?? []).includes(o);
-                return (
-                  <button key={o} className={`opt ${q.kind === 'multi' ? 'multi' : ''}`} role={q.kind === 'single' ? 'radio' : 'checkbox'} aria-checked={on} onClick={() => choose(q, o)}>
-                    <span className="mark" aria-hidden /> {o}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="row">
-              <button className="btn btn-ghost" onClick={() => setStep(step - 1)}>Back</button>
-              <button className="btn btn-primary" onClick={() => setStep(step + 1)} disabled={!canNext}>Next</button>
-            </div>
-          </>)}
+            {q.hint && <p className="muted">{q.hint}{q.optional && q.kind !== 'email' ? '' : ''}</p>}
+            {q.optional && <span className="small">Optional</span>}
 
-          {onEmail && (<>
-            <span className="kicker">Last step</span>
-            <h2>Want to talk for 15 minutes?</h2>
-            <p className="muted">If you would be happy to chat about how you choose events, leave your email. This is optional.</p>
-            <label className="small" htmlFor="em">Email (optional)</label>
-            <input id="em" className="input" type="email" inputMode="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" aria-describedby="emerr" />
-            <p id="emerr" className="small" style={{ color: '#7d5200' }}>{emailError}</p>
+            {(q.kind === 'single' || q.kind === 'multi') && (
+              <div className="opts" role={q.kind === 'single' ? 'radiogroup' : 'group'} aria-label={q.title}>
+                {q.options.map((o) => {
+                  const on = q.kind === 'single' ? sel(q.key) === o : ((sel(q.key) as string[] | undefined) ?? []).includes(o);
+                  return (
+                    <button key={o} className={`opt ${q.kind === 'multi' ? 'multi' : ''}`} role={q.kind === 'single' ? 'radio' : 'checkbox'} aria-checked={on} onClick={() => choose(q, o)}>
+                      <span className="mark" aria-hidden /> {o}
+                    </button>
+                  );
+                })}
+                {otherOn && (
+                  <input className="input" aria-label="Other, please say" placeholder="Other: please say" maxLength={300} value={(sel(`${q.key}_other`) as string) ?? ''} onChange={(e) => typeText(`${q.key}_other`, e.target.value)} onBlur={() => flushText(q)} />
+                )}
+              </div>
+            )}
+
+            {q.kind === 'scale' && (<>
+              <div className="scale" role="radiogroup" aria-label={q.title}>
+                {q.options.map((o) => (<button key={o} className="scalebtn" role="radio" aria-checked={sel(q.key) === o} onClick={() => choose(q, o)}>{o}</button>))}
+              </div>
+              <div className="row" style={{ justifyContent: 'space-between' }}><span className="small">1 · {q.low}</span><span className="small">5 · {q.high}</span></div>
+            </>)}
+
+            {q.kind === 'text' && (
+              <textarea className="input area" rows={4} maxLength={1000} aria-label={q.title} value={(sel(q.key) as string) ?? ''} onChange={(e) => typeText(q.key, e.target.value)} onBlur={() => flushText(q)} placeholder="Type here (optional)" />
+            )}
+
+            {q.kind === 'email' && (<>
+              <label className="small" htmlFor="em">Email (optional)</label>
+              <input id="em" className="input" type="email" inputMode="email" autoComplete="email" value={(sel(q.key) as string) ?? ''} onChange={(e) => { setEmailError(''); setAnswers((a) => ({ ...a, [q.key]: e.target.value })); }} placeholder="you@example.com" aria-describedby="emerr" />
+              <p id="emerr" className="small" style={{ color: '#7d5200' }}>{emailError}</p>
+              {/* the email is sent when leaving this question (see go) */}
+            </>)}
+
             <div className="row">
-              <button className="btn btn-ghost" onClick={() => setStep(step - 1)} disabled={finishing}>Back</button>
-              <button className="btn btn-primary" onClick={finish} disabled={finishing}>{finishing ? 'Saving…' : 'Finish and explore'}</button>
+              <button className="btn btn-ghost" onClick={() => go(-1, q)} disabled={finishing}>Back</button>
+              {isLast
+                ? <button className="btn btn-primary" onClick={() => void finish(q)} disabled={finishing || !canNext}>{finishing ? 'Saving…' : 'Finish and explore'}</button>
+                : <button className="btn btn-primary" onClick={() => { if (q.kind === 'email') { const v = ((answers[q.key] as string) ?? '').trim(); if (v && !EMAIL.test(v)) { setEmailError('That email does not look right. You can leave it empty.'); return; } enqueue('/api/survey/answer', { key: q.key, value: v }); } go(1, q); }} disabled={!canNext}>Next</button>}
             </div>
             {save === 'retry' && <p className="small">We could not reach the server yet. Your answers are kept on this device and will be sent when the connection is back.</p>}
           </>)}

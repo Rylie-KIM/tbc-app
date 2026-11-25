@@ -121,3 +121,11 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 
 **Save-check results (2026-11-25).** On the live site, 20 of 20 test answers were stored exactly as sent and read back, wrong input and a wrong export token were refused, and the delete button removed all 20 (checked in the database; the one row left belongs to a real visitor). In a real browser, answers showed "Saved" only after the server confirmed, and answers given while the network was cut were kept in the browser and stored after it returned. Not yet done: the Google Sheet copy, automatic backups, the backup restore test (F21.13 to F21.16): until they pass, treat the live survey as not yet safe to share widely (R10).
 
+## D15. The survey keeps a log, not one overwritten row (2026-11-25)
+
+**Status:** Owner asked (the data looked like one row updated again and again). It was: one `survey_response` row per person, each answer overwriting the last. Now there is also `survey_event`, an append-only log with one row per start, answer, email and completion (migration 0002); the response row remains the current state. A changed answer keeps both values in the log. Deleting a person's answers removes the response and its log rows (the privacy promise). The existing visitor's answers were copied into the log as `backfill` rows (their true times were not kept). The CSV export has the current answers and, with `?view=events`, the log.
+
+## D16. The full questionnaire is in the app (2026-11-25)
+
+**Status:** Owner asked. All 24 questions of the questionnaire file are in the onboarding (earlier only 5 to 6 were). This overrides the earlier plan of 4 to 5 onboarding questions (F21.1). A sponsor who has sponsored sees 23 questions, one who has not (Q4 = 0) sees 11, an organiser sees 5. The intro now says "a few minutes" (it was "about a minute"); the time was not measured.
+

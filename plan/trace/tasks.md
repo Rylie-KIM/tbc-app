@@ -8,7 +8,7 @@ Draft 2026-11-24, updated 2026-11-25 (owner's standing instruction: keep this fi
 
 **Status column (added 2026-11-25):** every task row has one of `todo`, `in progress`, `done`, `blocked` (waiting for something outside the task), `skipped` (owner decided not to do it) or `later` (its gate is not passed yet, so it is not planned in detail). Claude changes the cell whenever work happens and refreshes the counts below; the owner can also edit it by hand.
 
-**Progress (2026-11-25, after the first build):** done 35, in progress 27, todo 78, blocked 0, skipped 3, later 13; 156 tasks in all.
+**Progress (2026-11-25, after the first build):** done 44, in progress 28, todo 71, blocked 0, skipped 3, later 13; 159 tasks in all.
 
 **Notes on the first status values:**
 
@@ -72,8 +72,8 @@ Source: `../design/design-direction.md` and `../design/tbc-flora_v2.html`.
 | F00.2 | done | Load the one typeface; decide Aeonik (licence) or Hanken Grotesk | Decision, build | S | F00.1 | **Decided 2026-11-25 (owner): Hanken Grotesk for now**; Aeonik is reconsidered at a public launch. Used everywhere, including buttons, inputs and numbers |
 | F00.3 | in progress | Buttons: primary, mint, black, ghost, stop, disabled, icon, link; same height and padding in a row, 12px gap | Build | M | F00.1 | All variants in the page; focus ring visible; rows checked for equal gaps |
 | F00.4 | in progress | Form controls: text input, select, segmented control, checkbox, switch, error state | Build | M | F00.1 | Each control has default, focus, error and disabled states |
-| F00.5 | in progress | Tags, chips, status labels, progress bar, steps, notice | Build | M | F00.1 | Matches the design file; warning uses amber, errors use black, no red |
-| F00.6 | done | Glass panels and cards (text sits on at least 66% white) | Build | S | F00.1 | Panel and card components; no text directly on the background |
+| F00.5 | in progress | Tags, chips, status labels, progress bar, steps, notice | Build | M | F00.1 | Matches the design file; warning uses amber, errors use black, no red **2026-11-25 restyle (owner request):** no more small capital letters or coloured top lines; labels are raised pills in plain sentence case; the progress bar is a recessed groove with a glossy filled tube |
+| F00.6 | done | Glass panels and cards (text sits on at least 66% white) | Build | S | F00.1 | Panel and card components; no text directly on the background More depth on panels, role cards (a glossy orb instead of a coloured line), answer options, scale buttons and filter chips |
 | F00.7 | in progress | Backgrounds: light X form for app screens, dark X form for hero | Build | M | F00.6 | Two background components; soft edges; work at phone width |
 | F00.8 | todo | Status symbol as the TBC knot, bright strand blinks, stops when "reduce motion" is on | Build | M | F00.5 | Three states (success, warning, error); used in notices; reduced-motion respected |
 | F00.9 | in progress | Logo files: neon-gradient with black strand, and white-strand version for dark | Design | S | none | **Started 2026-11-24:** `logo_final.png` (3D, shadow baked in, transparent) is saved in `../design/`. Still to do: the white-strand version for dark backgrounds |
@@ -98,7 +98,7 @@ Source: `../design/design-direction.md` and `../design/tbc-flora_v2.html`.
 | F02.2 | todo | Data model: event with dates, venue, attendance, audience description, organiser type, tracks, contact, past editions | Build | M | F01.2, F02.1 | Model in code; first-edition flag |
 | F02.3 | todo | Create and edit an event in steps (describe, packages, review, publish) with a progress bar | Build | L | F02.2, F00.5 | An organiser can save a draft and come back |
 | F02.4 | todo | Publish check: mandatory fields must be filled; clear error messages | Build | S | F02.3 | Publishing is blocked with a message naming the missing fields |
-| F02.5 | todo | Public event page for sponsors: facts first, packages, organiser, "first edition" label | Build | L | F02.2, F00.6 | A sponsor can read the whole event without logging in to anything else |
+| F02.5 | in progress | Public event page for sponsors: facts first, packages, organiser, "first edition" label | Build | L | F02.2, F00.6 | A sponsor can read the whole event without logging in to anything else **Built 2026-11-25 for the example events:** `/app/events/[id]` has the cover, the same fact table for every event, the packages and the prospectus; the cards on the events page are labelled as summaries. Not yet for real events |
 | F02.6 | todo | Check the page against survey results: is anything sponsors named missing? | Research | S | R6, F02.5 | Gaps listed and added to the backlog |
 
 ### F03 Prospectus import and organiser trial (needs: O2, O7)
@@ -130,9 +130,10 @@ Owner decision 2026-11-25: an organiser can test the product with a sample prosp
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
 | F06.1 | done | Events list page | Build | M | F02.5 | Published events appear as cards with the key facts **Built 2026-11-25:** the "See packages" button sits at the bottom edge of every card, in the same place across a row |
-| F06.2 | in progress | Filters: goal, date, location, audience and organiser type | Build | M | F06.1, F04 (see F04.1) | Each filter works alone and together; filter state kept in the page address |
+| F06.2 | in progress | Filters: goal, date, location, audience and organiser type | Build | M | F06.1, F04 (see F04.1) | Each filter works alone and together; filter state kept in the page address Search plus filters by organiser type, goal and size; place is not a filter yet |
 | F06.3 | todo | Cold start: what the page shows when there are few or no events | Design, build | S | F06.1 | Clear empty state with a next step (list an event, or ask us to introduce you) |
 | F06.4 | done | Organiser-type filter with plain labels (student society; university or careers service; company-hosted; community or non-profit; commercial organiser), a count for each, and a one-line explanation of each | Build | M | F06.1, F02.2 | Each label filters the list; the counts add up; every label has at least two example events (F24.10) |
+| F06.5 | done | Keyword search as the default, with a Filters panel (organiser type, sponsor goal, size), active-filter chips, a result count and a clear-all button | Build | M | F06.1 | **Built 2026-11-25.** Search matches name, text, place, type, goal, audience and tracks; the filter panel opens from the search bar |
 
 F04 (sponsor profile by goal) is gated by survey Q5. For the first slice, F06.2 uses a plain goal filter without a saved profile (F04.1).
 
@@ -163,10 +164,10 @@ Decided 2026-11-24: built **with the full app**. Updated 2026-11-25: this is now
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F21.1 | done | Choose the 4-5 onboarding questions and their order (past behaviour first, product explained after); candidates are Q1, Q5, Q6, Q20 and Q24 | Decision | S | R6 or provisional | Question list and order written; each maps to a survey question number |
+| F21.1 | done | Choose the 4-5 onboarding questions and their order (past behaviour first, product explained after); candidates are Q1, Q5, Q6, Q20 and Q24 | Decision | S | R6 or provisional | Question list and order written; each maps to a survey question number All 24 questions of `../research/sponsor-questionnaire.md` are now in the onboarding (owner request 2026-11-25): 23 questions for a sponsor who has sponsored, 11 for one who has not (Q4 = 0), 5 for an organiser. Open questions are optional; "Other" has a text box; Q10, Q11 and Q13 keep their maximums; the email (Q18) and the free text have their own handling |
 | F21.2 | in progress | Consent text, what is stored and for how long (matches F01.5) | Decision, build | S | F01.5 | Text on screen before the first answer is saved; stored fields listed |
 | F21.3 | done | Data model `survey_response`: source, answers, consent time, optional email, anonymous id | Build | M | R8 | Model in code; every row has a source (form or app) |
-| F21.4 | done | Stepped onboarding screens, one question per screen, progress shown, phone first; starts from the landing hero's button | Build | L | F00.3, F00.4, F00.5, F00.7, F21.3 | A person can finish on a phone in about a minute The two buttons on the "why we are asking" screen are the same size and the main one moves gently (not with "reduce motion"); small buttons at the bottom right: "Answer as … instead" and "Delete my answers" |
+| F21.4 | done | Stepped onboarding screens, one question per screen, progress shown, phone first; starts from the landing hero's button | Build | L | F00.3, F00.4, F00.5, F00.7, F21.3 | A person can finish on a phone in about a minute The two buttons on the "why we are asking" screen are the same size and the main one moves gently (not with "reduce motion"); small buttons at the bottom right: "Answer as … instead" and "Delete my answers" Scale, free-text and email questions added; section names shown above each question; the "questionnaire starts now" screen shows the count and says "a few minutes" |
 | F21.5 | in progress | Answer without an account (for QR use at events); offer an account at the end | Build | M | F21.4 | An anonymous answer is saved; account creation links it |
 | F21.6 | todo | Optional "help shape TBC" cards with deeper questions | Build | M | F21.4 | Each card can be skipped; answers saved with the same source tag |
 | F21.7 | todo | Turn the chosen goals into the sponsor profile | Build | M | F21.4, F04.1 (gate) | Profile pre-filled from onboarding answers |
@@ -180,6 +181,7 @@ Decided 2026-11-24: built **with the full app**. Updated 2026-11-25: this is now
 | F21.20 | done | Organiser path: if the person chose organiser, say this round is about sponsors' needs and offer two or three short questions on how they find sponsors today (written after the organiser interviews, R4), or "Skip and explore" | Decision, build | M | F21.19, R4 | An organiser can answer the short set or skip; answers saved with source `app` and the role |
 | F21.21 | done | Keep screen 1 to one general sentence about TBC (no feature list) so the intro does not steer the answers; with no Google Form baseline, note the intro wording next to the results | Decision | S | F21.19 | The intro wording is checked against this rule |
 | F21.22 | in progress | Review the intro wording together with all other English texts | Decision | S | F21.19, F22.6 | Final texts listed; the owner has read them |
+| F21.23 | done | Append-only log of the survey: every start, answer, email and completion is its own row (`survey_event`), so changing an answer never overwrites history; the response row keeps the current state; "Delete my answers" removes both | Build | M | F21.3 | **Built 2026-11-25** (migration 0002, backfill of the existing answers). Checked by the save-check: a changed answer shows the latest in the response and keeps both rows in the log; the log is deleted with the response. The export has a log view (`?view=events`) |
 
 Keeping every answer safe (added 2026-11-24: losing survey answers is not acceptable):
 
@@ -187,7 +189,7 @@ Keeping every answer safe (added 2026-11-24: losing survey answers is not accept
 |---|---|---|---|---|---|---|
 | F21.12 | done | Save each answer to the database the moment it is given; if the network fails, keep it in the browser and retry, and show "Saved" only after the server confirms | Build | M | F21.3 | A test that cuts the network mid-way loses no answer; the screen never says "Saved" before the server did **Built 2026-11-25:** Built: every answer is sent at once, queued in the browser and retried every 3 seconds; "Saved" shows only after the server confirms. The cut-network test in a browser is still to do **Tested on the live site 2026-11-25 in a real browser:** "Saved" showed only after the server confirmed; with the network cut on purpose the screen said "Not saved yet, trying again…", the answer waited in the browser queue, and after the network came back it was sent and stored (checked in the database) |
 | F21.13 | todo | Second copy of every answer in a Google Sheet in the team's Drive, through a retry queue (an answer waits in the queue until the Sheet confirms) | Build | M | F21.3 | Every database answer appears in the Sheet; a failed write is retried, not dropped |
-| F21.14 | in progress | Automatic backups of the database plus a weekly CSV export saved outside the database provider | Build | M | R8, F21.8 | Backups run on schedule; the latest export is found in Drive **Built 2026-11-25:** The export endpoint exists (`/api/admin/export`, token protected). The weekly automatic copy outside the database provider is still to do |
+| F21.14 | in progress | Automatic backups of the database plus a weekly CSV export saved outside the database provider | Build | M | R8, F21.8 | Backups run on schedule; the latest export is found in Drive **Built 2026-11-25:** The export endpoint exists (`/api/admin/export`, token protected). The weekly automatic copy outside the database provider is still to do The CSV export has two views: the current answers and the log (`?view=events`) |
 | F21.15 | todo | Daily check that database and Sheet counts match; the team is told if they do not | Build | S | F21.13 | A forced mismatch in a test sends a warning |
 | F21.16 | in progress | Save-check before launch: submit 20 test answers (some on a bad connection), compare database, Sheet and export, then restore a backup into an empty database | Test | M | F21.12-F21.15 | All 20 found in all three places; the restore works; result written down **Built 2026-11-25:** Database part passed locally on 2026-11-25: 20 of 20 answers stored as sent, bad input and wrong token refused, delete works, test rows removed (`scripts/save-check.mjs`). The run against the live site, the Google Sheet copy and the backup restore are still to do **Live-site run 2026-11-25:** 20 of 20 test answers stored as sent and read back; all 20 removed by delete (checked in the database); the one row left in the table is a real visitor's. The rate-limit step cannot be shown on the live site when requests are paced (it passed locally). `scripts/save-check.mjs` now checks by anonymous id in the database. Still to do: the Google Sheet copy and the backup restore |
 
@@ -241,16 +243,17 @@ Twelve two-page example prospectuses with different covers, colours, sizes, plac
 
 | ID | Status | Task | Type | Size | Depends on | Done when |
 |---|---|---|---|---|---|---|
-| F24.1 | in progress | Confirm the twelve examples and their invented names, sizes and price ranges. Decided 2026-11-25: Impact Hack's real prospectus is not published; only its content ideas are borrowed | Decision | S | none | The table above is final; the first example contains no real name, quote or photo from Impact Hack |
-| F24.2 | todo | Build the two-page template (page 1: cover, about, audience figures; page 2: packages, contact) driven by one data file per event, real selectable text, printed to PDF with the installed Chrome | Build | M | F24.1 | One data file produces one PDF; changing the file changes the PDF |
-| F24.3 | todo | Make the twelve PDFs, each with its own cover, colours, content and price structure (prices informed by `../research/examples.md`, not copied from any document) | Build | L | F24.2 | Twelve PDFs of two pages; no two covers look alike |
-| F24.4 | todo | Cover thumbnails (images) for the event cards | Build | S | F24.3 | One thumbnail per example |
-| F24.5 | todo | "Example" marking inside every PDF (footer) and in the file info | Build | S | F24.3 | The word appears on both pages |
-| F24.6 | todo | Store the PDFs and thumbnails as static files; a seed script links each to an example event with its organiser type | Build | S | F24.3, F18.2, H10 | Seeding creates twelve example events with their files |
-| F24.7 | todo | One viewer for every prospectus: a preview inside the app and a Download button | Build | M | F24.6, F00.6 | Every prospectus opens and downloads the same way |
+| F24.1 | done | Confirm the twelve examples and their invented names, sizes and price ranges. Decided 2026-11-25: Impact Hack's real prospectus is not published; only its content ideas are borrowed | Decision | S | none | The table above is final; the first example contains no real name, quote or photo from Impact Hack The twelve are final (owner decision 2026-11-25: Impact Hack is not published; example 1 is an invented look-alike) |
+| F24.2 | done | Build the two-page template (page 1: cover, about, audience figures; page 2: packages, contact) driven by one data file per event, real selectable text, printed to PDF with the installed Chrome | Build | M | F24.1 | One data file produces one PDF; changing the file changes the PDF **Built 2026-11-25:** `scripts/make-examples.mjs` makes one two-page prospectus per event from `data/events.json`, printed with the installed Chrome |
+| F24.3 | done | Make the twelve PDFs, each with its own cover, colours, content and price structure (prices informed by `../research/examples.md`, not copied from any document) | Build | L | F24.2 | Twelve PDFs of two pages; no two covers look alike **Built 2026-11-25:** twelve PDFs (two pages each) in `public/prospectuses/`, each with its own cover colours, shapes and packages |
+| F24.4 | done | Cover thumbnails (images) for the event cards | Build | S | F24.3 | One thumbnail per example The covers are SVG illustrations (`public/events/`) |
+| F24.5 | done | "Example" marking inside every PDF (footer) and in the file info | Build | S | F24.3 | The word appears on both pages "Example" is on the cover ribbon and both page footers |
+| F24.6 | in progress | Store the PDFs and thumbnails as static files; a seed script links each to an example event with its organiser type | Build | S | F24.3, F18.2, H10 | Seeding creates twelve example events with their files The PDFs and covers are static files linked from `data/events.json`; they are not in the database yet |
+| F24.7 | done | One viewer for every prospectus: a preview inside the app and a Download button | Build | M | F24.6, F00.6 | Every prospectus opens and downloads the same way **Built 2026-11-25:** the event page shows the PDF in the page and has "Download the PDF" and "Open in a new tab" |
 | F24.8 | todo | Check each PDF can be read as plain text and by the AI reader (F25) | Test | S | F24.3, F25.3 | Result per file written down |
 | F24.9 | todo | Check that no real person or company appears in any example, Impact Hack included | Test | S | F24.3, F24.1 | A short checklist, signed off |
 | F24.10 | todo | Check coverage: every organiser type has at least two events; every other filter value (goal, place, size band) has at least two | Test | S | F24.6, F06.4 | A table of filter values and counts; gaps filled with more examples |
+| F24.11 | done | Cover art for every example event: twelve invented illustrations (SVG), different shapes and colours, used on the cards, the event page and the prospectus cover | Build | M | F24.1 | **Built 2026-11-25** by `scripts/make-examples.mjs` (`public/events/`) |
 
 ### F27 Guided start (needs: S9, O7, S1, O1)
 
@@ -261,7 +264,7 @@ After the questions, the start page offers a short tour and a checklist. Texts a
 | F27.1 | done | Decide the steps for each side (sponsor: switch, filters, example event, prospectus viewer, proposal button, proposals; organiser: switch, add event, sample download, review screen, packages, proposals) and the closing checklist "Try these three things" | Decision | S | none | The two step lists are final; each step points at a real screen element |
 | F27.2 | done | Decide: build the tour component ourselves or use a small open-source tour library (check licence, size, keyboard support, phone support) | Decision | S | none | The choice and its reasons written in `decisions.md` |
 | F27.3 | in progress | Tour component: highlights a real element with a small card (title, one sentence, Back, Next, Skip); works on a phone; focus moves into the card and Esc skips; respects "reduce motion" | Build | L | F27.2, F00.6 | A keyboard-only person can go through and skip; the highlight sits on the right element at phone and desktop width **Built 2026-11-25:** Own simple version built (highlights a real element, Back, Next, Skip, Esc). Not yet tested with a keyboard only or on a phone (F27.8) |
-| F27.4 | done | Start rule: the welcome card ("Show me around" or "I'll explore myself") shows once after onboarding; the tour is skippable at every step and replayable from the menu | Build | S | F27.3, F21.4 | Skipping never traps the person; the menu entry replays the tour **Built 2026-11-25:** the "Show me around" button is large and dark with a neon ring, a spinning spark and a gentle hop (not with "reduce motion"), in the top bar and on the welcome card |
+| F27.4 | done | Start rule: the welcome card ("Show me around" or "I'll explore myself") shows once after onboarding; the tour is skippable at every step and replayable from the menu | Build | S | F27.3, F21.4 | Skipping never traps the person; the menu entry replays the tour **Built 2026-11-25:** the "Show me around" button is large and dark with a neon ring, a spinning spark and a gentle hop (not with "reduce motion"), in the top bar and on the welcome card After the tour ends with "Done", the "Show me around" button in the top bar and the welcome card disappear |
 | F27.5 | done | Checklist card "Try these three things" that ticks as the person does them, shows progress and can be hidden | Build | M | F27.1, F00.5 | Each task ticks when done; the card can be dismissed |
 | F27.6 | in progress | Save progress (tour done, checklist ticks) per person and per anonymous id, so reopening does not restart it | Build | S | F21.3, F26 | Closing and reopening keeps the progress **Built 2026-11-25:** Progress is saved in this browser only (not in the database yet) |
 | F27.7 | done | Role-aware: the steps change when the person switches side, and the switch step comes first | Build | M | F23.3, F27.3 | Switching side mid-tour moves to that side's steps without breaking |
@@ -330,13 +333,13 @@ One line each. Break these down only when the gate passes (the thresholds are in
 | F02 Event page | F02.1-F02.6 | 6 |
 | F03 Prospectus import and organiser trial | F03.1-F03.7 | 7 |
 | F05 Package builder | F05.1-F05.5 | 5 |
-| F06 Browse and filter | F06.1-F06.4 | 4 |
+| F06 Browse and filter | F06.1-F06.5 | 5 |
 | F08 Proposals and thread | F08.1-F08.6 | 6 |
 | F18 Honest demo content | F18.1-F18.5 | 5 |
-| F21 Onboarding survey | F21.1-F21.22 | 22 |
+| F21 Onboarding survey | F21.1-F21.23 | 23 |
 | F22 Landing page | F22.1-F22.6 | 6 |
 | F23 Role switch | F23.1-F23.9 | 9 |
-| F24 Example prospectus library | F24.1-F24.10 | 10 |
+| F24 Example prospectus library | F24.1-F24.11 | 11 |
 | F25 AI assistant | F25.1-F25.9 | 9 |
 | F27 Guided start | F27.1-F27.8 | 8 |
 | X Cross-cutting | X1-X9 | 9 |
@@ -344,7 +347,7 @@ One line each. Break these down only when the gate passes (the thresholds are in
 | H Hosting and data safety (Supabase) | H1-H10 | 10 |
 | Later features (placeholders) | F04.1 to F20.1 | 13 |
 
-Feature tasks for the preview app: 113. Cross-cutting: 9. Research and decisions: 11. Hosting and data safety (H1 to H10, serving feature F26): 10. Later placeholders: 13. Total listed: 156. Sizes are guesses and are not added up.
+Feature tasks for the preview app: 116. Cross-cutting: 9. Research and decisions: 11. Hosting and data safety (H1 to H10, serving feature F26): 10. Later placeholders: 13. Total listed: 159. Sizes are guesses and are not added up.
 
 ## 5. Suggested order
 

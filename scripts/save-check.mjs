@@ -23,16 +23,29 @@ for (const [i, id] of ids.entries()) {
   if (await post('/api/survey/complete', { anonId: id, email: i === 0 ? 'save.check@example.com' : undefined }) !== 200) bad('complete ' + i);
 }
 who = '10.0.2.1';
+// changing an answer must add a log row, not overwrite history
+who = '10.0.2.2';
+if (await post('/api/survey/answer', { anonId: ids[1], key: 'q01_role', value: 'Other' }) !== 200) bad('changed answer refused');
 // bad input must be refused, never stored
 if (await post('/api/survey/answer', { anonId: ids[0], key: 'q01_role', value: 'Not an option' }) !== 400) bad('unlisted option accepted');
 if (await post('/api/survey/answer', { anonId: ids[0], key: 'made_up_key', value: 'x' }) !== 400) bad('unknown key accepted');
 if (await post('/api/survey/complete', { anonId: ids[0], email: 'not-an-email' }) !== 400) bad('bad email accepted');
 if (await post('/api/survey/answer', { anonId: 'short', key: 'q01_role', value: 'Other' }) !== 400) bad('short id accepted');
 
+const dbc0 = null;
 const dbc = new pg.Client({ connectionString: env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 await dbc.connect();
 const stored = await dbc.query('select count(*)::int n, count(completed_at)::int done from public.survey_response where anon_id = any($1)', [ids]);
 console.log('database rows for the 20 test ids:', stored.rows[0].n, '| completed:', stored.rows[0].done);
+const ev = await dbc.query(`select r.anon_id, count(*) filter (where e.kind = 'start')::int starts, count(*) filter (where e.kind = 'answer')::int answers, count(*) filter (where e.kind = 'complete')::int completes
+  from public.survey_event e join public.survey_response r on r.id = e.response_id where r.anon_id = any($1) group by r.anon_id`, [ids]);
+console.log('log rows found for', ev.rowCount, 'of 20 test people | e.g. person 2:', JSON.stringify(ev.rows.find((x) => x.anon_id === ids[1])));
+if (ev.rowCount !== 20 || ev.rows.some((x) => x.starts !== 1 || x.completes !== 1 || x.answers < 3)) bad('the log is missing start, answers or completion rows');
+const changed = ev.rows.find((x) => x.anon_id === ids[1]);
+const state = await dbc.query("select answers->>'q01_role' as v from public.survey_response where anon_id = $1", [ids[1]]);
+const history = await dbc.query("select count(*)::int n from public.survey_event e join public.survey_response r on r.id = e.response_id where r.anon_id = $1 and e.key = 'q01_role'", [ids[1]]);
+console.log('changed answer: state shows', state.rows[0].v, '| log keeps', history.rows[0].n, 'rows for that question');
+if (state.rows[0].v !== 'Other' || history.rows[0].n < 2) bad('a changed answer did not keep its history');
 if (stored.rows[0].n !== 20 || stored.rows[0].done !== 20) bad('the database does not hold all 20 test rows');
 const exp = await (await fetch(`${base}/api/admin/export?token=${env.ADMIN_EXPORT_TOKEN}`)).text();
 const wrong = (await fetch(`${base}/api/admin/export?token=wrong`)).status;
@@ -54,6 +67,8 @@ if (PACE) await sleep(62000);
 for (const [i, id] of ids.entries()) await post('/api/survey/delete', { anonId: id }, `10.0.4.${i + 1}`, PACE ? 3200 : 0);
 const after = await (await fetch(`${base}/api/admin/export?token=${env.ADMIN_EXPORT_TOKEN}`)).text();
 const left = await dbc.query('select count(*)::int n from public.survey_response where anon_id = any($1)', [ids]);
+const leftEv = await dbc.query('select count(*)::int n from public.survey_event e join public.survey_response r on r.id = e.response_id where r.anon_id = any($1)', [ids]);
+if (leftEv.rows[0].n !== 0) bad('log rows stayed after delete');
 if (left.rows[0].n !== 0 || after.includes('save.check@example.com')) bad('delete did not remove the 20 test rows (' + left.rows[0].n + ' left)');
 await dbc.end();
 console.log(fail ? `SAVE-CHECK FAILED (${fail})` : 'SAVE-CHECK PASSED: 20 of 20 stored as sent, bad input refused, wrong token refused, delete works, test rows removed');

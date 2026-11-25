@@ -1,0 +1,562 @@
+[
+ {
+  "id": "e1",
+  "name": "Two Cities Hack",
+  "type": "Student society",
+  "attendance": 350,
+  "place": "Two cities, one weekend",
+  "format": "24 hours, in person on two campuses",
+  "audience": "Data and AI students, mostly master\u2019s and second-year",
+  "goal": "Hire",
+  "price": "\u00a3500 to \u00a35,000",
+  "edition": "3rd edition",
+  "blurb": "A 24-hour data and AI hackathon across two campuses, with students from several courses.",
+  "tracks": [
+   "Health",
+   "Climate",
+   "Finance"
+  ],
+  "organiser": "A university data science society",
+  "palette": 0,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3500",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a32,000",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a35,000",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e2",
+  "name": "Campus Build Night",
+  "type": "Student society",
+  "attendance": 40,
+  "place": "One campus",
+  "format": "One evening (5 hours)",
+  "audience": "Computer science undergraduates",
+  "goal": "Product feedback",
+  "price": "\u00a3200 to \u00a3800",
+  "edition": "2nd edition",
+  "blurb": "A small evening build session where students try new tools and give feedback.",
+  "tracks": [
+   "Developer tools"
+  ],
+  "organiser": "A university computing society",
+  "palette": 1,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3200",
+    "perks": [
+     "Credits for every team",
+     "Logo on the event page"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a3500",
+    "perks": [
+     "Credits and mentor hours",
+     "A prize in your name",
+     "Workshop slot"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a3800",
+    "perks": [
+     "A named challenge track",
+     "Opening-ceremony slot",
+     "Early access for the best teams"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e3",
+  "name": "Health Data Jam",
+  "type": "Student society",
+  "attendance": 90,
+  "place": "Edinburgh",
+  "format": "One weekend, in person",
+  "audience": "Health and data students",
+  "goal": "Brand",
+  "price": "\u00a3300 to \u00a31,500",
+  "edition": "First edition",
+  "blurb": "Students work with open health datasets over a weekend.",
+  "tracks": [
+   "Open health data"
+  ],
+  "organiser": "A student health-tech society",
+  "palette": 2,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3300",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a3800",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a31,500",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e4",
+  "name": "Careers Service AI Challenge",
+  "type": "University or careers service",
+  "attendance": 120,
+  "place": "Bristol",
+  "format": "One day, in person",
+  "audience": "Final-year students looking for graduate roles",
+  "goal": "Hire",
+  "price": "\u00a31,000 to \u00a33,000",
+  "edition": "4th edition",
+  "blurb": "An employer-focused challenge day run by a university careers service.",
+  "tracks": [
+   "Applied AI"
+  ],
+  "organiser": "A university careers service",
+  "palette": 3,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a31,000",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a32,000",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a33,000",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e5",
+  "name": "Research Data Hack",
+  "type": "University or careers service",
+  "attendance": 80,
+  "place": "Manchester",
+  "format": "Two days, in person",
+  "audience": "Master\u2019s and PhD students",
+  "goal": "Brand",
+  "price": "\u00a3300 to \u00a31,500",
+  "edition": "2nd edition",
+  "blurb": "A department-led hack on research data, with academic data providers.",
+  "tracks": [
+   "Research data"
+  ],
+  "organiser": "A university department",
+  "palette": 4,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3300",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a3800",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a31,500",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e6",
+  "name": "FinHack London",
+  "type": "Company-hosted",
+  "attendance": 200,
+  "place": "London",
+  "format": "Two days, in person",
+  "audience": "Students and early-career developers",
+  "goal": "Hire",
+  "price": "\u00a32,000 to \u00a310,000",
+  "edition": "5th edition",
+  "blurb": "A bank hosts a fintech hackathon and invites partners to co-sponsor.",
+  "tracks": [
+   "Payments",
+   "Risk",
+   "Open banking"
+  ],
+  "organiser": "A retail bank (invented)",
+  "palette": 5,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a32,000",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a35,000",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a310,000",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e7",
+  "name": "Cloud Native Weekend",
+  "type": "Company-hosted",
+  "attendance": 100,
+  "place": "London and online",
+  "format": "One weekend, hybrid",
+  "audience": "Developers at all levels",
+  "goal": "Product feedback",
+  "price": "Credits and prizes",
+  "edition": "2nd edition",
+  "blurb": "A developer-tools company hosts a weekend and invites partner tracks.",
+  "tracks": [
+   "Cloud",
+   "Developer experience"
+  ],
+  "organiser": "A developer-tools company (invented)",
+  "palette": 6,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "Credits",
+    "perks": [
+     "Credits for every team",
+     "Logo on the event page"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "Credits and a prize",
+    "perks": [
+     "Credits and mentor hours",
+     "A prize in your name",
+     "Workshop slot"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "A named track",
+    "perks": [
+     "A named challenge track",
+     "Opening-ceremony slot",
+     "Early access for the best teams"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e8",
+  "name": "Open Source Weekend",
+  "type": "Community or non-profit",
+  "attendance": 150,
+  "place": "Online and Manchester",
+  "format": "One weekend, hybrid",
+  "audience": "Open-source contributors, mostly beginners",
+  "goal": "Product feedback",
+  "price": "Mostly in-kind",
+  "edition": "4th edition",
+  "blurb": "A community weekend to build with open-source tools; credits matter more than cash.",
+  "tracks": [
+   "Open source"
+  ],
+  "organiser": "A volunteer developer community",
+  "palette": 7,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "Credits",
+    "perks": [
+     "Credits for every team",
+     "Logo on the event page"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "Credits and mentors",
+    "perks": [
+     "Credits and mentor hours",
+     "A prize in your name",
+     "Workshop slot"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "A named track",
+    "perks": [
+     "A named challenge track",
+     "Opening-ceremony slot",
+     "Early access for the best teams"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e9",
+  "name": "Code for Good Hackathon",
+  "type": "Community or non-profit",
+  "attendance": 100,
+  "place": "Bristol",
+  "format": "One weekend, in person",
+  "audience": "Students and volunteers",
+  "goal": "Brand",
+  "price": "\u00a3250 to \u00a32,000",
+  "edition": "3rd edition",
+  "blurb": "Teams build tools for local charities over one weekend.",
+  "tracks": [
+   "Social impact"
+  ],
+  "organiser": "A local non-profit",
+  "palette": 8,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3250",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a31,000",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a32,000",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e10",
+  "name": "Design x Code Weekend",
+  "type": "Community or non-profit",
+  "attendance": 60,
+  "place": "London",
+  "format": "One weekend, in person",
+  "audience": "Designers and developers",
+  "goal": "Brand",
+  "price": "\u00a3300 to \u00a31,200",
+  "edition": "First edition",
+  "blurb": "Designers and developers pair up to build small products.",
+  "tracks": [
+   "Product design"
+  ],
+  "organiser": "A design and code community",
+  "palette": 9,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3300",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a3700",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a31,200",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e11",
+  "name": "Green Code Hack",
+  "type": "Commercial organiser",
+  "attendance": 150,
+  "place": "London",
+  "format": "Two days, in person",
+  "audience": "Students and graduates",
+  "goal": "Brand",
+  "price": "\u00a3500 to \u00a33,000",
+  "edition": "2nd edition",
+  "blurb": "A sustainability hackathon run by an events company.",
+  "tracks": [
+   "Energy",
+   "Transport"
+  ],
+  "organiser": "An events company (invented)",
+  "palette": 10,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a3500",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a31,500",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a33,000",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ },
+ {
+  "id": "e12",
+  "name": "AI Build Sprint",
+  "type": "Commercial organiser",
+  "attendance": 400,
+  "place": "Online",
+  "format": "48 hours, online",
+  "audience": "Students and professionals worldwide",
+  "goal": "Hire",
+  "price": "\u00a31,500 to \u00a37,500",
+  "edition": "6th edition",
+  "blurb": "A large online sprint run by an events company with many sponsor tracks.",
+  "tracks": [
+   "Agents",
+   "Data",
+   "Open models"
+  ],
+  "organiser": "An events company (invented)",
+  "palette": 11,
+  "tiers": [
+   {
+    "name": "Bronze",
+    "price": "\u00a31,500",
+    "perks": [
+     "Logo on the event page",
+     "Mention in social posts"
+    ]
+   },
+   {
+    "name": "Gold",
+    "price": "\u00a34,000",
+    "perks": [
+     "Set a challenge track",
+     "A prize in your name",
+     "A seat on the judging panel"
+    ]
+   },
+   {
+    "name": "Platinum",
+    "price": "\u00a37,500",
+    "perks": [
+     "Co-branding (\"presented by\")",
+     "Opening-ceremony speaking slot",
+     "Recruitment table and private interview space"
+    ]
+   }
+  ]
+ }
+]
