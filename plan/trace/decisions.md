@@ -129,7 +129,7 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 
 **Status:** Owner asked. All 24 questions of the questionnaire file are in the onboarding (earlier only 5 to 6 were). This overrides the earlier plan of 4 to 5 onboarding questions (F21.1). A sponsor who has sponsored sees 23 questions, one who has not (Q4 = 0) sees 11, an organiser sees 5. The intro now says "a few minutes" (it was "about a minute"); the time was not measured.
 
-**Update (2026-11-25):** a sponsor who answers Q4 = 0 sees 11 questions (the skip rule in `sponsor-questionnaire.md` stays). Owner chose to keep it and to say "11–23 questions" on the intro screen instead of a fixed 23.
+**Update (2026-11-25):** a sponsor who answers Q4 = 0 sees 11 questions (the skip rule in `sponsor-questionnaire.md` stays). Owner chose to keep it. The intro says "23 questions at most" (Claude's choice, after the owner's "A": "11–23" would hint that answering 0 shortens the survey, which could bias Q4). The skip is announced once, right after Q4 = 0.
 
 ## D17. One response per person and side (2026-11-25)
 

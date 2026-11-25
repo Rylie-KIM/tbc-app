@@ -246,7 +246,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           {step === 3 && (<>
             <h2>Your questionnaire starts now</h2>
             <div className="two">
-              <div className="usercard"><b className="bignum">{role === 'sponsor' ? '11–23' : total}</b><span>questions</span></div>
+              <div className="usercard"><b className="bignum">{role === 'sponsor' ? '23' : total}</b><span>{role === 'sponsor' ? 'questions at most' : 'questions'}</span></div>
               <div className="usercard"><b className="bignum">{role === 'sponsor' ? '5' : '2'}</b><span>{role === 'sponsor' ? 'minutes' : 'minutes or less'}</span></div>
             </div>
             <div className="row">
@@ -257,6 +257,9 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
 
           {q && (<>
             <span className="kicker">Question {qi + 1} of {questions.length}</span>
+            {q.key === 'q21_why_not' && (
+              <p className="skipnote" role="status">Thanks. Since you have not sponsored yet, we skip {questionsFor('sponsor', { q04_freq: '1-2' }).length - questions.length} questions about past sponsorships. {questions.length - qi} left.</p>
+            )}
             {q.intro && <p className="muted" style={{ background: 'rgba(255,255,255,.7)', borderRadius: 16, padding: '12px 16px' }}>{q.intro}</p>}
             <h2>{q.title}</h2>
             {q.hint && <p className="muted">{q.hint}</p>}
