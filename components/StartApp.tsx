@@ -119,17 +119,28 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
           </section>
         )}
 
-        {!hideList && (
-          <section className="glass" aria-label="Try these three things">
-            <div className="row" style={{ justifyContent: 'space-between' }}>
-              <h3>Try these three things</h3>
-              <button className="btn btn-ghost btn-small" onClick={() => { setHideList(true); ls.set('tbc_hidelist', '1'); }}>Hide</button>
+        <div className="pilllabel"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden><path d="M8 1.5 13 3.4v4.2c0 3-2 5.3-5 6.9-3-1.6-5-3.9-5-6.9V3.4z" fill="currentColor" opacity=".85" /></svg> Early preview · everything here is example data</div>
+        <section className="bento" aria-label="Overview">
+          <div className="tile tile-grad" aria-hidden><img src="/brand/logo-white.png" alt="" /></div>
+          <a className="tile tile-glass" href={role === 'sponsor' ? '#events' : '#proposals'}>
+            <span className="num">+{role === 'sponsor' ? EVENTS.length : EXAMPLE_PROPOSALS.length}</span>
+            <span className="tilelabel"><span>{role === 'sponsor' ? 'Example events' : 'Example proposals'}</span><span aria-hidden>↗</span></span>
+          </a>
+          {!hideList ? (
+            <div className="tile tile-lime" aria-label="Try these three things">
+              <div className="tilelabel"><b>Try these three things</b><button className="btn btn-ghost btn-small" onClick={() => { setHideList(true); ls.set('tbc_hidelist', '1'); }}>Hide</button></div>
+              <div className="num">{tasks.filter((t) => done.includes(t.id)).length}<span className="of">/3</span></div>
+              <div className="thin" aria-hidden><i style={{ width: `${(tasks.filter((t) => done.includes(t.id)).length / 3) * 100}%` }} /></div>
+              <ul className="check small-check">
+                {tasks.map((t) => (<li key={t.id} className={done.includes(t.id) ? 'done' : ''}><i aria-hidden>{done.includes(t.id) ? '✓' : ''}</i>{t.label}</li>))}
+              </ul>
             </div>
-            <ul className="check" style={{ marginTop: 12 }}>
-              {tasks.map((t) => (<li key={t.id} className={done.includes(t.id) ? 'done' : ''}><i aria-hidden>{done.includes(t.id) ? '✓' : ''}</i>{t.label}</li>))}
-            </ul>
-          </section>
-        )}
+          ) : null}
+          <div className="tile tile-black">
+            <span className="num">+{role === 'sponsor' ? ORGANISER_TYPES.length : GOALS.length}</span>
+            <span className="tilelabel"><span>{role === 'sponsor' ? 'Kinds of organiser to choose from' : 'Sponsor goals: hire, product feedback, brand'}</span><span className="glowdot" aria-hidden /></span>
+          </div>
+        </section>
 
         {role === 'sponsor' ? (
           <>
@@ -139,7 +150,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
               <p className="muted" style={{ marginTop: 8 }}>These cards are summaries of example events. Open an event for its full details, packages and prospectus.</p>
             </div>
 
-            <div className="searchbox" data-tour="filters">
+            <div id="events" className="searchbox" data-tour="filters">
               <div className="searchrow">
                 <input className="input" type="search" aria-label="Search events by keyword" placeholder="Search by keyword, for example AI, London, hire" value={text} onChange={(e) => { setText(e.target.value); tick('s-filter'); }} />
                 <button className="btn btn-ghost" aria-expanded={panel} aria-controls="filterpanel" onClick={() => setPanel(!panel)}>
@@ -199,7 +210,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
               <p className="muted" style={{ margin: '8px 0 14px' }}>Start with your prospectus, or try one of our samples. We read the file, you check it.</p>
               <div className="row"><button className="btn btn-tour" onClick={() => tick('o-add')}><span className="spark" aria-hidden>✦</span> Add an event (coming next)</button><span className="chip warn">Not available yet</span></div>
             </section>
-            <section className="glass" data-tour="proposals">
+            <section id="proposals" className="glass" data-tour="proposals">
               <h3>Example proposals</h3>
               <div style={{ marginTop: 8 }}>
                 {EXAMPLE_PROPOSALS.map((p) => (
