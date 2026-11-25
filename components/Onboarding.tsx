@@ -283,7 +283,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
               <div className="scale" role="radiogroup" aria-label={q.title}>
                 {q.options.map((o) => (<button key={o} className="scalebtn" role="radio" aria-checked={sel(q.key) === o} onClick={() => choose(q, o)}>{o}</button>))}
               </div>
-              <div className="row" style={{ justifyContent: 'space-between' }}><span className="small">1 · {q.low}</span><span className="small">5 · {q.high}</span></div>
+              <div className="row" style={{ justifyContent: 'space-between' }}><span className="scalelabel">1 · {q.low}</span><span className="scalelabel">5 · {q.high}</span></div>
             </>)}
 
             {q.kind === 'text' && (
@@ -308,9 +308,6 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
 
           {!isIntro && (
             <div className="row" style={{ justifyContent: 'flex-end' }}>
-              <button className="btn btn-ghost btn-small" onClick={() => switchRole(role === 'organiser' ? 'sponsor' : 'organiser')}>
-                Answer as {role === 'organiser' ? 'sponsor' : 'organiser'} instead
-              </button>
               {deleted
                 ? <span className="small">Your answers were deleted.</span>
                 : <button className="btn btn-ghost btn-small" onClick={wipe}>Delete my answers</button>}
