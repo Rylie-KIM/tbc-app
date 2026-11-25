@@ -214,31 +214,27 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           <div className="progress" aria-hidden><i style={{ width: `${pct}%` }} /></div>
 
           {step === 0 && (<>
-            <span className="kicker">Welcome to TBC</span>
-            <h2>Sponsors and hackathons, in one place</h2>
-            <p className="muted">TBC helps people who run hackathons find sponsors, and helps sponsors find events worth backing.</p>
+            <h2>Welcome to TBC</h2>
+            <p className="muted">Sponsors and hackathons, in one place.</p>
             <div className="row"><button className="btn btn-primary" onClick={() => setStep(1)}>Next</button></div>
           </>)}
 
           {step === 1 && (<>
-            <span className="kicker">You can try both sides</span>
-            <h2>Who is TBC for?</h2>
+            <h2>Who is TBC for? You can try both sides.</h2>
             <div className="two">
               <div className="usercard spo"><span className="orb spo" aria-hidden>S</span><b>Sponsor</b><p className="muted">You decide whether your company backs events: to hire, to get product feedback, or to be seen.</p></div>
               <div className="usercard org"><span className="orb org" aria-hidden>O</span><b>Organiser</b><p className="muted">You run a hackathon or student event and need support: money, credits, prizes, mentors or a venue.</p></div>
             </div>
-            <p className="small">You are trying TBC as <b>{role === 'organiser' ? 'an organiser' : 'a sponsor'}</b>. You can switch sides at any time with the button in the top right corner, here and inside the app.</p>
             <div className="row"><button className="btn btn-ghost" onClick={() => setStep(0)}>Back</button><button className="btn btn-primary" onClick={() => setStep(2)}>Next</button></div>
           </>)}
 
           {step === 2 && (<>
-            <span className="kicker">Why we ask</span>
             {role === 'sponsor' ? (<>
               <h2>A few questions about sponsoring</h2>
-              <p className="muted">We are building TBC around what sponsors actually need, so we would like to learn how you decide which events to back. It takes a few minutes. There are no right answers.</p>
+              <p className="muted">We want to learn how you decide which events to back. There are no right answers.</p>
             </>) : (<>
               <h2>We are starting with sponsors</h2>
-              <p className="muted">This first round is about what sponsors need. You can answer a few quick questions about how you find sponsors today, or go straight to exploring.</p>
+              <p className="muted">Answer a few questions about how you find sponsors today, or skip to explore.</p>
             </>)}
             <p className="small">Your answers are saved to help us design TBC. Your email is optional. <Link href="/privacy" target="_blank">What we store</Link></p>
             <div className="row">
@@ -249,14 +245,11 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           </>)}
 
           {step === 3 && (<>
-            <span className="kicker">The questionnaire</span>
             <h2>Your questionnaire starts now</h2>
-            <p className="muted">{role === 'sponsor' ? 'Questions about how you choose events to back.' : 'Questions about how you find sponsors today.'}</p>
             <div className="two">
-              <div className="usercard"><b>{role === 'sponsor' ? `Up to ${total} questions` : `${total} questions`}</b><span className="small">one at a time{role === 'sponsor' ? '; fewer if you have not sponsored yet' : ''}</span></div>
-              <div className="usercard"><b>A few minutes</b><span className="small">no right answers; you can skip the open questions</span></div>
+              <div className="usercard"><b className="bignum">{total}</b><span>questions</span></div>
+              <div className="usercard"><b className="bignum">{role === 'sponsor' ? '5' : '2'}</b><span>{role === 'sponsor' ? 'minutes' : 'minutes or less'}</span></div>
             </div>
-            <p className="small">Each answer is saved as you give it. You can go back, switch sides, or delete your answers at any time.</p>
             <div className="row">
               <button className="btn btn-ghost" onClick={() => setStep(2)}>Back</button>
               <button className="btn btn-tour btn-same" onClick={() => setStep(4)} autoFocus><span className="spark" aria-hidden>✦</span> Begin the questionnaire</button>
@@ -264,7 +257,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
           </>)}
 
           {q && (<>
-            <span className="kicker">{q.section} · Question {qi + 1} of {questions.length}</span>
+            <span className="kicker">Question {qi + 1} of {questions.length}</span>
             {q.intro && <p className="muted" style={{ background: 'rgba(255,255,255,.7)', borderRadius: 16, padding: '12px 16px' }}>{q.intro}</p>}
             <h2>{q.title}</h2>
             {q.hint && <p className="muted">{q.hint}{q.optional && q.kind !== 'email' ? '' : ''}</p>}
