@@ -49,7 +49,7 @@ export default async function EventPage({ params }: { params: Promise<{ id: stri
               </article>
             ))}
           </div>
-          <div className="row" style={{ marginTop: 16 }}><button className="btn btn-primary" disabled>Send a proposal (coming next)</button></div>
+          <div className="row" style={{ marginTop: 16 }}><button className="btn btn-primary" disabled>Send a proposal (coming soon)</button></div>
         </section>
 
         <section className="glass">

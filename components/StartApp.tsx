@@ -18,7 +18,7 @@ const STEPS: Record<Role, Step[]> = {
   ],
   organiser: [
     { target: 'switch', title: 'Switch sides here', text: 'Switch sides here to see TBC as a sponsor too.' },
-    { target: 'add', title: 'Add your event', text: 'This is where you will start with your prospectus, or try one of our samples. It is coming next.' },
+    { target: 'add', title: 'Add your event', text: 'This is where you will start with your prospectus, or try one of our samples. It is coming soon.' },
     { target: 'proposals', title: 'Proposals', text: 'Sponsors’ proposals and your replies will appear here. These are examples.' },
   ],
 };
@@ -220,7 +220,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
             <section className="glass" data-tour="add">
               <h3>Add your event</h3>
               <p className="muted" style={{ margin: '8px 0 14px' }}>Start with your prospectus, or try one of our samples. We read the file, you check it.</p>
-              <div className="row"><button className="btn btn-tour" onClick={() => tick('o-add')}><span className="spark" aria-hidden>✦</span> Add an event (coming next)</button><span className="chip warn">Not available yet</span></div>
+              <div className="row"><button className="btn btn-tour" onClick={() => tick('o-add')}><span className="spark" aria-hidden>✦</span> Add an event (coming soon)</button></div>
             </section>
             <section id="proposals" className="glass" data-tour="proposals">
               <h3>Example proposals</h3>
