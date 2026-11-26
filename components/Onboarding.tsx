@@ -278,9 +278,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
               <p className="skipnote" role="status">Thanks. Since you have not sponsored yet, we skip {questionsFor('sponsor', { q04_freq: '1-2' }).length - questions.length} questions about past sponsorships. {questions.length - qi} left.</p>
             )}
             {q.intro && <p className="muted" style={{ background: 'rgba(255,255,255,.7)', borderRadius: 16, padding: '12px 16px' }}>{q.intro}</p>}
-            {echo.length > 0 && (
-              <div className="echo"><span className="muted">You chose</span><div className="row" style={{ gap: 8 }}>{echo.map((x) => <span className="tag" key={x}>{x}</span>)}</div></div>
-            )}
+            {echo.length > 0 && <p className="echo">{q.echoLead ?? 'You chose'}: {echo.join(', ')}.</p>}
             <h2>{shownTitle}</h2>
             {q.hint && <p className="muted">{q.hint}</p>}
             {q.optional && q.kind !== 'email' && <span className="small">Optional</span>} {/* the email question already says it in its hint */}

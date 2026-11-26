@@ -26,8 +26,8 @@ try {
       const byKey = new Map();
       for (const list of Object.values(s.paths)) for (const q of list) if (!byKey.has(q.key)) byKey.set(q.key, q);
       for (const q of byKey.values()) {
-        await c.query('insert into public.survey_question (version, key, kind, section, title, intro, hint, options, max_choices, has_other, optional, low_label, high_label, echo_from, title_after) values ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9,$10,$11,$12,$13,$14,$15)',
-          [s.version, q.key, q.kind, q.section, q.title, q.intro, q.hint, JSON.stringify(q.options ?? []), q.max, !!q.other, !!q.optional, q.low, q.high, q.echoFrom ?? null, q.titleAfter ?? null]);
+        await c.query('insert into public.survey_question (version, key, kind, section, title, intro, hint, options, max_choices, has_other, optional, low_label, high_label, echo_from, echo_lead, title_after) values ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9,$10,$11,$12,$13,$14,$15,$16)',
+          [s.version, q.key, q.kind, q.section, q.title, q.intro, q.hint, JSON.stringify(q.options ?? []), q.max, !!q.other, !!q.optional, q.low, q.high, q.echoFrom ?? null, q.echoLead ?? null, q.titleAfter ?? null]);
       }
       for (const [path, list] of Object.entries(s.paths)) for (const [i, q] of list.entries()) await c.query('insert into public.survey_flow (version, path, position, question_key) values ($1,$2,$3,$4)', [s.version, path, i + 1, q.key]);
       await c.query('commit'); console.log('publish', s.version, `(${byKey.size} questions)`);

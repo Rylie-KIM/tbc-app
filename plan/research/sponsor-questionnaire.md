@@ -463,7 +463,7 @@ function createSponsorForm() {
 - I would not filter
 - Other (add "Other" option)
 
-**Q14. What should an event’s web page always show about its participants?** Paragraph, optional. **From survey v2 (2026-11-26):** the app shows "You chose: ..." (the person's Q13 picks, not "I would not filter") above the question, and the question reads "What else should an event page always show about its participants?". Without a pick it keeps the plain wording. The Google Form version is not used (D2).
+**Q14. What should an event’s web page always show about its participants?** Paragraph, optional. **From survey v2 (2026-11-26):** the app shows "In the previous question, you chose: ..." as plain text (the person's Q13 picks, not "I would not filter") above the question, and the question reads "What else should an event page always show about its participants?". Without a pick it keeps the plain wording. The Google Form version is not used (D2).
 
 ### Section 4: An idea (everyone answers from here)
 

@@ -2,7 +2,7 @@
 // Keys follow the questionnaire's numbering, so the export matches the analysis plan.
 // Bump this on ANY change to the questions, wording, options or order (then run `npm run survey:version -- --write`
 // and add a line to plan/trace/survey-changelog.md). Every saved answer records the version the person saw.
-export const SURVEY_VERSION = 'v2';
+export const SURVEY_VERSION = 'v3';
 export type Role = 'organiser' | 'sponsor';
 export type Kind = 'single' | 'multi' | 'scale' | 'text' | 'email';
 
@@ -21,6 +21,7 @@ export type Question = {
   high?: string;
   /** A follow-up to an earlier question: the page shows what the person chose there, and uses `titleAfter` when they chose something. */
   echoFrom?: string;
+  echoLead?: string; // the sentence that introduces the list, shown in plain text
   titleAfter?: string;
 };
 
@@ -47,7 +48,7 @@ export const Q: Record<string, Question> = {
   q20_tools: q({ key: 'q20_tools', kind: 'multi', section: SEC.choosing, title: 'How do you currently find and keep track of events you might sponsor?', hint: ALL_APPLY, other: true, options: ['Event listing sites (for example Luma, Devpost, MLH)', 'LinkedIn', 'Emails from organisers', 'A spreadsheet or Notion list', 'A CRM (for example HubSpot, Salesforce)', 'Personal network', 'I do not keep track', 'Other'] }),
   q12_measure: q({ key: 'q12_measure', kind: 'multi', section: SEC.choosing, title: 'How do you measure whether a sponsorship worked?', hint: ALL_APPLY, options: ['Interviews or hires', 'Sign-ups or product usage', 'Leads or contacts', 'Social reach or brand mentions', 'Project ideas or code produced', 'We do not measure it'] }),
   q13_filters: q({ key: 'q13_filters', kind: 'multi', section: SEC.choosing, title: 'If you could filter the participants of an event you sponsor, which participants would you want?', hint: 'Pick up to 3.', max: 3, other: true, options: ['Skills or field of study (for example data, backend, design)', 'Study level (undergraduate, master’s, PhD)', 'University or department', 'Graduation year (when they could start an internship or graduate job)', 'Experience level (beginners or experienced)', 'Right to work in the UK', 'Location', 'Number of hackathons attended before', 'Team makeup (solo, team, diversity of the team)', 'Experience with our product or tools', 'I would not filter', 'Other'] }),
-  q14_text: q({ key: 'q14_text', kind: 'text', section: SEC.choosing, title: 'What should an event’s web page always show about its participants?', echoFrom: 'q13_filters', titleAfter: 'What else should an event’s web page always show about its participants?', optional: true }),
+  q14_text: q({ key: 'q14_text', kind: 'text', section: SEC.choosing, title: 'What should an event’s web page always show about its participants?', echoFrom: 'q13_filters', echoLead: 'In the previous question, you chose', titleAfter: 'What else should an event’s web page always show about its participants?', optional: true }),
   q15_useful: q({ key: 'q15_useful', kind: 'scale', section: SEC.idea, intro: 'TBC is a website where hackathon and community organisers list their events, and sponsors can browse them and propose partnerships. A sponsor could trade things like access to hiring, user or beta testing, or product exposure for sponsorship.', title: 'How useful would TBC be to you?', low: 'Not useful', high: 'Very useful', options: ['1', '2', '3', '4', '5'] }),
   q16_page: q({ key: 'q16_page', kind: 'multi', section: SEC.idea, title: 'What would an event’s web page need to show before you would consider sponsoring the event?', hint: ALL_APPLY, other: true, options: ['Audience profile (skills, universities, levels)', 'Attendee numbers', 'Event theme or topic', 'Purpose of the event (why it exists and who it is for)', 'Expected outcomes (for example projects built, hires, sign-ups)', 'Past sponsors and what they got', 'Results of past editions (for example hires, sign-ups, projects built)', 'Dates and venue', 'What each sponsorship tier includes and costs', 'References for the organisers', 'Other'] }),
   q17_payer: q({ key: 'q17_payer', kind: 'single', section: SEC.idea, title: 'If TBC charged a fee for using the website, who should pay that fee?', options: ['Organisers', 'Sponsors', 'Both', 'It should be free', 'Not sure'] }),

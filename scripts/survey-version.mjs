@@ -7,7 +7,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const s = await import('../lib/survey.ts');
-const pick = (x) => ({ key: x.key, section: x.section, kind: x.kind, title: x.title ?? null, intro: x.intro ?? null, hint: x.hint ?? null, options: x.options, max: x.max ?? null, other: !!x.other, optional: !!x.optional, low: x.low ?? null, high: x.high ?? null, echoFrom: x.echoFrom ?? null, titleAfter: x.titleAfter ?? null });
+const pick = (x) => ({ key: x.key, section: x.section, kind: x.kind, title: x.title ?? null, intro: x.intro ?? null, hint: x.hint ?? null, options: x.options, max: x.max ?? null, other: !!x.other, optional: !!x.optional, low: x.low ?? null, high: x.high ?? null, echoFrom: x.echoFrom ?? null, echoLead: x.echoLead ?? null, titleAfter: x.titleAfter ?? null });
 const paths = {
   organiser: s.questionsFor('organiser', {}).map(pick),
   sponsor_has_sponsored: s.questionsFor('sponsor', { q04_freq: '1-2' }).map(pick),
