@@ -194,7 +194,7 @@ function createSponsorForm() {
     "Getting budget approved or reporting internally"], true, true, 2);
 
   // Q22 and Q23 (added 2026-11-24; numbered Q22 and Q23 so the other numbers stay fixed, placed after Q11 in the form)
-  para("What do you wish event organisers did differently?");
+  para("When hackathon organisers contact you or work with you as a sponsor, what is missing or frustrating?");
 
   choice("How many weeks before an event starts do you usually decide whether to sponsor the event?", [
     "Less than 2 weeks",
@@ -436,7 +436,7 @@ function createSponsorForm() {
 - Getting budget approved or reporting internally
 - Other (add "Other" option)
 
-**Q22. What do you wish event organisers did differently?** Paragraph, optional. Added 2026-11-24 (placed after Q11 in the form).
+**Q22. When hackathon organisers contact you or work with you as a sponsor, what is missing or frustrating?** Paragraph, optional. Added 2026-11-24 (placed after Q11 in the form).
 
 **Q23. How many weeks before an event starts do you usually decide whether to sponsor the event?** Multiple choice, required. Added 2026-11-24 (placed after Q22 in the form).
 - Less than 2 weeks

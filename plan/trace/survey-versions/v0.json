@@ -2,7 +2,7 @@
   "version": "v0",
   "released": "2026-11-26",
   "summary": "First version: the questionnaire of sponsor-questionnaire.md (24 questions) after the test period. Organiser path 5 questions, sponsor who has sponsored 23, sponsor who has not 11.",
-  "hash": "416a20eaed3c364f",
+  "hash": "6e503af6fe0d08f9",
   "paths": {
     "organiser": [
       {
@@ -396,7 +396,7 @@
         "key": "q22_wish",
         "section": "Choosing events",
         "kind": "text",
-        "title": "What do you wish event organisers did differently?",
+        "title": "When hackathon organisers contact you or work with you as a sponsor, what is missing or frustrating?",
         "intro": null,
         "hint": null,
         "options": [],
