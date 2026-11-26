@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { MatchBox } from '@/components/MatchBox';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EVENTS, EXAMPLE_PROPOSALS, GOALS, ORGANISER_TYPES, SIZE_BANDS, factRows, type ExampleEvent } from '@/data/events';
 
@@ -158,6 +159,8 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
               <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.6rem)' }}>Choose events to sponsor</h1>
               <p className="muted" style={{ marginTop: 8 }}>These cards are summaries of example events. Open an event for its full details, packages and prospectus.</p>
             </div>
+
+            <MatchBox />
 
             <div id="events" className="searchbox" data-tour="filters">
               <div className="searchrow">

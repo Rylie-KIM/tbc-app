@@ -12,6 +12,8 @@ export default function Privacy() {
       <p>When you start the short questions we store which side you chose (organiser or sponsor), the answers you give, and the times you started and finished. We store an anonymous random code from your browser to keep your answers together. There is no account yet.</p>
       <h2>Your email</h2>
       <p>Your email is optional. If you leave it, we may contact you for a short interview about how sponsors choose events. We do not share it.</p>
+      <h2>The “Tell us what you are looking for” box</h2>
+      <p>The sentence you write there is sent to an AI service (OpenRouter and the free model it uses) together with the facts of our example events, so that it can suggest events. We do not store your sentence, and we do not send your answers, your email or any code that identifies you. The free service may keep or use what it receives under its own terms, so please do not write personal or confidential details.</p>
       <h2>What we do not store</h2>
       <p>We do not store your name, and the preview does not track you across other sites.</p>
       <h2>Why</h2>

@@ -286,6 +286,10 @@ Claude through the Anthropic API (`decisions.md` D3). Model prices and ids come 
 | F25.7 | todo | Failure handling: refusals, timeouts, unreadable PDFs; show the manual form with a clear message | Build | M | F25.3 | Each failure shows a message and the empty form; nothing is lost |
 | F25.8 | todo | Measure: run the reader on the twelve examples and the real Impact Hack PDF with Haiku 5.5 and Sonnet 5.5; count correct fields; pick the model by results | Test | M | F25.3, F24.3 | A table of results saved in `../research/`; model choice recorded |
 | F25.9 | todo | Placeholder: the match explainer for F07 ("why it fits, what is missing") | Build | M | F07 gate | Starts only when F07's gate passes |
+| F25.10 | done | Sponsor side: "Tell us what you are looking for". The sponsor writes a sentence; the AI picks up to four example events and gives a reason from each event's own facts; any failure falls back to a keyword match, and the page says which one it is | Build | M | F24, F25.1 | **Built 2026-11-26.** `/api/match`, `lib/match.ts`, `components/MatchBox.tsx`; OpenRouter chat completions, JSON answer checked (only known event ids, short reasons, at most four); a daily call cap (`ai_usage`, migration 0007, default 40) and a per-address limit; the sentence is not stored; privacy page updated. Checked with a fake provider (`scripts/match-check.mjs`: good, fenced, garbage, empty, "nothing fits" and a provider 429); **not yet run against the real OpenRouter** (F25.11) |
+| F25.11 | todo | Owner: create the OpenRouter account and key (openrouter.ai/keys); put `OPENROUTER_API_KEY` in `.env`; Claude then adds it to Vercel (production) and runs one real call | Owner | S | F25.10 | The page's notice says "sent to an AI service" and a real answer comes back with reasons |
+| F25.12 | todo | Measure the free model on 10 to 15 sponsor sentences: does it answer in the JSON format, are the reasons true to the event data, how often does it fall back; try one other free model if it is weak | Build | S | F25.11 | A short table: sentence, events chosen, reason true or not, seconds taken |
+| F25.13 | todo | Read OpenRouter's and the free model provider's terms on keeping and training on inputs; change the privacy wording if needed | Research | S | F25.11 | The sentence under the box and `/privacy` match what the terms say |
 
 ### Cross-cutting (slice 1)
 
@@ -337,11 +341,11 @@ One line each. Break these down only when the gate passes (the thresholds are in
 | F06 Browse and filter | F06.1-F06.5 | 5 |
 | F08 Proposals and thread | F08.1-F08.6 | 6 |
 | F18 Honest demo content | F18.1-F18.5 | 5 |
-| F21 Onboarding survey | F21.1-F21.23 | 23 |
+| F21 Onboarding survey | F21.1-F21.24 | 24 |
 | F22 Landing page | F22.1-F22.6 | 6 |
 | F23 Role switch | F23.1-F23.9 | 9 |
 | F24 Example prospectus library | F24.1-F24.11 | 11 |
-| F25 AI assistant | F25.1-F25.9 | 9 |
+| F25 AI assistant | F25.1-F25.13 | 13 |
 | F27 Guided start | F27.1-F27.8 | 8 |
 | X Cross-cutting | X1-X9 | 9 |
 | R Research and decisions | R1-R11 | 11 |

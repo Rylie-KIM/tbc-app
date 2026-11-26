@@ -251,3 +251,11 @@ main.app { padding-block: 22px 120px; display: flex; flex-direction: column; gap
 .statusrow { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--hair); flex-wrap: wrap; }
 .statusrow:first-of-type { border-top: 0; }
 footer.foot { padding-block: 28px 40px; color: var(--faint); font-size: .86rem; }
+
+/* F25.10: describe what you want */
+.matchbox { display: flex; flex-direction: column; gap: 6px; }
+.matchres { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
+.matchitem { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 16px; border-radius: 18px; background: linear-gradient(180deg, #fff, #eef5f1); box-shadow: 0 0 0 1px rgba(1,63,34,.16), 0 8px 18px -12px rgba(1,63,34,.45); }
+.matchitem p { margin-top: 4px; }
+.matcherr { color: var(--ink); background: #fff3d6; border-radius: 12px; padding: 10px 14px; margin-top: 10px; }
+@media (max-width: 640px) { .matchitem { flex-direction: column; align-items: flex-start; } }
