@@ -1,6 +1,6 @@
 # Sponsor questionnaire (web survey)
 
-> **Status 2026-11-26:** this file matches the deployed survey, **version v0**. The wording of every question, hint and answer option below is the wording in the app. The source in code is `lib/survey.ts`; the stored copy is `../trace/survey-versions/v0.json` and the database tables `survey_version`, `survey_question` (options as JSON) and `survey_flow` (order). Each later change to a question gets a new version and a row in `../trace/survey-changelog.md`; update this file with it. If this file and the app ever differ, the app is right.
+> **Status 2026-11-26:** this file matches the deployed survey, **version 1.0.0**. The wording of every question, hint and answer option below is the wording in the app. The source in code is `lib/survey.ts`; the stored copy is `../trace/survey-versions/1.0.0.json` and the database tables `survey_version`, `survey_question` (options as JSON) and `survey_flow` (order). Each later change to a question gets a new version and a row in `../trace/survey-changelog.md`; update this file with it. If this file and the app ever differ, the app is right.
 
 > **Update 2026-11-25:** the survey is now collected on the website (onboarding, task F21), not by Google Form. The questions (Q1 to Q24), the analysis plan and the decision gate below still apply. The Google Forms steps and the Apps Script are kept only for reference.
 
@@ -317,13 +317,13 @@ function createSponsorForm() {
 - The 1-minute event version is still made by hand: **Make a copy** of the form and keep only Q1, Q3, Q5, Q6, Q11.
 - The Sheet holds emails from Q18: keep it private, and export to `responses.csv` only into the git-ignored `research/analysis/` folder.
 
-## Question text (as in the app, v0)
+## Question text (as in the app, 1.0.0)
 
 **Before the questions** (the intro screens, wording in `components/Onboarding.tsx`): "Welcome to TBC" (one sentence: "Sponsors and hackathons, in one place."); "Who is TBC for? You can try both sides." (Sponsor and Organiser); for a sponsor, "A few questions about sponsoring" ("We want to learn how you decide which events to back. There are no right answers.") with the note that answers are saved to help design TBC and that the email is optional; then "Your questionnaire starts now" with the numbers **23 questions at most** and **5-10 minutes** (organiser: 5 questions, 2 minutes or less). The Google Form title and description that stood here are no longer used (D2).
 
 **How the app shows the questions:**
 - One question per screen, with "Question n of N" above it, a progress bar, Back and Next. The hint is shown under the question; an optional question carries the tag "Optional" (the email question says it in its hint).
-- Three paths (the order below is the order shown; the snapshot `survey-versions/v0.json` and the table `survey_flow` hold it):
+- Three paths (the order below is the order shown; the snapshot `survey-versions/1.0.0.json` and the table `survey_flow` hold it):
 
 | Path | Questions in order | Count |
 |---|---|---|

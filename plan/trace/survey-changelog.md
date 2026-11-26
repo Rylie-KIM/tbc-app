@@ -4,7 +4,7 @@ Every change to the questions, their wording, their options or their order gets 
 
 ## How it works
 
-- `SURVEY_VERSION` in `lib/survey.ts` (`v0`, `v1`, ...; the first is `v0`). The page sends it with every start, answer and completion; the server stores it on the response (`survey_response.survey_version`, the version at start) and on each logged event (`survey_event.survey_version`).
+- `SURVEY_VERSION` in `lib/survey.ts` (semantic version: `1.0.0` is the first release to real users; `v0` was the test version). The page sends it with every start, answer and completion; the server stores it on the response (`survey_response.survey_version`, the version at start) and on each logged event (`survey_event.survey_version`).
 - `plan/trace/survey-versions/<version>.json` is a snapshot of what each person sees in that version: every question with its wording, hint, options, limits and order, for the three paths (organiser, sponsor who has sponsored, sponsor who has not). The file holds a hash of that content.
 - **In the database** (migration 0005): `survey_version` (one row per version: date, summary, content hash), `survey_question` (every question of that version; the answer options are a JSON array in the `options` column) and `survey_flow` (the order of the questions in that version, one row per position, for the three paths). The view `survey_event_readable` shows every logged event next to the question it answered, as that version worded it. These tables are filled from the snapshot files by `npm run survey:publish`; a published version is never edited (the script stops with MISMATCH if a snapshot no longer matches what is in the database). There is deliberately no foreign key from `survey_response` / `survey_event` to `survey_version`: a save must never fail because a version was not published yet.
 - Release steps for a change: edit `lib/survey.ts`, raise `SURVEY_VERSION`, `npm run survey:version -- --write --summary "what changed"`, add a row below, `npm run survey:publish`, deploy, commit. `npm run survey:version -- --check` and `npm run survey:publish -- --check` must both pass before a deploy.
@@ -17,13 +17,14 @@ Every change to the questions, their wording, their options or their order gets 
 
 | Version | Date | What it is |
 |---|---|---|
-| v0 | 2026-11-26 | The first version: the 24 questions of `sponsor-questionnaire.md` as they stand after the test period. Organiser path 5 questions, sponsor who has sponsored 23, sponsor who has not 11. Snapshot: `survey-versions/v0.json`. |
+| 1.0.0 | 2026-11-26 | First release to real users. The same 24 questions as the test version v0: organiser path 5 questions, sponsor who has sponsored 23, sponsor who has not 11. Snapshot: `survey-versions/1.0.0.json`. |
+| v0 | up to 2026-11-26 | The test version, used by the owner before the link was shared. The same content as 1.0.0 (including the test-period edits listed below). Answers saved under v0 are test answers. Snapshot: `survey-versions/v0.json`. |
 
-The next change to a question, an option or the order is `v1`: raise `SURVEY_VERSION`, write the snapshot, add a row here.
+Numbering from here: a change to wording or options that keeps the meaning (a clearer sentence, a typo) is a patch (1.0.1); a new or removed answer option, or a changed order, is a minor change (1.1.0); a new or removed question, or a changed meaning, is a major change (2.0.0). Raise `SURVEY_VERSION`, write the snapshot, add a row here.
 
-## Test period (before v0): not versions
+## Test period (v0): the edits that led to 1.0.0
 
-Until 2026-11-26 the link had not been shared with anyone, so every answer in the database was a test and all of them were deleted (D19). The wording changes made on 2026-11-26 during that test period are folded into v0 and are not separate versions. For the record, they were:
+Until 2026-11-26 the link had not been shared with anyone, so every answer in the database was a test and all of them were deleted (D19). The wording changes made on 2026-11-26 during that test period are folded into v0 and 1.0.0 and are not separate versions. For the record, they were:
 
 - Q10, option 9: "Measurable results from past editions" is now "Results that past sponsors got (for example hires, sign-ups, leads)" (the old text did not say whose results or what kind). Q16: "Results from past editions" is now "Results of past editions (for example hires, sign-ups, projects built)".
 - Q14 follows Q13: the page shows "In the previous question, you chose: ..." as plain text above the question, and the question reads "What else should an event’s web page always show about its participants?". A person who chose nothing, or only "I would not filter", gets "What should an event’s web page always show about its participants?" with no sentence above it. (The old text, "Which of these should an event page always show about its participants?", pointed at nothing on the screen.)

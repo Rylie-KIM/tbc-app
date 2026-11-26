@@ -146,3 +146,5 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 ## D19. Test data removed from the database (2026-11-26)
 
 **Status:** Owner decided (the link had never been shared with anyone, so every stored answer was a test by the owner or by Claude). All survey answers were deleted: 11 responses and 476 log rows (`survey_response`, `survey_event`). The version tables (`survey_version`, `survey_question`, `survey_flow`) were kept. The count was checked before and after. This cannot be undone and no backup existed (F21.14 is still not built). The save-check still creates and removes its own rows. From now on any row in the database is a real visitor's.
+
+**Update (2026-11-26, owner):** the link is now going to real users, so the survey is version **1.0.0** (semantic versions from here; `v0` stays as the name of the test version). The content is identical to v0; answers saved under v0 are test answers and keep the label v0.

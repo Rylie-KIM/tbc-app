@@ -7,7 +7,8 @@ import fs from 'node:fs';
 import pg from 'pg';
 const env = { ...Object.fromEntries(fs.existsSync('.env') ? fs.readFileSync('.env', 'utf8').split('\n').filter((l) => /^[A-Za-z_][A-Za-z0-9_]*=/.test(l)).map((l) => [l.split('=')[0], l.slice(l.indexOf('=') + 1)]) : []), ...process.env };
 const dir = 'plan/trace/survey-versions';
-const snaps = fs.readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(fs.readFileSync(`${dir}/${f}`, 'utf8'))).sort((a, b) => Number(a.version.slice(1)) - Number(b.version.slice(1)));
+const key = (v) => v.replace(/^v/, '').split('.').reduce((n, x) => n * 1000 + Number(x), 0); // 'v0' < '1.0.0' < '1.0.1' < '1.1.0'
+const snaps = fs.readdirSync(dir).filter((f) => f.endsWith('.json')).map((f) => JSON.parse(fs.readFileSync(`${dir}/${f}`, 'utf8'))).sort((a, b) => key(a.version) - key(b.version));
 const checkOnly = process.argv.includes('--check');
 const c = new pg.Client({ connectionString: env.DATABASE_URL, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 15000 });
 await c.connect();

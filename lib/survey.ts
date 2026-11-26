@@ -1,8 +1,8 @@
 // The full questionnaire (plan/research/sponsor-questionnaire.md, Q1 to Q24) as the onboarding survey.
 // Keys follow the questionnaire's numbering, so the export matches the analysis plan.
-// Bump this on ANY change to the questions, wording, options or order (then run `npm run survey:version -- --write`
+// Semantic version: 1.0.0 is the first release to real users. Bump this on ANY change to the questions, wording, options or order (then run `npm run survey:version -- --write`
 // and add a line to plan/trace/survey-changelog.md). Every saved answer records the version the person saw.
-export const SURVEY_VERSION = 'v0';
+export const SURVEY_VERSION = '1.0.0';
 export type Role = 'organiser' | 'sponsor';
 export type Kind = 'single' | 'multi' | 'scale' | 'text' | 'email';
 
@@ -73,7 +73,7 @@ export function questionsFor(role: Role, answers: Answers): Question[] {
 
 // Option texts that earlier versions showed. A page still open on an older version may send one of them: accept it as it is.
 export const LEGACY_OPTIONS: Record<string, string[]> = {};
-export const VERSION_RE = /^v\d{1,3}$/;
+export const VERSION_RE = /^(v\d{1,3}|\d{1,3}\.\d{1,3}\.\d{1,3})$/; // 'v0' was the test version; real versions are 1.0.0, 1.1.0, ...
 
 const list = Object.values(Q);
 export const OPTIONS_BY_KEY: Record<string, string[]> = Object.fromEntries(list.filter((x) => x.options.length).map((x) => [x.key, x.options]));
