@@ -15,8 +15,9 @@ responses*.csv
 # Real Impact Hack prospectus: never published (decisions D5), kept local for private reader tests
 plan/ImpactHack_Sponsorship_Prospectus.pdf
 
-# Kept local until the GitHub repo is confirmed private (decisions D13):
-# raw meeting transcript (names of team members) and the reference images (other people's design work)
+# Kept local (owner, 2026-11-26): everything in plan/meetings (the raw meeting transcript with names of team members, and the meeting notes)
+plan/meetings/
+# Kept local until the GitHub repo is confirmed private (decisions D13): the reference images (other people's design work)
 plan/TBC-Hackathon Sponsorship Platform Planning.txt
 plan/design/[0-9].jpg
 .env*
