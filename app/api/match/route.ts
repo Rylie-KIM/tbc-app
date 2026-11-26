@@ -7,7 +7,10 @@ import { keywordMatch, parseAnswer, SYSTEM_PROMPT, userPrompt, type MatchResult 
 export const maxDuration = 30;
 
 const BASE = process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1';
-const MODEL = process.env.OPENROUTER_MODEL || 'openai/gpt-oss-20b:free';
+// Free models are often rate-limited upstream (429), so OpenRouter is given a short list and tries the next one on a failure.
+// The free list changes: ids were read from openrouter.ai/api/v1/models on 2026-11-26. Tried that day on two sentences: ernie answered both
+// (5 to 8 s), ling one of two, the others were rate-limited upstream. The openrouter/free router was left out: it landed on slow reasoning models (25 s+).
+const MODELS = (process.env.OPENROUTER_MODELS || 'baidu/ernie-5.5-flash-preview:free,inclusionai/ling-3.2-flash:free,google/gemma-4-31b-it:free').split(',').map((m) => m.trim()).filter(Boolean).slice(0, 3);
 const DAILY_CAP = Number(process.env.AI_DAILY_CAP || 40);
 
 async function underDailyCap(): Promise<boolean> {
@@ -22,16 +25,18 @@ async function askModel(text: string): Promise<MatchResult | null> {
   if (!key) return null;
   if (!(await underDailyCap())) return null;
   const ctl = new AbortController();
-  const timer = setTimeout(() => ctl.abort(), 22_000);
+  const timer = setTimeout(() => ctl.abort(), 20_000);
   try {
     const res = await fetch(`${BASE}/chat/completions`, {
       method: 'POST', signal: ctl.signal,
       headers: { authorization: `Bearer ${key}`, 'content-type': 'application/json', 'x-title': 'TBC preview' },
-      body: JSON.stringify({ model: MODEL, temperature: 0.2, max_tokens: 700, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: SYSTEM_PROMPT }, { role: 'user', content: userPrompt(text) }] }),
+      body: JSON.stringify({ models: MODELS, temperature: 0.2, max_tokens: 2500, response_format: { type: 'json_object' }, messages: [{ role: 'system', content: SYSTEM_PROMPT }, { role: 'user', content: userPrompt(text) }] }),
     });
     if (!res.ok) { console.error('openrouter status', res.status); return null; }
     const data = await res.json().catch(() => null);
-    const out = parseAnswer(data?.choices?.[0]?.message?.content);
+    const content = data?.choices?.[0]?.message?.content;
+    const out = parseAnswer(content);
+    if (!out || !(out.matches.length || out.summary)) console.error('openrouter answer not usable', data?.model, data?.choices?.[0]?.finish_reason, typeof content === 'string' ? `${content.length} chars: ${content.slice(0, 160).replace(/\s+/g, ' ')}` : 'no content');
     return out && (out.matches.length || out.summary) ? out : null; // an answer with neither matches nor a reason is treated as a failure
   } catch (e) { console.error('openrouter failed', (e as Error).name); return null; }
   finally { clearTimeout(timer); }
