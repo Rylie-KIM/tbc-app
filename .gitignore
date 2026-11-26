@@ -17,6 +17,8 @@ plan/ImpactHack_Sponsorship_Prospectus.pdf
 
 # Kept local (owner, 2026-11-26): everything in plan/meetings (the raw meeting transcript with names of team members, and the meeting notes)
 plan/meetings/
+# Kept local (owner, 2026-11-26): sponsor outreach tracking (names and email addresses)
+plan/outreach/
 # Kept local until the GitHub repo is confirmed private (decisions D13): the reference images (other people's design work)
 plan/TBC-Hackathon Sponsorship Platform Planning.txt
 plan/design/[0-9].jpg
