@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { questionsFor, SURVEY_VERSION, type Answers, type Question, type Role } from '@/lib/survey';
+import { echoOf, questionsFor, SURVEY_VERSION, type Answers, type Question, type Role } from '@/lib/survey';
 
 type Job = { path: string; body: Record<string, unknown>; retried?: boolean };
 type SaveState = 'idle' | 'saving' | 'saved' | 'retry';
@@ -204,6 +204,8 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
 
   const sel = (k: string) => answers[k];
   const canNext = !q || q.optional || (q.kind === 'multi' ? ((sel(q.key) as string[] | undefined)?.length ?? 0) > 0 : !!sel(q.key));
+  const echo = q ? echoOf(q, answers) : [];
+  const shownTitle = q ? (echo.length > 0 && q.titleAfter ? q.titleAfter : q.title) : '';
   const isLast = !!q && qi === questions.length - 1;
   const total = questionsFor(role, {}).length;
   const otherOn = !!q?.other && ((sel(q.key) as string[] | undefined) ?? []).includes('Other');
@@ -276,12 +278,15 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
               <p className="skipnote" role="status">Thanks. Since you have not sponsored yet, we skip {questionsFor('sponsor', { q04_freq: '1-2' }).length - questions.length} questions about past sponsorships. {questions.length - qi} left.</p>
             )}
             {q.intro && <p className="muted" style={{ background: 'rgba(255,255,255,.7)', borderRadius: 16, padding: '12px 16px' }}>{q.intro}</p>}
-            <h2>{q.title}</h2>
+            {echo.length > 0 && (
+              <div className="echo"><span className="muted">You chose</span><div className="row" style={{ gap: 8 }}>{echo.map((x) => <span className="tag" key={x}>{x}</span>)}</div></div>
+            )}
+            <h2>{shownTitle}</h2>
             {q.hint && <p className="muted">{q.hint}</p>}
             {q.optional && q.kind !== 'email' && <span className="small">Optional</span>} {/* the email question already says it in its hint */}
 
             {(q.kind === 'single' || q.kind === 'multi') && (
-              <div className="opts" role={q.kind === 'single' ? 'radiogroup' : 'group'} aria-label={q.title}>
+              <div className="opts" role={q.kind === 'single' ? 'radiogroup' : 'group'} aria-label={shownTitle}>
                 {q.options.map((o) => {
                   const on = q.kind === 'single' ? sel(q.key) === o : ((sel(q.key) as string[] | undefined) ?? []).includes(o);
                   return (
@@ -297,14 +302,14 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             )}
 
             {q.kind === 'scale' && (<>
-              <div className="scale" role="radiogroup" aria-label={q.title}>
+              <div className="scale" role="radiogroup" aria-label={shownTitle}>
                 {q.options.map((o) => (<button key={o} className="scalebtn" role="radio" aria-checked={sel(q.key) === o} onClick={() => choose(q, o)}>{o}</button>))}
               </div>
               <div className="row" style={{ justifyContent: 'space-between' }}><span className="scalelabel"><b>1</b> {q.low}</span><span className="scalelabel"><b>5</b> {q.high}</span></div>
             </>)}
 
             {q.kind === 'text' && (
-              <textarea className="input area" rows={4} maxLength={1000} aria-label={q.title} value={(sel(q.key) as string) ?? ''} onChange={(e) => typeText(q.key, e.target.value)} onBlur={() => flushText(q)} placeholder="Type here (optional)" />
+              <textarea className="input area" rows={4} maxLength={1000} aria-label={shownTitle} value={(sel(q.key) as string) ?? ''} onChange={(e) => typeText(q.key, e.target.value)} onBlur={() => flushText(q)} placeholder="Type here (optional)" />
             )}
 
             {q.kind === 'email' && (<>

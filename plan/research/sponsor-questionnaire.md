@@ -114,7 +114,7 @@ function createSponsorForm() {
     "I am not involved in sponsorship decisions"], true);
 
   // Q24 (added 2026-11-24): asked before Q4 so that people who then skip to section 1b still answer it
-  choice("If your organisation has organised a hackathon or student event itself, which edition was the most recent one?", [
+  choice("If your organisation has organised its own hackathon or student event, which edition was the most recent event you organised?", [
     "We have not organised one",
     "It was our first edition",
     "2nd edition",
@@ -131,7 +131,7 @@ function createSponsorForm() {
   // ---- Section 1b: only for people who answered 0 to Q4 (added 2026-11-24)
   var page1b = form.addPageBreakItem().setTitle("Section 1b: If you have not sponsored yet");
 
-  boxes("What has stopped you from sponsoring so far? (select all that apply)", [
+  boxes("What has stopped you from sponsoring a hackathon or student event so far? (select all that apply)", [
     "No budget",
     "I did not find an event that fits",
     "I am not sure it is worth the money",
@@ -149,14 +149,14 @@ function createSponsorForm() {
     "Find beta testers or early users",
     "Support the community or local ecosystem"], true, true);
 
-  boxes("How did you find this event? (select all that apply)", [
+  boxes("How did you find the most recent event you sponsored? (select all that apply)", [
     "The organisers contacted us (email or LinkedIn)",
     "Personal contact or referral",
     "I attended another event",
     "An event listing site (for example Luma, Devpost, MLH)",
     "A university, society or careers service"], true, true);
 
-  choice("Roughly what did your organisation contribute in total?", [
+  choice("Roughly how much did your organisation contribute in total to the most recent event you sponsored?", [
     "Under £500",
     "£500-£1,000",
     "£1,000-£2,500",
@@ -165,14 +165,14 @@ function createSponsorForm() {
     "In-kind only (credits, prizes, mentors, swag)",
     "Prefer not to say"], true);
 
-  scale("How well did the event meet your goal?", "Not at all", "Completely");
+  scale("How well did the most recent event you sponsored meet your goal?", "Not at all", "Completely");
 
-  para("What was the most valuable outcome, and what disappointed you?");
+  para("For the most recent event you sponsored, what was the most valuable outcome, and what disappointed you?");
 
   // ---- Section 3: Choosing events
   form.addPageBreakItem().setTitle("Section 3: Choosing events");
 
-  boxes("Which factors matter most when deciding whether to sponsor? Pick up to 3.", [
+  boxes("Which factors matter most when deciding whether to sponsor a hackathon or student event? Pick up to 3.", [
     "Audience fit (skills, university, level)",
     "Number of attendees",
     "Organiser track record and reliability",
@@ -194,7 +194,7 @@ function createSponsorForm() {
   // Q22 and Q23 (added 2026-11-24; numbered Q22 and Q23 so the other numbers stay fixed, placed after Q11 in the form)
   para("What do you wish event organisers did differently?");
 
-  choice("How many weeks before an event do you usually decide whether to sponsor it?", [
+  choice("How many weeks before an event starts do you usually decide whether to sponsor the event?", [
     "Less than 2 weeks",
     "2 to 4 weeks",
     "1 to 2 months",
@@ -220,7 +220,7 @@ function createSponsorForm() {
     "Project ideas or code produced",
     "We do not measure it"], true, false);
 
-  boxes("If you could filter the participants you receive, which participants would you want? Pick up to 3.", [
+  boxes("If you could filter the participants of an event you sponsor, which participants would you want? Pick up to 3.", [
     "Skills or field of study (for example data, backend, design)",
     "Study level (undergraduate, master's, PhD)",
     "University or department",
@@ -233,7 +233,7 @@ function createSponsorForm() {
     "Experience with our product or tools",
     "I would not filter"], true, true, 3);
 
-  para("Which of these should an event page always show about its participants?");
+  para("What should an event’s web page always show about its participants?");
 
   // ---- Section 4: An idea (everyone answers from here)
   var page4 = form.addPageBreakItem().setTitle("Section 4: An idea")
@@ -242,22 +242,25 @@ function createSponsorForm() {
       "can browse them and propose partnerships. A sponsor could trade things like access to " +
       "hiring, user or beta testing, or product exposure for sponsorship.");
 
-  scale("How useful would that be to you?", "Not useful", "Very useful");
+  scale("How useful would TBC be to you?", "Not useful", "Very useful");
 
-  boxes("What would an event page need to show before you would consider it? (select all that apply)", [
+  boxes("What would an event’s web page need to show before you would consider sponsoring the event? (select all that apply)", [
     "Audience profile (skills, universities, levels)",
     "Attendee numbers",
+    "Event theme or topic",
+    "Purpose of the event (why it exists and who it is for)",
+    "Expected outcomes (for example projects built, hires, sign-ups)",
     "Past sponsors and what they got",
-    "Results from past editions",
+    "Results of past editions (for example hires, sign-ups, projects built)",
     "Dates and venue",
     "What each sponsorship tier includes and costs",
     "References for the organisers"], true, true);
 
-  choice("If it charged a fee, who should pay?", [
+  choice("If TBC charged a fee for using the website, who should pay that fee?", [
     "Organisers", "Sponsors", "Both", "It should be free", "Not sure"], true);
 
   form.addTextItem()
-    .setTitle("Would you be willing to join a short interview (15 minutes)? If yes, leave an email.")
+    .setTitle("Would you be willing to join a 15-minute interview with the TBC team about sponsoring events? If yes, leave an email.")
     .setRequired(false)
     .setValidation(FormApp.createTextValidation()
       .setHelpText("Enter a valid email address.")
@@ -339,7 +342,7 @@ function createSponsorForm() {
 - I recommend or influence the decision
 - I am not involved in sponsorship decisions
 
-**Q24. If your organisation has organised a hackathon or student event itself, which edition was the most recent one?** Multiple choice, required. Added 2026-11-24 (numbered Q24 so the other numbers stay fixed, placed after Q3 and before Q4 in the form, so everyone answers it, including people who skip to section 1b).
+**Q24. If your organisation has organised its own hackathon or student event, which edition was the most recent event you organised?** Multiple choice, required. Added 2026-11-24 (numbered Q24 so the other numbers stay fixed, placed after Q3 and before Q4 in the form, so everyone answers it, including people who skip to section 1b).
 - We have not organised one
 - It was our first edition
 - 2nd edition
@@ -355,7 +358,7 @@ function createSponsorForm() {
 
 ### Section 1b: If you have not sponsored yet (only people who answered 0 to Q4; after this section, go to section 4)
 
-**Q21. What has stopped you from sponsoring so far? (select all that apply)** Checkboxes, required. Added 2026-11-24 (numbered Q21 so the other numbers stay fixed, placed after Q4 in the form).
+**Q21. What has stopped you from sponsoring a hackathon or student event so far? (select all that apply)** Checkboxes, required. Added 2026-11-24 (numbered Q21 so the other numbers stay fixed, placed after Q4 in the form).
 - No budget
 - I did not find an event that fits
 - I am not sure it is worth the money
@@ -374,7 +377,7 @@ function createSponsorForm() {
 - Support the community or local ecosystem
 - Other (add "Other" option)
 
-**Q6. How did you find this event? (select all that apply)** Checkboxes, required.
+**Q6. How did you find the most recent event you sponsored? (select all that apply)** Checkboxes, required.
 - The organisers contacted us (email or LinkedIn)
 - Personal contact or referral
 - I attended another event
@@ -382,7 +385,7 @@ function createSponsorForm() {
 - A university, society or careers service
 - Other (add "Other" option)
 
-**Q7. Roughly what did your organisation contribute in total?** Multiple choice, required.
+**Q7. Roughly how much did your organisation contribute in total to the most recent event you sponsored?** Multiple choice, required.
 - Under £500
 - £500-£1,000
 - £1,000-£2,500
@@ -391,13 +394,13 @@ function createSponsorForm() {
 - In-kind only (credits, prizes, mentors, swag)
 - Prefer not to say
 
-**Q8. How well did the event meet your goal?** Linear scale 1 to 5, required. Label 1 "Not at all", label 5 "Completely".
+**Q8. How well did the most recent event you sponsored meet your goal?** Linear scale 1 to 5, required. Label 1 "Not at all", label 5 "Completely".
 
-**Q9. What was the most valuable outcome, and what disappointed you?** Paragraph, optional.
+**Q9. For the most recent event you sponsored, what was the most valuable outcome, and what disappointed you?** Paragraph, optional.
 
 ### Section 3: Choosing events
 
-**Q10. Which factors matter most when deciding whether to sponsor? Pick up to 3.** Checkboxes, required, Select at most 3.
+**Q10. Which factors matter most when deciding whether to sponsor a hackathon or student event? Pick up to 3.** Checkboxes, required, Select at most 3.
 - Audience fit (skills, university, level)
 - Number of attendees
 - Organiser track record and reliability
@@ -420,7 +423,7 @@ function createSponsorForm() {
 
 **Q22. What do you wish event organisers did differently?** Paragraph, optional. Added 2026-11-24 (placed after Q11 in the form).
 
-**Q23. How many weeks before an event do you usually decide whether to sponsor it?** Multiple choice, required. Added 2026-11-24 (placed after Q22 in the form).
+**Q23. How many weeks before an event starts do you usually decide whether to sponsor the event?** Multiple choice, required. Added 2026-11-24 (placed after Q22 in the form).
 - Less than 2 weeks
 - 2 to 4 weeks
 - 1 to 2 months
@@ -446,7 +449,7 @@ function createSponsorForm() {
 - Project ideas or code produced
 - We do not measure it
 
-**Q13. If you could filter the participants you receive, which participants would you want? Pick up to 3.** Checkboxes, required, Select at most 3.
+**Q13. If you could filter the participants of an event you sponsor, which participants would you want? Pick up to 3.** Checkboxes, required, Select at most 3.
 - Skills or field of study (for example data, backend, design)
 - Study level (undergraduate, master's, PhD)
 - University or department
@@ -460,32 +463,35 @@ function createSponsorForm() {
 - I would not filter
 - Other (add "Other" option)
 
-**Q14. Which of these should an event page always show about its participants?** Paragraph, optional.
+**Q14. What should an event’s web page always show about its participants?** Paragraph, optional. **From survey v2 (2026-11-26):** the app shows "You chose: ..." (the person's Q13 picks, not "I would not filter") above the question, and the question reads "What else should an event page always show about its participants?". Without a pick it keeps the plain wording. The Google Form version is not used (D2).
 
 ### Section 4: An idea (everyone answers from here)
 
 **Section description:** TBC is a website where hackathon and community organisers list their events, and sponsors can browse them and propose partnerships. A sponsor could trade things like access to hiring, user or beta testing, or product exposure for sponsorship.
 
-**Q15. How useful would that be to you?** Linear scale 1 to 5, required. Label 1 "Not useful", label 5 "Very useful".
+**Q15. How useful would TBC be to you?** Linear scale 1 to 5, required. Label 1 "Not useful", label 5 "Very useful".
 
-**Q16. What would an event page need to show before you would consider it? (select all that apply)** Checkboxes, required.
+**Q16. What would an event’s web page need to show before you would consider sponsoring the event? (select all that apply)** Checkboxes, required.
 - Audience profile (skills, universities, levels)
 - Attendee numbers
+- Event theme or topic
+- Purpose of the event (why it exists and who it is for)
+- Expected outcomes (for example projects built, hires, sign-ups)
 - Past sponsors and what they got
-- Results from past editions
+- Results of past editions (for example hires, sign-ups, projects built)
 - Dates and venue
 - What each sponsorship tier includes and costs
 - References for the organisers
 - Other (add "Other" option)
 
-**Q17. If it charged a fee, who should pay?** Multiple choice, required.
+**Q17. If TBC charged a fee for using the website, who should pay that fee?** Multiple choice, required.
 - Organisers
 - Sponsors
 - Both
 - It should be free
 - Not sure
 
-**Q18. Would you be willing to join a short interview (15 minutes)? If yes, leave an email.** Short answer, optional, email validation.
+**Q18. Would you be willing to join a 15-minute interview with the TBC team about sponsoring events? If yes, leave an email.** Short answer, optional, email validation.
 
 **Q19. Anything else we should know?** Paragraph, optional.
 
@@ -882,8 +888,8 @@ Each entry: why we ask, how we analyse it (math and code), chart, a made-up exam
 - **Analysis:** code each answer to the Q13 options plus new codes; count; note what is mentioned first.
 - **Chart:** bar of coded mentions.
 - **Example:** "cohort by course and year" 5, "how many are final-year" 4, "past hackathon winners" 2.
-- **Hypothesis:** answers mostly repeat Q13; the new codes are the useful part.
-- **Expected:** 50% or more of mentions map to Q13 options; at least one new code is mentioned twice or more.
+- **Hypothesis:** answers mostly repeat Q13; the new codes are the useful part. **From v2:** the question asks "what else" after showing the person's Q13 picks, so repeats of Q13 are expected to be rarer; v0 and v1 answers ("Which of these...", nothing shown) are read separately.
+- **Expected:** at least one new code is mentioned twice or more (v0/v1: 50% or more of mentions map to Q13 options).
 - **Decision:**
   - The coded list becomes the participant fields of the event page, ordered by mention count; a field mentioned once is not added.
   - A new code with 2 or more mentions is added to the registration form and to the Q13 filter list.
@@ -913,7 +919,7 @@ Each entry: why we ask, how we analyse it (math and code), chart, a made-up exam
   moscow = pd.cut(bal16, [-0.01, 0.25, 0.50, 1.01], labels=["Could", "Should", "Must"], right=False)
   ```
 - **Chart:** bar with reference lines at 25% and 50%.
-- **Example:** attendee numbers 11/13, audience profile 10/13, tier prices 9/13, past sponsors 7/13, results 5/13, references 3/13.
+- **Example:** attendee numbers 11/13, audience profile 10/13, tier prices 9/13, past sponsors 7/13, results 5/13, references 3/13. (From v2 the list also has event theme or topic, purpose and expected outcomes: read them with the same rule; the figures above are made up and predate them.)
 - **Hypothesis:** attendee numbers, audience profile and tier prices are must-haves; references are optional.
 - **Expected:** attendee numbers, audience profile and tiers are each 50% or more (balanced); references are under 25%.
 - **Decision:**
