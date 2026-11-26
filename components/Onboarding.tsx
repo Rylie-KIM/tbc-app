@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { questionsFor, type Answers, type Question, type Role } from '@/lib/survey';
 
-type Job = { path: string; body: Record<string, unknown> };
+type Job = { path: string; body: Record<string, unknown>; retried?: boolean };
 type SaveState = 'idle' | 'saving' | 'saved' | 'retry';
 const QUEUE_KEY = 'tbc_queue';
 
@@ -60,7 +60,12 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
       const job = queue.current[0];
       try {
         const res = await fetch(job.path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(job.body) });
-        if (res.ok || res.status === 400 || res.status === 404) { queue.current.shift(); persistQueue(); }
+        if (res.status === 404 && job.path !== '/api/survey/start' && !job.retried && (job.body.role === 'sponsor' || job.body.role === 'organiser')) {
+          // the server has no response for this person and side (for example it was deleted): create it again, then send the answer again
+          job.retried = true;
+          queue.current.unshift({ path: '/api/survey/start', body: { anonId: job.body.anonId, role: job.body.role } });
+          persistQueue();
+        } else if (res.ok || res.status === 400 || res.status === 404) { queue.current.shift(); persistQueue(); }
         else throw new Error(String(res.status));
       } catch {
         busy.current = false;
@@ -123,6 +128,14 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
     if (textTimer.current) clearTimeout(textTimer.current);
     textTimer.current = setTimeout(() => enqueue('/api/survey/answer', { key, value }), 700);
   };
+  // The email is kept in state at once and sent about a second after typing stops, when it looks valid.
+  const typeEmail = (key: string, value: string) => {
+    setEmailError('');
+    setAnswers((a) => ({ ...a, [key]: value }));
+    if (textTimer.current) clearTimeout(textTimer.current);
+    const v = value.trim();
+    if (v && EMAIL.test(v)) textTimer.current = setTimeout(() => enqueue('/api/survey/answer', { key, value: v }), 900);
+  };
   const flushText = (q: Question | null) => {
     if (textTimer.current) { clearTimeout(textTimer.current); textTimer.current = null; }
     if (!q) return;
@@ -135,6 +148,8 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
       const v = ((answers[q.key] as string) ?? '').trim();
       if (delta > 0 && v && !EMAIL.test(v)) { setEmailError('That email does not look right. You can leave it empty.'); return; }
       setEmailError('');
+      if (textTimer.current) { clearTimeout(textTimer.current); textTimer.current = null; }
+      if (!v || EMAIL.test(v)) enqueue('/api/survey/answer', { key: q.key, value: v }); // also when going Back, so a typed email is never lost
     }
     flushText(q);
     setStep((s) => s + delta);
@@ -293,7 +308,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
             )}
 
             {q.kind === 'email' && (<>
-              <input id="em" className="input" aria-label="Email address" type="email" inputMode="email" autoComplete="email" value={(sel(q.key) as string) ?? ''} onChange={(e) => { setEmailError(''); setAnswers((a) => ({ ...a, [q.key]: e.target.value })); }} placeholder="you@example.com" aria-describedby="emerr" />
+              <input id="em" className="input" aria-label="Email address" type="email" inputMode="email" autoComplete="email" value={(sel(q.key) as string) ?? ''} onChange={(e) => typeEmail(q.key, e.target.value)} placeholder="you@example.com" aria-describedby="emerr" />
               <p id="emerr" className="small" style={{ color: '#7d5200' }}>{emailError}</p>
               {/* the email is sent when leaving this question (see go) */}
             </>)}
@@ -302,7 +317,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
               <button className="btn btn-ghost" onClick={() => go(-1, q)} disabled={finishing}>Back</button>
               {isLast
                 ? <button className="btn btn-primary" onClick={() => void finish(q)} disabled={finishing || !canNext}>{finishing ? 'Saving…' : 'Finish and explore'}</button>
-                : <button className="btn btn-primary" onClick={() => { if (q.kind === 'email') { const v = ((answers[q.key] as string) ?? '').trim(); if (v && !EMAIL.test(v)) { setEmailError('That email does not look right. You can leave it empty.'); return; } enqueue('/api/survey/answer', { key: q.key, value: v }); } go(1, q); }} disabled={!canNext}>Next</button>}
+                : <button className="btn btn-primary" onClick={() => { if (q.kind === 'email') { const v = ((answers[q.key] as string) ?? '').trim(); if (v && !EMAIL.test(v)) { setEmailError('That email does not look right. You can leave it empty.'); return; } } go(1, q); }} disabled={!canNext}>Next</button>}
             </div>
             {save === 'retry' && <p className="small">We could not reach the server yet. Your answers are kept on this device and will be sent when the connection is back.</p>}
           </>)}
