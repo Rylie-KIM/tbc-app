@@ -1,10 +1,12 @@
-# Sponsor questionnaire (Google Form)
+# Sponsor questionnaire (web survey)
+
+> **Status 2026-11-26:** this file matches the deployed survey, **version v0**. The wording of every question, hint and answer option below is the wording in the app. The source in code is `lib/survey.ts`; the stored copy is `../trace/survey-versions/v0.json` and the database tables `survey_version`, `survey_question` (options as JSON) and `survey_flow` (order). Each later change to a question gets a new version and a row in `../trace/survey-changelog.md`; update this file with it. If this file and the app ever differ, the app is right.
 
 > **Update 2026-11-25:** the survey is now collected on the website (onboarding, task F21), not by Google Form. The questions (Q1 to Q24), the analysis plan and the decision gate below still apply. The Google Forms steps and the Apps Script are kept only for reference.
 
-Draft 2026-11-12. Goal: learn how sponsors choose hackathons, what is hard for them, and whether TBC would help. Target 10-15 responses, at least 3 each from recruitment, product/developer-relations and brand/marketing sponsors. About 4 minutes before the 2026-11-24 revision (now likely 7-10 minutes: time it with two people before sending, see `../trace/user-needs.md` 2.2 fix 5). Revised 2026-11-24: fixes 1-4 of `../trace/user-needs.md` 2.2 applied (new Q21, Q22, Q23; Q4 asks about sponsoring only); Q24 (own events organised, by edition) added the same day. Based on meeting 1 (`discussion.md`) and the benchmarks in `examples.md`.
+Draft 2026-11-12. Goal: learn how sponsors choose hackathons, what is hard for them, and whether TBC would help. Target 10-15 responses, at least 3 each from recruitment, product/developer-relations and brand/marketing sponsors. About 4 minutes before the 2026-11-24 revision. The app tells sponsors "5-10 minutes"; this was never timed (task R2 was skipped, D2). Revised 2026-11-24: fixes 1-4 of `../trace/user-needs.md` 2.2 applied (new Q21, Q22, Q23; Q4 asks about sponsoring only); Q24 (own events organised, by edition) added the same day. Based on meeting 1 (`discussion.md`) and the benchmarks in `examples.md`.
 
-Rules for the form: ask about past behaviour, not hypotheticals; do not mention TBC until section 4; we do not quote prices ourselves; email is optional.
+Rules for the survey: ask about past behaviour, not hypotheticals; the questions do not mention TBC until section 4 (the intro screens before them describe TBC in one general sentence, D12); we do not quote prices ourselves; email is optional.
 
 ## How to create it in Google Forms
 
@@ -21,7 +23,7 @@ Rules for the form: ask about past behaviour, not hypotheticals; do not mention 
 
 For on-the-spot use, duplicate the form (three dots, Make a copy) and keep only Q1, Q3, Q5, Q6 and Q11 as a 1-minute version.
 
-## Create the form with Google Apps Script (fast route, added 2026-11-16)
+## Create the form with Google Apps Script (fast route, added 2026-11-16; reference only: the question texts in this script follow the Google Form layout, with the hint inside the title, and do not include the organiser path)
 
 This replaces steps 2-9 above: one script builds the whole form (19 questions, 4 sections, skip rule, validations, progress bar, linked Sheet). The question text is the same as in "Form text" below; if you change a question there, change it in the script too.
 
@@ -142,7 +144,7 @@ function createSponsorForm() {
   // ---- Section 2: Your most recent sponsorship
   var page2 = form.addPageBreakItem().setTitle("Section 2: Your most recent sponsorship");
 
-  boxes("Why did you sponsor it? (select all that apply)", [
+  boxes("What were your reasons for sponsoring the most recent event you sponsored? (select all that apply)", [
     "Hire interns or graduates",
     "Get people to try our product or API and give feedback",
     "Brand awareness among students or developers",
@@ -222,7 +224,7 @@ function createSponsorForm() {
 
   boxes("If you could filter the participants of an event you sponsor, which participants would you want? Pick up to 3.", [
     "Skills or field of study (for example data, backend, design)",
-    "Study level (undergraduate, master's, PhD)",
+    "Study level (undergraduate, master’s, PhD)",
     "University or department",
     "Graduation year (when they could start an internship or graduate job)",
     "Experience level (beginners or experienced)",
@@ -315,11 +317,24 @@ function createSponsorForm() {
 - The 1-minute event version is still made by hand: **Make a copy** of the form and keep only Q1, Q3, Q5, Q6, Q11.
 - The Sheet holds emails from Q18: keep it private, and export to `responses.csv` only into the git-ignored `research/analysis/` folder.
 
-## Form text
+## Question text (as in the app, v0)
 
-**Title:** How do companies choose hackathons to sponsor? (4-minute survey)
+**Before the questions** (the intro screens, wording in `components/Onboarding.tsx`): "Welcome to TBC" (one sentence: "Sponsors and hackathons, in one place."); "Who is TBC for? You can try both sides." (Sponsor and Organiser); for a sponsor, "A few questions about sponsoring" ("We want to learn how you decide which events to back. There are no right answers.") with the note that answers are saved to help design TBC and that the email is optional; then "Your questionnaire starts now" with the numbers **23 questions at most** and **5-10 minutes** (organiser: 5 questions, 2 minutes or less). The Google Form title and description that stood here are no longer used (D2).
 
-**Description:** We are university students who organise hackathons and are researching how companies decide which events to sponsor, so we can make that process easier. It takes about 4 minutes. Answers are used only for this research; we will not publish your name or company without your permission. Thank you.
+**How the app shows the questions:**
+- One question per screen, with "Question n of N" above it, a progress bar, Back and Next. The hint is shown under the question; an optional question carries the tag "Optional" (the email question says it in its hint).
+- Three paths (the order below is the order shown; the snapshot `survey-versions/v0.json` and the table `survey_flow` hold it):
+
+| Path | Questions in order | Count |
+|---|---|---|
+| Sponsor who has sponsored (Q4 is not 0) | Q1, Q2, Q3, Q24, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q22, Q23, Q20, Q12, Q13, Q14, Q15, Q16, Q17, Q18, Q19 | 23 |
+| Sponsor who has not sponsored (Q4 = 0) | Q1, Q2, Q3, Q24, Q4, Q21, Q15, Q16, Q17, Q18, Q19 | 11 |
+| Organiser | O1, O2, O3, Q18, Q19 | 5 |
+
+- **Skip note.** After Q4 = 0 the page says: "Thanks. Since you have not sponsored yet, we skip 12 questions about past sponsorships. 6 left." (The intro says "23 questions at most" so that answering 0 does not look like a way to a shorter survey.)
+- **Q14 follows Q13.** Above Q14 the page shows "In the previous question, you chose: ..." as plain text with the person's Q13 answers (without "I would not filter"; "Other" shows the person's own words). With at least one answer the question reads "What else should an event’s web page always show about its participants?"; with none, or only "I would not filter", it reads "What should an event’s web page always show about its participants?" and nothing is shown above it.
+- **"Other" options** open a short text box; the text is saved as `<question>_other`.
+- **Email (Q18)** is saved while it is typed (when it looks valid) and when the person goes Back or Next. At the end the person goes to the app ("Finish and explore"); the confirmation message at the end of this section is not used.
 
 ### Section 1: About you
 
@@ -350,7 +365,7 @@ function createSponsorForm() {
 - 4th edition or later
 - Not sure
 
-**Q4. In the last 2 years, how many hackathons or student events has your organisation sponsored (paid for, or given prizes, credits or mentors to)? Do not count events you organised yourselves.** Multiple choice, required, with the skip rule (0 goes to section 1b, every other answer to section 2). Revised 2026-11-24: "or hosted" removed, because company-hosted events are a different buyer.
+**Q4. In the last 2 years, how many hackathons or student events has your organisation sponsored?** Multiple choice, required, hint "Paid for, or gave prizes, credits or mentors to. Do not count events you organised yourselves.", with the skip rule (0 goes to section 1b, every other answer to section 2). Revised 2026-11-24: "or hosted" removed, because company-hosted events are a different buyer.
 - 0
 - 1-2
 - 3-5
@@ -358,7 +373,7 @@ function createSponsorForm() {
 
 ### Section 1b: If you have not sponsored yet (only people who answered 0 to Q4; after this section, go to section 4)
 
-**Q21. What has stopped you from sponsoring a hackathon or student event so far? (select all that apply)** Checkboxes, required. Added 2026-11-24 (numbered Q21 so the other numbers stay fixed, placed after Q4 in the form).
+**Q21. What has stopped you from sponsoring a hackathon or student event so far?** Checkboxes, required, hint "Select all that apply.". Added 2026-11-24 (numbered Q21 so the other numbers stay fixed, placed after Q4 in the form).
 - No budget
 - I did not find an event that fits
 - I am not sure it is worth the money
@@ -369,7 +384,7 @@ function createSponsorForm() {
 
 ### Section 2: Your most recent sponsorship
 
-**Q5. Why did you sponsor it? (select all that apply)** Checkboxes, required.
+**Q5. What were your reasons for sponsoring the most recent event you sponsored?** Checkboxes, required, hint "Select all that apply.".
 - Hire interns or graduates
 - Get people to try our product or API and give feedback
 - Brand awareness among students or developers
@@ -377,7 +392,7 @@ function createSponsorForm() {
 - Support the community or local ecosystem
 - Other (add "Other" option)
 
-**Q6. How did you find the most recent event you sponsored? (select all that apply)** Checkboxes, required.
+**Q6. How did you find the most recent event you sponsored?** Checkboxes, required, hint "Select all that apply.".
 - The organisers contacted us (email or LinkedIn)
 - Personal contact or referral
 - I attended another event
@@ -400,7 +415,7 @@ function createSponsorForm() {
 
 ### Section 3: Choosing events
 
-**Q10. Which factors matter most when deciding whether to sponsor a hackathon or student event? Pick up to 3.** Checkboxes, required, Select at most 3.
+**Q10. Which factors matter most when deciding whether to sponsor a hackathon or student event?** Checkboxes, required, hint "Pick up to 3.", at most 3 can be chosen.
 - Audience fit (skills, university, level)
 - Number of attendees
 - Organiser track record and reliability
@@ -412,7 +427,7 @@ function createSponsorForm() {
 - Results that past sponsors got (for example hires, sign-ups, leads)
 - Other (add "Other" option)
 
-**Q11. What is hardest about sponsoring events? Pick up to 2.** Checkboxes, required, Select at most 2.
+**Q11. What is hardest about sponsoring events?** Checkboxes, required, hint "Pick up to 2.", at most 2 can be chosen.
 - Finding relevant events
 - Judging which events are worth it
 - Negotiating the package back and forth
@@ -431,7 +446,7 @@ function createSponsorForm() {
 - More than 6 months
 - It varies a lot
 
-**Q20. How do you currently find and keep track of events you might sponsor? (select all that apply)** Checkboxes, required. Added after the first draft: numbered Q20 so the other numbers stay fixed, but placed after Q11 in the form.
+**Q20. How do you currently find and keep track of events you might sponsor?** Checkboxes, required, hint "Select all that apply.". Added after the first draft: numbered Q20 so the other numbers stay fixed, but placed after Q11 in the form.
 - Event listing sites (for example Luma, Devpost, MLH)
 - LinkedIn
 - Emails from organisers
@@ -441,7 +456,7 @@ function createSponsorForm() {
 - I do not keep track
 - Other (add "Other" option)
 
-**Q12. How do you measure whether a sponsorship worked? (select all that apply)** Checkboxes, required.
+**Q12. How do you measure whether a sponsorship worked?** Checkboxes, required, hint "Select all that apply.".
 - Interviews or hires
 - Sign-ups or product usage
 - Leads or contacts
@@ -449,9 +464,9 @@ function createSponsorForm() {
 - Project ideas or code produced
 - We do not measure it
 
-**Q13. If you could filter the participants of an event you sponsor, which participants would you want? Pick up to 3.** Checkboxes, required, Select at most 3.
+**Q13. If you could filter the participants of an event you sponsor, which participants would you want?** Checkboxes, required, hint "Pick up to 3.", at most 3 can be chosen.
 - Skills or field of study (for example data, backend, design)
-- Study level (undergraduate, master's, PhD)
+- Study level (undergraduate, master’s, PhD)
 - University or department
 - Graduation year (when they could start an internship or graduate job)
 - Experience level (beginners or experienced)
@@ -471,7 +486,7 @@ function createSponsorForm() {
 
 **Q15. How useful would TBC be to you?** Linear scale 1 to 5, required. Label 1 "Not useful", label 5 "Very useful".
 
-**Q16. What would an event’s web page need to show before you would consider sponsoring the event? (select all that apply)** Checkboxes, required.
+**Q16. What would an event’s web page need to show before you would consider sponsoring the event?** Checkboxes, required, hint "Select all that apply.".
 - Audience profile (skills, universities, levels)
 - Attendee numbers
 - Event theme or topic
@@ -491,11 +506,39 @@ function createSponsorForm() {
 - It should be free
 - Not sure
 
-**Q18. Would you be willing to join a 15-minute interview with the TBC team about sponsoring events? If yes, leave an email.** Short answer, optional, email validation.
+**Q18. Would you be willing to join a 15-minute interview with the TBC team about sponsoring events?** Short answer (email), optional, email validation, hint "If yes, leave your email. Leaving your email is optional."
 
 **Q19. Anything else we should know?** Paragraph, optional.
 
-**Confirmation message:** Thank you. Your answers help us build something useful for organisers and sponsors.
+### Organiser path (people who choose "organiser"; 5 questions)
+
+Added 2026-11-25 (task F21.20): how organisers find sponsors today. Shown in this order: O1, O2, O3, then Q18 and Q19 above. These three questions are not in the analysis plan below; they are read as counts.
+
+**O1. How do you find sponsors today?** Checkboxes, required, hint "Select all that apply."
+- Personal contacts or referrals
+- LinkedIn messages
+- Emails to companies
+- Going to events
+- Sponsor lists from other hackathons
+- Companies contact us
+- We have not looked yet
+
+**O2. What is hardest about getting sponsors?** Checkboxes, required, hint "Pick up to 2.", at most 2 can be chosen.
+- Finding the right companies
+- Knowing what to ask for
+- Setting prices
+- Negotiating back and forth
+- Getting replies
+- Showing what sponsors get
+
+**O3. Which edition is the event you are organising?** Multiple choice, required.
+- I have not organised one yet
+- First edition
+- 2nd edition
+- 3rd edition
+- 4th edition or later
+
+**Confirmation message (Google Form only, not used in the app):** Thank you. Your answers help us build something useful for organisers and sponsors.
 
 ## Follow-up call script (20-30 min)
 
