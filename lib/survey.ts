@@ -1,5 +1,8 @@
 // The full questionnaire (plan/research/sponsor-questionnaire.md, Q1 to Q24) as the onboarding survey.
 // Keys follow the questionnaire's numbering, so the export matches the analysis plan.
+// Bump this on ANY change to the questions, wording, options or order (then run `npm run survey:version -- --write`
+// and add a line to plan/trace/survey-changelog.md). Every saved answer records the version the person saw.
+export const SURVEY_VERSION = 'v1';
 export type Role = 'organiser' | 'sponsor';
 export type Kind = 'single' | 'multi' | 'scale' | 'text' | 'email';
 
@@ -34,7 +37,7 @@ export const Q: Record<string, Question> = {
   q07_spend: q({ key: 'q07_spend', kind: 'single', section: SEC.recent, title: 'Roughly what did your organisation contribute in total?', options: ['Under £500', '£500-£1,000', '£1,000-£2,500', '£2,500-£5,000', 'Over £5,000', 'In-kind only (credits, prizes, mentors, swag)', 'Prefer not to say'] }),
   q08_satisf: q({ key: 'q08_satisf', kind: 'scale', section: SEC.recent, title: 'How well did the event meet your goal?', low: 'Not at all', high: 'Completely', options: ['1', '2', '3', '4', '5'] }),
   q09_text: q({ key: 'q09_text', kind: 'text', section: SEC.recent, title: 'What was the most valuable outcome, and what disappointed you?', optional: true }),
-  q10_factors: q({ key: 'q10_factors', kind: 'multi', section: SEC.choosing, title: 'Which factors matter most when deciding whether to sponsor?', hint: 'Pick up to 3.', max: 3, other: true, options: ['Audience fit (skills, university, level)', 'Number of attendees', 'Organiser track record and reliability', 'Who else is sponsoring', 'Theme or topic', 'Cost', 'Location', 'What we get (judging seat, challenge, resume access, speaking slot)', 'Measurable results from past editions', 'Other'] }),
+  q10_factors: q({ key: 'q10_factors', kind: 'multi', section: SEC.choosing, title: 'Which factors matter most when deciding whether to sponsor?', hint: 'Pick up to 3.', max: 3, other: true, options: ['Audience fit (skills, university, level)', 'Number of attendees', 'Organiser track record and reliability', 'Who else is sponsoring', 'Theme or topic', 'Cost', 'Location', 'What we get (judging seat, challenge, resume access, speaking slot)', 'Results that past sponsors got (for example hires, sign-ups, leads)', 'Other'] }),
   q11_pains: q({ key: 'q11_pains', kind: 'multi', section: SEC.choosing, title: 'What is hardest about sponsoring events?', hint: 'Pick up to 2.', max: 2, other: true, options: ['Finding relevant events', 'Judging which events are worth it', 'Negotiating the package back and forth', 'Knowing who will attend', 'Measuring results afterwards', 'Getting budget approved or reporting internally', 'Other'] }),
   q22_wish: q({ key: 'q22_wish', kind: 'text', section: SEC.choosing, title: 'What do you wish event organisers did differently?', optional: true }),
   q23_lead: q({ key: 'q23_lead', kind: 'single', section: SEC.choosing, title: 'How many weeks before an event do you usually decide whether to sponsor it?', options: ['Less than 2 weeks', '2 to 4 weeks', '1 to 2 months', '3 to 6 months', 'More than 6 months', 'It varies a lot'] }),
@@ -63,6 +66,10 @@ export function questionsFor(role: Role, answers: Answers): Question[] {
   if (answers['q04_freq'] === '0') return [...head, Q.q21_why_not, ...tail];
   return [...head, Q.q05_motive, Q.q06_channel, Q.q07_spend, Q.q08_satisf, Q.q09_text, Q.q10_factors, Q.q11_pains, Q.q22_wish, Q.q23_lead, Q.q20_tools, Q.q12_measure, Q.q13_filters, Q.q14_text, ...tail];
 }
+
+// Option texts that earlier versions showed. A page still open on an older version may send one of them: accept it as it is.
+export const LEGACY_OPTIONS: Record<string, string[]> = { q10_factors: ['Measurable results from past editions'] };
+export const VERSION_RE = /^v\d{1,3}$/;
 
 const list = Object.values(Q);
 export const OPTIONS_BY_KEY: Record<string, string[]> = Object.fromEntries(list.filter((x) => x.options.length).map((x) => [x.key, x.options]));

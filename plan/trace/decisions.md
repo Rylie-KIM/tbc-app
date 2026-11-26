@@ -134,3 +134,7 @@ Survey answers are small (an estimated 1-2 KB each), so size is not the problem.
 ## D17. One response per person and side (2026-11-25)
 
 **Status:** Owner reported a bug: after switching between Sponsor and Organiser, the earlier answers stayed attached to the newly chosen side. Cause: there was one response row per browser, and the side was overwritten. Now there is one response per browser and side (migration 0003, unique on `anon_id` + `role_chosen`); each answer names its side. Switching side during the questionnaire returns to that side's start screen. Answers already stored before this fix were not split (only one real visitor row existed). "Delete my answers" removes both sides.
+
+## D18. The survey is versioned (2026-11-26)
+
+**Status:** Owner asked (so that a change to the order or content of the survey can be tracked). Each change to a question, its wording, options or order is a new version (`v0`, `v1`, ...) recorded in `plan/trace/survey-changelog.md`, with a snapshot in `plan/trace/survey-versions/`. Every response and every logged event stores the version the person saw (the page sends it); the export shows `survey_version` and `versions_seen`. Rows saved before this are `v0` (the questionnaire as it stood on 2026-11-26; earlier untracked wording edits are included in v0). First change: Q10's option "Measurable results from past editions" became "Results that past sponsors got (for example hires, sign-ups, leads)" (v1). Claude's choice of the new wording; the owner may change it. Old answers are not rewritten.

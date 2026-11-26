@@ -12,17 +12,17 @@ export async function GET(req: Request) {
   const a = Buffer.from(want), b = Buffer.from(got);
   if (!want || a.length !== b.length || !timingSafeEqual(a, b)) return new Response('Not found', { status: 404 });
   if (new URL(req.url).searchParams.get('view') === 'events') { // the append-only log: one line per start, answer, email, completion
-    const ev = await db().query('select e.id, e.response_id, e.kind, e.key, e.value, e.role, e.created_at from public.survey_event e order by e.id');
-    const hd = ['event_id', 'response_id', 'kind', 'key', 'value', 'role', 'created_at'];
-    const rowsCsv = ev.rows.map((x) => [x.id, x.response_id, x.kind, x.key, x.value === null ? '' : typeof x.value === 'string' ? x.value : JSON.stringify(x.value), x.role, x.created_at?.toISOString()].map(csv).join(','));
+    const ev = await db().query('select e.id, e.response_id, e.kind, e.key, e.value, e.role, e.survey_version, e.created_at from public.survey_event e order by e.id');
+    const hd = ['event_id', 'response_id', 'kind', 'key', 'value', 'role', 'survey_version', 'created_at'];
+    const rowsCsv = ev.rows.map((x) => [x.id, x.response_id, x.kind, x.key, x.value === null ? '' : typeof x.value === 'string' ? x.value : JSON.stringify(x.value), x.role, x.survey_version, x.created_at?.toISOString()].map(csv).join(','));
     return new Response([hd.join(','), ...rowsCsv].join('\n'), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="tbc-survey-log.csv"', 'cache-control': 'no-store' } });
   }
-  const r = await db().query("select *, left(md5(anon_id), 10) as person from public.survey_response order by started_at");
-  const head = ['id', 'person', 'source', 'role_chosen', 'started_at', 'updated_at', 'consent_at', 'completed_at', ...EXPORT_KEYS];
+  const r = await db().query("select r.*, left(md5(r.anon_id), 10) as person, (select string_agg(distinct e.survey_version, '; ' order by e.survey_version) from public.survey_event e where e.response_id = r.id and e.survey_version is not null) as versions_seen from public.survey_response r order by r.started_at");
+  const head = ['id', 'person', 'source', 'role_chosen', 'survey_version', 'versions_seen', 'started_at', 'updated_at', 'consent_at', 'completed_at', ...EXPORT_KEYS];
   const lines = [head.join(',')];
   for (const row of r.rows) {
     const ans = row.answers ?? {};
-    lines.push([row.id, row.person, row.source, row.role_chosen, row.started_at?.toISOString(), row.updated_at?.toISOString(), row.consent_at?.toISOString(), row.completed_at?.toISOString(),
+    lines.push([row.id, row.person, row.source, row.role_chosen, row.survey_version, row.versions_seen, row.started_at?.toISOString(), row.updated_at?.toISOString(), row.consent_at?.toISOString(), row.completed_at?.toISOString(),
       ...EXPORT_KEYS.map((k) => (k === 'q18_email' ? row.email : Array.isArray(ans[k]) ? ans[k].join('; ') : ans[k]))].map(csv).join(','));
   }
   return new Response(lines.join('\n'), { headers: { 'content-type': 'text/csv; charset=utf-8', 'content-disposition': 'attachment; filename="tbc-survey.csv"', 'cache-control': 'no-store' } });

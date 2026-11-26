@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { questionsFor, type Answers, type Question, type Role } from '@/lib/survey';
+import { questionsFor, SURVEY_VERSION, type Answers, type Question, type Role } from '@/lib/survey';
 
 type Job = { path: string; body: Record<string, unknown>; retried?: boolean };
 type SaveState = 'idle' | 'saving' | 'saved' | 'retry';
@@ -63,7 +63,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
         if (res.status === 404 && job.path !== '/api/survey/start' && !job.retried && (job.body.role === 'sponsor' || job.body.role === 'organiser')) {
           // the server has no response for this person and side (for example it was deleted): create it again, then send the answer again
           job.retried = true;
-          queue.current.unshift({ path: '/api/survey/start', body: { anonId: job.body.anonId, role: job.body.role } });
+          queue.current.unshift({ path: '/api/survey/start', body: { anonId: job.body.anonId, role: job.body.role, version: job.body.version } });
           persistQueue();
         } else if (res.ok || res.status === 400 || res.status === 404) { queue.current.shift(); persistQueue(); }
         else throw new Error(String(res.status));
@@ -80,7 +80,7 @@ export default function Onboarding({ role: roleParam }: { role?: string }) {
   }, []);
 
   const enqueue = (path: string, body: Record<string, unknown>) => {
-    queue.current.push({ path, body: { anonId: anon.current, role, ...body } });
+    queue.current.push({ path, body: { anonId: anon.current, role, version: SURVEY_VERSION, ...body } });
     persistQueue();
     void flush();
   };

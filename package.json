@@ -6,7 +6,8 @@
     "build": "next build",
     "start": "next start",
     "db:test": "node scripts/db-test.mjs",
-    "db:migrate": "node scripts/migrate.mjs"
+    "db:migrate": "node scripts/migrate.mjs",
+    "survey:version": "node --no-warnings scripts/survey-version.mjs"
   },
   "repository": {
     "type": "git",

@@ -181,7 +181,7 @@ function createSponsorForm() {
     "Cost",
     "Location",
     "What we get (judging seat, challenge, resume access, speaking slot)",
-    "Measurable results from past editions"], true, true, 3);
+    "Results that past sponsors got (for example hires, sign-ups, leads)"], true, true, 3);
 
   boxes("What is hardest about sponsoring events? Pick up to 2.", [
     "Finding relevant events",
@@ -406,7 +406,7 @@ function createSponsorForm() {
 - Cost
 - Location
 - What we get (judging seat, challenge, resume access, speaking slot)
-- Measurable results from past editions
+- Results that past sponsors got (for example hires, sign-ups, leads)
 - Other (add "Other" option)
 
 **Q11. What is hardest about sponsoring events? Pick up to 2.** Checkboxes, required, Select at most 2.

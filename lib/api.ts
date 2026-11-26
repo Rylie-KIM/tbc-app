@@ -1,4 +1,4 @@
-import { MAX_BY_KEY, OPTIONS_BY_KEY, TEXT_KEYS } from '@/lib/survey';
+import { LEGACY_OPTIONS, MAX_BY_KEY, OPTIONS_BY_KEY, TEXT_KEYS, VERSION_RE } from '@/lib/survey';
 
 export const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
@@ -21,9 +21,9 @@ export const validAnon = (v: unknown): v is string => typeof v === 'string' && /
 export function cleanAnswer(key: unknown, value: unknown): string | string[] | null {
   if (typeof key !== 'string') return null;
   if (TEXT_KEYS.has(key)) return typeof value === 'string' ? value.trim().slice(0, 1000) : null;
-  const allowed = OPTIONS_BY_KEY[key];
-  if (!allowed) return null;
-  const max = MAX_BY_KEY[key] ?? allowed.length;
+  const allowed = [...(OPTIONS_BY_KEY[key] ?? []), ...(LEGACY_OPTIONS[key] ?? [])];
+  if (!OPTIONS_BY_KEY[key]) return null;
+  const max = MAX_BY_KEY[key] ?? OPTIONS_BY_KEY[key].length;
   if (typeof value === 'string') return allowed.includes(value) ? value : null;
   if (Array.isArray(value) && value.length <= max && value.every((x) => typeof x === 'string' && allowed.includes(x))) return Array.from(new Set(value as string[]));
   return null;
@@ -32,6 +32,8 @@ export function cleanAnswer(key: unknown, value: unknown): string | string[] | n
 export const validEmail = (v: unknown): v is string => typeof v === 'string' && v.length <= 200 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 
 type Q = (sql: string, params?: unknown[]) => Promise<import('pg').QueryResult>;
+/** The questionnaire version the page says the person saw; null for an old page that sends none. */
+export const versionOf = (v: unknown): string | null => (typeof v === 'string' && VERSION_RE.test(v) ? v : null);
 export const sideOf = (v: unknown): 'organiser' | 'sponsor' | null => (v === 'organiser' || v === 'sponsor' ? v : null);
 
 /** The response of this person for one side; an older queued answer without a side goes to the most recent response. */

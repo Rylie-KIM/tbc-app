@@ -71,6 +71,14 @@ const org = sides.rows.find((r) => r.role_chosen === 'organiser'), spo = sides.r
 if (!org || Object.keys(org.answers).join() !== 'o03_edition') bad('organiser response holds other answers: ' + JSON.stringify(org?.answers));
 if (!spo || 'o03_edition' in spo.answers || spo.answers.q01_role !== 'Other') bad('sponsor response is mixed up: ' + JSON.stringify(spo?.answers));
 else console.log('both sides kept apart: organiser', JSON.stringify(org.answers), '| sponsor has', Object.keys(spo.answers).length, 'answers, none of the organiser ones');
+
+// survey versions: the version the page sends is stored on the response and on each logged event;
+// an older page that still sends the previous Q10 wording is accepted
+await post('/api/survey/start', { anonId: ids[1], role: 'sponsor', version: 'v1' });
+if (await post('/api/survey/answer', { anonId: ids[1], role: 'sponsor', key: 'q10_factors', value: ['Cost', 'Measurable results from past editions'], version: 'v0' }) !== 200) bad('previous Q10 wording refused');
+if (await post('/api/survey/answer', { anonId: ids[1], role: 'sponsor', key: 'q10_factors', value: ['Cost'], version: 'bad version' }) !== 200) bad('answer with a malformed version refused');
+const vs = await dbc.query("select e.survey_version v, e.key from public.survey_event e join public.survey_response r on r.id = e.response_id where r.anon_id = $1 and e.key = 'q10_factors' order by e.id", [ids[1]]);
+if (vs.rows.map((r) => r.v).join() !== 'v0,') bad('event versions wrong: ' + JSON.stringify(vs.rows)); else console.log('versions stored per event:', vs.rows.map((r) => r.v ?? 'none').join(', '));
 if (PACE) await sleep(62000); // let the limiter window reset before the rate-limit test
 // the rate limit: one address sending far too many requests must be slowed down
 let limited = 0; for (let k = 0; k < 90; k++) if (await post('/api/survey/answer', { anonId: ids[0], key: 'q01_role', value: 'Other' }, '10.0.3.1') === 429) limited++;
