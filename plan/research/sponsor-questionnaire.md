@@ -463,7 +463,7 @@ function createSponsorForm() {
 - I would not filter
 - Other (add "Other" option)
 
-**Q14. What should an event’s web page always show about its participants?** Paragraph, optional. **From survey v2 (2026-11-26):** the app shows "In the previous question, you chose: ..." as plain text (the person's Q13 picks, not "I would not filter") above the question, and the question reads "What else should an event page always show about its participants?". Without a pick it keeps the plain wording. The Google Form version is not used (D2).
+**Q14. What should an event’s web page always show about its participants?** Paragraph, optional. **In the app (2026-11-26):** the page shows "In the previous question, you chose: ..." as plain text (the person's Q13 picks, not "I would not filter") above the question, and the question reads "What else should an event page always show about its participants?". Without a pick it keeps the plain wording. The Google Form version is not used (D2).
 
 ### Section 4: An idea (everyone answers from here)
 
@@ -888,8 +888,8 @@ Each entry: why we ask, how we analyse it (math and code), chart, a made-up exam
 - **Analysis:** code each answer to the Q13 options plus new codes; count; note what is mentioned first.
 - **Chart:** bar of coded mentions.
 - **Example:** "cohort by course and year" 5, "how many are final-year" 4, "past hackathon winners" 2.
-- **Hypothesis:** answers mostly repeat Q13; the new codes are the useful part. **From v2:** the question asks "what else" after showing the person's Q13 picks, so repeats of Q13 are expected to be rarer; v0 and v1 answers ("Which of these...", nothing shown) are read separately.
-- **Expected:** at least one new code is mentioned twice or more (v0/v1: 50% or more of mentions map to Q13 options).
+- **Hypothesis:** answers mostly repeat Q13; the new codes are the useful part. In the app the question asks "what else" after showing the person's Q13 picks, so repeats of Q13 are expected to be rarer than in the original wording.
+- **Expected:** at least one new code is mentioned twice or more.
 - **Decision:**
   - The coded list becomes the participant fields of the event page, ordered by mention count; a field mentioned once is not added.
   - A new code with 2 or more mentions is added to the registration form and to the Q13 filter list.
@@ -919,7 +919,7 @@ Each entry: why we ask, how we analyse it (math and code), chart, a made-up exam
   moscow = pd.cut(bal16, [-0.01, 0.25, 0.50, 1.01], labels=["Could", "Should", "Must"], right=False)
   ```
 - **Chart:** bar with reference lines at 25% and 50%.
-- **Example:** attendee numbers 11/13, audience profile 10/13, tier prices 9/13, past sponsors 7/13, results 5/13, references 3/13. (From v2 the list also has event theme or topic, purpose and expected outcomes: read them with the same rule; the figures above are made up and predate them.)
+- **Example:** attendee numbers 11/13, audience profile 10/13, tier prices 9/13, past sponsors 7/13, results 5/13, references 3/13. (The list in the app also has event theme or topic, purpose and expected outcomes; the figures above are made up and predate them.)
 - **Hypothesis:** attendee numbers, audience profile and tier prices are must-haves; references are optional.
 - **Expected:** attendee numbers, audience profile and tiers are each 50% or more (balanced); references are under 25%.
 - **Decision:**

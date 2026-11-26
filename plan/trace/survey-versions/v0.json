@@ -1,8 +1,8 @@
 {
   "version": "v0",
   "released": "2026-11-26",
-  "summary": "The questionnaire as it stood when versions began (24 questions). Rows saved before versions were recorded are labelled v0.",
-  "hash": "afcb6e38f8bd5ad1",
+  "summary": "First version: the questionnaire of sponsor-questionnaire.md (24 questions) after the test period. Organiser path 5 questions, sponsor who has sponsored 23, sponsor who has not 11.",
+  "hash": "416a20eaed3c364f",
   "paths": {
     "organiser": [
       {
@@ -25,7 +25,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "o02_hard",
@@ -46,13 +49,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "o03_edition",
         "section": "Finding sponsors",
         "kind": "single",
-        "title": "Which edition is your event?",
+        "title": "Which edition is the event you are organising?",
         "intro": null,
         "hint": null,
         "options": [
@@ -66,21 +72,27 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q18_email",
         "section": "An idea",
         "kind": "email",
-        "title": "Would you be willing to join a short interview (15 minutes)?",
+        "title": "Would you be willing to join a 15-minute interview with the TBC team about sponsoring events?",
         "intro": null,
-        "hint": "If yes, leave your email. This is optional.",
+        "hint": "If yes, leave your email. Leaving your email is optional.",
         "options": [],
         "max": null,
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q19_text",
@@ -94,7 +106,10 @@
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       }
     ],
     "sponsor_has_sponsored": [
@@ -117,7 +132,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q02_size",
@@ -136,7 +154,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q03_authority",
@@ -154,13 +175,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q24_organised",
         "section": "About you",
         "kind": "single",
-        "title": "If your organisation has organised a hackathon or student event itself, which edition was the most recent one?",
+        "title": "If your organisation has organised its own hackathon or student event, which edition was the most recent event you organised?",
         "intro": null,
         "hint": null,
         "options": [
@@ -175,7 +199,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q04_freq",
@@ -194,13 +221,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q05_motive",
         "section": "Your most recent sponsorship",
         "kind": "multi",
-        "title": "Why did you sponsor your most recent event?",
+        "title": "What were your reasons for sponsoring the most recent event you sponsored?",
         "intro": null,
         "hint": "Select all that apply.",
         "options": [
@@ -215,13 +245,16 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q06_channel",
         "section": "Your most recent sponsorship",
         "kind": "multi",
-        "title": "How did you find this event?",
+        "title": "How did you find the most recent event you sponsored?",
         "intro": null,
         "hint": "Select all that apply.",
         "options": [
@@ -236,13 +269,16 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q07_spend",
         "section": "Your most recent sponsorship",
         "kind": "single",
-        "title": "Roughly what did your organisation contribute in total?",
+        "title": "Roughly how much did your organisation contribute in total to the most recent event you sponsored?",
         "intro": null,
         "hint": null,
         "options": [
@@ -258,13 +294,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q08_satisf",
         "section": "Your most recent sponsorship",
         "kind": "scale",
-        "title": "How well did the event meet your goal?",
+        "title": "How well did the most recent event you sponsored meet your goal?",
         "intro": null,
         "hint": null,
         "options": [
@@ -278,13 +317,16 @@
         "other": false,
         "optional": false,
         "low": "Not at all",
-        "high": "Completely"
+        "high": "Completely",
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q09_text",
         "section": "Your most recent sponsorship",
         "kind": "text",
-        "title": "What was the most valuable outcome, and what disappointed you?",
+        "title": "For the most recent event you sponsored, what was the most valuable outcome, and what disappointed you?",
         "intro": null,
         "hint": null,
         "options": [],
@@ -292,13 +334,16 @@
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q10_factors",
         "section": "Choosing events",
         "kind": "multi",
-        "title": "Which factors matter most when deciding whether to sponsor?",
+        "title": "Which factors matter most when deciding whether to sponsor a hackathon or student event?",
         "intro": null,
         "hint": "Pick up to 3.",
         "options": [
@@ -310,14 +355,17 @@
           "Cost",
           "Location",
           "What we get (judging seat, challenge, resume access, speaking slot)",
-          "Measurable results from past editions",
+          "Results that past sponsors got (for example hires, sign-ups, leads)",
           "Other"
         ],
         "max": 3,
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q11_pains",
@@ -339,7 +387,10 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q22_wish",
@@ -353,13 +404,16 @@
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q23_lead",
         "section": "Choosing events",
         "kind": "single",
-        "title": "How many weeks before an event do you usually decide whether to sponsor it?",
+        "title": "How many weeks before an event starts do you usually decide whether to sponsor the event?",
         "intro": null,
         "hint": null,
         "options": [
@@ -374,7 +428,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q20_tools",
@@ -397,7 +454,10 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q12_measure",
@@ -418,13 +478,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q13_filters",
         "section": "Choosing events",
         "kind": "multi",
-        "title": "If you could filter the participants you receive, which participants would you want?",
+        "title": "If you could filter the participants of an event you sponsor, which participants would you want?",
         "intro": null,
         "hint": "Pick up to 3.",
         "options": [
@@ -445,13 +508,16 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q14_text",
         "section": "Choosing events",
         "kind": "text",
-        "title": "Which of these should an event page always show about its participants?",
+        "title": "What should an event’s web page always show about its participants?",
         "intro": null,
         "hint": null,
         "options": [],
@@ -459,13 +525,16 @@
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": "q13_filters",
+        "echoLead": "In the previous question, you chose",
+        "titleAfter": "What else should an event’s web page always show about its participants?"
       },
       {
         "key": "q15_useful",
         "section": "An idea",
         "kind": "scale",
-        "title": "How useful would that be to you?",
+        "title": "How useful would TBC be to you?",
         "intro": "TBC is a website where hackathon and community organisers list their events, and sponsors can browse them and propose partnerships. A sponsor could trade things like access to hiring, user or beta testing, or product exposure for sponsorship.",
         "hint": null,
         "options": [
@@ -479,20 +548,26 @@
         "other": false,
         "optional": false,
         "low": "Not useful",
-        "high": "Very useful"
+        "high": "Very useful",
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q16_page",
         "section": "An idea",
         "kind": "multi",
-        "title": "What would an event page need to show before you would consider it?",
+        "title": "What would an event’s web page need to show before you would consider sponsoring the event?",
         "intro": null,
         "hint": "Select all that apply.",
         "options": [
           "Audience profile (skills, universities, levels)",
           "Attendee numbers",
+          "Event theme or topic",
+          "Purpose of the event (why it exists and who it is for)",
+          "Expected outcomes (for example projects built, hires, sign-ups)",
           "Past sponsors and what they got",
-          "Results from past editions",
+          "Results of past editions (for example hires, sign-ups, projects built)",
           "Dates and venue",
           "What each sponsorship tier includes and costs",
           "References for the organisers",
@@ -502,13 +577,16 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q17_payer",
         "section": "An idea",
         "kind": "single",
-        "title": "If it charged a fee, who should pay?",
+        "title": "If TBC charged a fee for using the website, who should pay that fee?",
         "intro": null,
         "hint": null,
         "options": [
@@ -522,21 +600,27 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q18_email",
         "section": "An idea",
         "kind": "email",
-        "title": "Would you be willing to join a short interview (15 minutes)?",
+        "title": "Would you be willing to join a 15-minute interview with the TBC team about sponsoring events?",
         "intro": null,
-        "hint": "If yes, leave your email. This is optional.",
+        "hint": "If yes, leave your email. Leaving your email is optional.",
         "options": [],
         "max": null,
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q19_text",
@@ -550,7 +634,10 @@
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       }
     ],
     "sponsor_not_sponsored_yet": [
@@ -573,7 +660,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q02_size",
@@ -592,7 +682,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q03_authority",
@@ -610,13 +703,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q24_organised",
         "section": "About you",
         "kind": "single",
-        "title": "If your organisation has organised a hackathon or student event itself, which edition was the most recent one?",
+        "title": "If your organisation has organised its own hackathon or student event, which edition was the most recent event you organised?",
         "intro": null,
         "hint": null,
         "options": [
@@ -631,7 +727,10 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q04_freq",
@@ -650,13 +749,16 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q21_why_not",
         "section": "If you have not sponsored yet",
         "kind": "multi",
-        "title": "What has stopped you from sponsoring so far?",
+        "title": "What has stopped you from sponsoring a hackathon or student event so far?",
         "intro": null,
         "hint": "Select all that apply.",
         "options": [
@@ -672,13 +774,16 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q15_useful",
         "section": "An idea",
         "kind": "scale",
-        "title": "How useful would that be to you?",
+        "title": "How useful would TBC be to you?",
         "intro": "TBC is a website where hackathon and community organisers list their events, and sponsors can browse them and propose partnerships. A sponsor could trade things like access to hiring, user or beta testing, or product exposure for sponsorship.",
         "hint": null,
         "options": [
@@ -692,20 +797,26 @@
         "other": false,
         "optional": false,
         "low": "Not useful",
-        "high": "Very useful"
+        "high": "Very useful",
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q16_page",
         "section": "An idea",
         "kind": "multi",
-        "title": "What would an event page need to show before you would consider it?",
+        "title": "What would an event’s web page need to show before you would consider sponsoring the event?",
         "intro": null,
         "hint": "Select all that apply.",
         "options": [
           "Audience profile (skills, universities, levels)",
           "Attendee numbers",
+          "Event theme or topic",
+          "Purpose of the event (why it exists and who it is for)",
+          "Expected outcomes (for example projects built, hires, sign-ups)",
           "Past sponsors and what they got",
-          "Results from past editions",
+          "Results of past editions (for example hires, sign-ups, projects built)",
           "Dates and venue",
           "What each sponsorship tier includes and costs",
           "References for the organisers",
@@ -715,13 +826,16 @@
         "other": true,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q17_payer",
         "section": "An idea",
         "kind": "single",
-        "title": "If it charged a fee, who should pay?",
+        "title": "If TBC charged a fee for using the website, who should pay that fee?",
         "intro": null,
         "hint": null,
         "options": [
@@ -735,21 +849,27 @@
         "other": false,
         "optional": false,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q18_email",
         "section": "An idea",
         "kind": "email",
-        "title": "Would you be willing to join a short interview (15 minutes)?",
+        "title": "Would you be willing to join a 15-minute interview with the TBC team about sponsoring events?",
         "intro": null,
-        "hint": "If yes, leave your email. This is optional.",
+        "hint": "If yes, leave your email. Leaving your email is optional.",
         "options": [],
         "max": null,
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       },
       {
         "key": "q19_text",
@@ -763,7 +883,10 @@
         "other": false,
         "optional": true,
         "low": null,
-        "high": null
+        "high": null,
+        "echoFrom": null,
+        "echoLead": null,
+        "titleAfter": null
       }
     ]
   }

@@ -2,7 +2,7 @@
 // Keys follow the questionnaire's numbering, so the export matches the analysis plan.
 // Bump this on ANY change to the questions, wording, options or order (then run `npm run survey:version -- --write`
 // and add a line to plan/trace/survey-changelog.md). Every saved answer records the version the person saw.
-export const SURVEY_VERSION = 'v3';
+export const SURVEY_VERSION = 'v0';
 export type Role = 'organiser' | 'sponsor';
 export type Kind = 'single' | 'multi' | 'scale' | 'text' | 'email';
 
@@ -72,7 +72,7 @@ export function questionsFor(role: Role, answers: Answers): Question[] {
 }
 
 // Option texts that earlier versions showed. A page still open on an older version may send one of them: accept it as it is.
-export const LEGACY_OPTIONS: Record<string, string[]> = { q10_factors: ['Measurable results from past editions'], q16_page: ['Results from past editions'] };
+export const LEGACY_OPTIONS: Record<string, string[]> = {};
 export const VERSION_RE = /^v\d{1,3}$/;
 
 const list = Object.values(Q);

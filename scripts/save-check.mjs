@@ -73,9 +73,9 @@ if (!spo || 'o03_edition' in spo.answers || spo.answers.q01_role !== 'Other') ba
 else console.log('both sides kept apart: organiser', JSON.stringify(org.answers), '| sponsor has', Object.keys(spo.answers).length, 'answers, none of the organiser ones');
 
 // survey versions: the version the page sends is stored on the response and on each logged event;
-// an older page that still sends the previous Q10 wording is accepted
-await post('/api/survey/start', { anonId: ids[1], role: 'sponsor', version: 'v1' });
-if (await post('/api/survey/answer', { anonId: ids[1], role: 'sponsor', key: 'q10_factors', value: ['Cost', 'Measurable results from past editions'], version: 'v0' }) !== 200) bad('previous Q10 wording refused');
+// a malformed version is stored as none
+await post('/api/survey/start', { anonId: ids[1], role: 'sponsor', version: 'v0' });
+if (await post('/api/survey/answer', { anonId: ids[1], role: 'sponsor', key: 'q10_factors', value: ['Cost', 'Location'], version: 'v0' }) !== 200) bad('Q10 answer refused');
 if (await post('/api/survey/answer', { anonId: ids[1], role: 'sponsor', key: 'q10_factors', value: ['Cost'], version: 'bad version' }) !== 200) bad('answer with a malformed version refused');
 const vs = await dbc.query("select e.survey_version v, e.key from public.survey_event e join public.survey_response r on r.id = e.response_id where r.anon_id = $1 and e.key = 'q10_factors' order by e.id", [ids[1]]);
 if (vs.rows.map((r) => r.v).join() !== 'v0,') bad('event versions wrong: ' + JSON.stringify(vs.rows)); else console.log('versions stored per event:', vs.rows.map((r) => r.v ?? 'none').join(', '));
