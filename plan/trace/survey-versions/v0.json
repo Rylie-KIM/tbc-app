@@ -1,5 +1,7 @@
 {
   "version": "v0",
+  "released": "2026-11-26",
+  "summary": "The questionnaire as it stood when versions began (24 questions). Rows saved before versions were recorded are labelled v0.",
   "hash": "afcb6e38f8bd5ad1",
   "paths": {
     "organiser": [

@@ -15,7 +15,9 @@ const paths = {
 };
 const hash = createHash('sha256').update(JSON.stringify(paths)).digest('hex').slice(0, 16);
 const file = fileURLToPath(new URL(`../plan/trace/survey-versions/${s.SURVEY_VERSION}.json`, import.meta.url));
-const snap = { version: s.SURVEY_VERSION, hash, paths };
+const prev = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : {}; // keep the release date and summary written by hand
+const arg = (n) => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : undefined; };
+const snap = { version: s.SURVEY_VERSION, released: arg('--released') ?? prev.released ?? new Date().toISOString().slice(0, 10), summary: arg('--summary') ?? prev.summary ?? null, hash, paths };
 
 if (process.argv.includes('--write')) {
   writeFileSync(file, JSON.stringify(snap, null, 2) + '\n');

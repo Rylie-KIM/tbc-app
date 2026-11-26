@@ -1,5 +1,7 @@
 {
   "version": "v2",
+  "released": "2026-11-26",
+  "summary": "Q14 follows the Q13 picks and asks \"what else\"; Q16 gets theme, purpose and expected-outcome options; pronouns replaced by what they point at. See plan/trace/survey-changelog.md.",
   "hash": "8e83fb3002a4291d",
   "paths": {
     "organiser": [

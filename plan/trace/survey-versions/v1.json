@@ -1,5 +1,7 @@
 {
   "version": "v1",
+  "released": "2026-11-26",
+  "summary": "Q10 option \"Measurable results from past editions\" reworded to \"Results that past sponsors got (for example hires, sign-ups, leads)\".",
   "hash": "0406cc9ed3def262",
   "paths": {
     "organiser": [
