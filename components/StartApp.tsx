@@ -106,7 +106,7 @@ export default function StartApp({ initialRole, welcome, switched }: { initialRo
         <div className="wrap">
           <Link href="/" className="logo-row" aria-label="TBC home"><img src="/brand/logo.png" alt="" /><b>TBC.</b></Link>
           <div className="row bar-actions">
-            {!tourDone && <button className="btn btn-tour" onClick={() => setTour(0)}><span className="spark" aria-hidden>✦</span> Show me around</button>}
+            {!tourDone && !showWelcome && <button className="btn btn-tour" onClick={() => setTour(0)}><span className="spark" aria-hidden>✦</span> Show me around</button>}
             <div className="switch" data-tour="switch" role="group" aria-label="Trying as">
               <span className="lbl">Trying as:</span>
               <button className="spo" aria-pressed={role === 'sponsor'} onClick={() => pick('sponsor')}>Sponsor</button>
